@@ -32,3 +32,25 @@ Flashcard quizzes
 
 
 9 sprints
+
+sprint 1
+Planning and project base created.
+Check github api if commit tracker is possible
+
+sprint 2
+Profile page, Login, Content page
+
+sprint 3
+
+
+sprint 4
+
+sprint 5
+
+sprint 6
+
+sprint 7
+
+sprint 8
+
+sprint 9
