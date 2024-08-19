@@ -13,11 +13,36 @@ export const classes = pgTable("classes", {
   name: text("name").notNull(),
 });
 
-export const pageContents = pgTable("page_contents", {
+export const courseModules = pgTable("course_modules", {
   id: integer("id").primaryKey(),
   title: text("title").notNull(),
   intro: text("intro"),
 });
+
+export const links = pgTable("links", {
+  id: integer("id").primaryKey(),
+  courseModulesId: integer("course_modules_id").references(
+    () => courseModules.id,
+  ),
+  url: text("url").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+});
+
+export const utlinks = pgTable("utlinks", {
+  id: integer("id").primaryKey(),
+  courseModulesId: integer("course_modules_id").references(
+    () => courseModules.id,
+  ),
+  url: text("url").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+});
+
+export const courseModulesRelations = relations(courseModules, ({ many }) => ({
+  links: many(links),
+  utlinks: many(utlinks),
+}));
 
 export const studentsRelations = relations(students, ({ one }) => ({
   author: one(classes, {
