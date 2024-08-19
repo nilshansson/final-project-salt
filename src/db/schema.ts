@@ -1,27 +1,27 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
   github: text("github"),
-  classId: integer("class_id").references(() => classes.id),
+  classId: serial("class_id").references(() => classes.id),
 });
 
 export const classes = pgTable("classes", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
 });
 
 export const courseModules = pgTable("course_modules", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   title: text("title").notNull(),
   intro: text("intro"),
 });
 
 export const links = pgTable("links", {
-  id: integer("id").primaryKey(),
-  courseModulesId: integer("course_modules_id").references(
+  id: serial("id").primaryKey(),
+  courseModulesId: serial("course_modules_id").references(
     () => courseModules.id,
   ),
   url: text("url").notNull(),
@@ -30,8 +30,8 @@ export const links = pgTable("links", {
 });
 
 export const utlinks = pgTable("utlinks", {
-  id: integer("id").primaryKey(),
-  courseModulesId: integer("course_modules_id").references(
+  id: serial("id").primaryKey(),
+  courseModulesId: serial("course_modules_id").references(
     () => courseModules.id,
   ),
   url: text("url").notNull(),

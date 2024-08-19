@@ -1,6 +1,7 @@
 export default function content({ params }: { params: { id: string } }) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="card bg-base-100 w-full items-center shadow-xl">
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">introduction</h2>
@@ -36,6 +37,7 @@ export default function content({ params }: { params: { id: string } }) {
           </div>
         </div>
       </article>
+      </div>
     </main>
   );
 }
