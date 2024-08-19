@@ -10,8 +10,8 @@ Encourage to sign up for frontend masters with the github student pack
 Github classroom
 Commit leaderboard per class, everyone can see how many commits everyone else in the class has done
 
-Github commits
-Admin page for seeing
+Github commit tracker
+Somehow maybe github api to track commits since starting at salt
 
 ***must have***
 Profile page
