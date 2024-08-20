@@ -1,13 +1,13 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { db, pool } from ".";
-import { courseModules, links, utlinks } from "./schema";
+import { courseModules, links, students, utlinks } from "./schema";
 import { eq } from "drizzle-orm";
 
 export type SelectModule = typeof courseModules.$inferSelect;
 export type InsertModule = typeof courseModules.$inferInsert;
 export async function insertCourseModule(
   title: string,
-  intro: string | null,
+  intro: string | null
 ): Promise<InsertModule> {
   try {
     const result = await db
@@ -40,7 +40,7 @@ export async function insertUtlink(
   courseModulesId: number,
   url: string,
   title: string,
-  description: string | null,
+  description: string | null
 ): Promise<InsertUtlink> {
   try {
     const utlink = await db
@@ -55,7 +55,7 @@ export async function insertUtlink(
 }
 
 export async function selectUtlinksByModule(
-  moduleId: number,
+  moduleId: number
 ): Promise<SelectUtlink[]> {
   try {
     const links = await db
@@ -75,7 +75,7 @@ export type InsertLink = typeof links.$inferInsert;
 export async function insertLink(
   courseModulesId: number,
   url: string,
-  title: string,
+  title: string
 ): Promise<InsertLink> {
   try {
     const link = await db
@@ -90,7 +90,7 @@ export async function insertLink(
 }
 
 export async function selectLinksByModule(
-  moduleId: number,
+  moduleId: number
 ): Promise<SelectLink[]> {
   try {
     const link = await db
@@ -103,3 +103,19 @@ export async function selectLinksByModule(
     throw new Error("Failed to select utlinks");
   }
 }
+
+export async function createStudentIfNotExists(userId: string, name: string) {
+  const existingStudent = await db
+    .select()
+    .from(students)
+    .where(eq(students.userId, userId));
+
+  if (!existingStudent) {
+    await db.insert(students).values({
+      userId: userId,
+      name: name,
+    });
+  }
+}
+
+export async function addGitHubUsername(userId: string) {}

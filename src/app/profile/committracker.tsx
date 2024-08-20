@@ -32,7 +32,6 @@ const GitHubCommits = ({ username }: { username: string }) => {
         }
 
         const repos = await reposResponse.json();
-        console.log("Fetched repos:", repos);
 
         let totalCommits = 0;
         const weeklyCommitsArray = Array(4).fill(0);
