@@ -1,5 +1,13 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  SignIn,
+} from "@clerk/nextjs";
 import Link from "next/link";
+
+import { z } from "zod";
 
 export function Navbar() {
   return (
