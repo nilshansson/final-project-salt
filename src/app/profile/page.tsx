@@ -3,7 +3,6 @@
 import { useUser } from "@clerk/nextjs";
 import GitHubCommits from "./committracker";
 import { useEffect, useState } from "react";
-import { addGitHubUsername, createStudentIfNotExists } from "@/db/query";
 import {
   handleAddGithubToDB,
   handleCreateUserIfNotExist,
@@ -14,11 +13,12 @@ export default function ProfilePage() {
   const [githubUsername, setGithubUsername] = useState("");
   const { user, isLoaded, isSignedIn } = useUser();
 
+  const userId = user?.id;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (githubUsername.trim()) {
-      handleAddGithubToDB(githubUsername);
-      setGithubUsername("");
+    if (githubUsername && userId) {
+      handleAddGithubToDB(userId, githubUsername);
       setHasGithubUsername(true);
     }
   };
@@ -30,11 +30,6 @@ export default function ProfilePage() {
       handleCreateUserIfNotExist(userId, name);
     }
   }, [isLoaded, isSignedIn, user]);
-
-  const handleGithubUsername = () => {};
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
 
   if (!isSignedIn) {
     return <div>Please sign in to view your profile.</div>;
@@ -59,7 +54,7 @@ export default function ProfilePage() {
           )}
 
           {hasGithubUsername ? (
-            <GitHubCommits username="nilshansson" />
+            <GitHubCommits username={githubUsername} />
           ) : (
             <form onSubmit={handleSubmit} className="join">
               <input
