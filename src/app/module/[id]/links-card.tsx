@@ -17,6 +17,7 @@ interface LinksProps{
 export function LinksCard({utlinks, links, moduleId}:LinksProps){
   return (
     <>
+    <div className="card bg-base-200 flex-row p-4">
       <LinkPoster moduleId={moduleId}/>
       <UploadButton
         endpoint="fileUploader"
@@ -30,6 +31,7 @@ export function LinksCard({utlinks, links, moduleId}:LinksProps){
           alert(`ERROR! ${error.message}`);
         }}
       />
+      </div>
         <div className="collapse collapse-arrow bg-base-200">
           <input type="radio" name="my-accordion-2"/>
           <div className="collapse-title text-xl font-medium">
@@ -57,8 +59,8 @@ export function LinksCard({utlinks, links, moduleId}:LinksProps){
           ))}
           </div>
         </div>
-
         </>
+
   )
 }
 
