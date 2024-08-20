@@ -1,5 +1,3 @@
-import React from "react";
-
 type GitHubCommitsProps = {
   username: string;
   totalCommits: number;
@@ -36,7 +34,6 @@ const fetchGitHubData = async (username: string) => {
     });
     const commits = commitsResponse.headers.get("link");
 
-    // Parse the `link` header to find the total number of commits
     if (commits) {
       const match = commits.match(/&page=(\d+)>; rel="last"/);
       if (match) {
@@ -52,7 +49,7 @@ const fetchGitHubData = async (username: string) => {
 };
 
 const GitHubCommits = async () => {
-  const username = "nilshansson"; // Replace with the desired username
+  const username = "nilshansson";
   const { username: fetchedUsername, totalCommits } = await fetchGitHubData(
     username
   );
