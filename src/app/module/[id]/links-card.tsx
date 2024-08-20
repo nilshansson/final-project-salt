@@ -15,6 +15,7 @@ interface LinksProps{
 
 
 export function LinksCard({utlinks, links, moduleId}:LinksProps){
+
   return (
     <>
     <div className="card bg-base-200 flex-row p-4">
@@ -32,33 +33,31 @@ export function LinksCard({utlinks, links, moduleId}:LinksProps){
         }}
       />
       </div>
-        <div className="collapse collapse-arrow bg-base-200">
-          <input type="radio" name="my-accordion-2"/>
-          <div className="collapse-title text-xl font-medium">
-            Links
-            </div>
-          <div className="collapse-content">
+        <div className="card bg-base-200 p-4 mt-4">
           {utlinks.map((utlink)=>(
             <div key={utlink.id}>
               <Link href={utlink.url}>
+              <div className="card bg-base-300 p-2 m-2">
                 <h3>
                 {utlink.title}
                 </h3>
+                </div>
               </Link>
             </div>
           ))}
           {links.map((link)=>(
             <div key={link.id}>
             <Link href={link.url}>
-              <h3>
+            <div className="card bg-base-300 p-2 m-2">
+            <h3>
               {link.title}
               </h3>
+              </div>
             </Link>
 
             </div>
           ))}
           </div>
-        </div>
         </>
 
   )
