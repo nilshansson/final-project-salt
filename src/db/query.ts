@@ -1,12 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { pool } from ".";
-import { courseModules } from "./schema";
+import { db, pool } from ".";
+import { courseModules, utlinks } from "./schema";
 import { eq } from "drizzle-orm";
 
-const db = drizzle(pool);
-
-type SelectModule = typeof courseModules.$inferSelect;
-type InsertModule = typeof courseModules.$inferInsert;
+export type SelectModule = typeof courseModules.$inferSelect;
+export type InsertModule = typeof courseModules.$inferInsert;
 export async function insertCourseModule(
   title: string,
   intro: string | null,
@@ -33,5 +31,41 @@ export async function selectCourseModule(id: number): Promise<SelectModule> {
   } catch (error) {
     console.error(error);
     throw new Error("error");
+  }
+}
+
+export type SelectUtlink = typeof utlinks.$inferSelect;
+export type InsertUtlink = typeof utlinks.$inferInsert;
+export async function insertUtlink(
+  courseModulesId: number,
+  url: string,
+  title: string,
+  description: string | null,
+): Promise<InsertUtlink> {
+  try {
+    const utlink = await db
+      .insert(utlinks)
+      .values({ courseModulesId, url, title, description })
+      .returning();
+    return utlink[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
+  }
+}
+
+export async function selectUtlinksByModule(
+  moduleId: number,
+): Promise<SelectUtlink[]> {
+  try {
+    const links = await db
+      .select()
+      .from(utlinks)
+      .where(eq(utlinks.courseModulesId, moduleId));
+
+    return links;
+  } catch (error) {
+    console.error("Failed to select utlinks:", error);
+    throw new Error("Failed to select utlinks");
   }
 }

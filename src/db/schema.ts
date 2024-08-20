@@ -44,6 +44,20 @@ export const courseModulesRelations = relations(courseModules, ({ many }) => ({
   utlinks: many(utlinks),
 }));
 
+export const linksRelations = relations(links, ({ one }) => ({
+  module: one(courseModules, {
+    fields: [links.courseModulesId],
+    references: [courseModules.id],
+  }),
+}));
+
+export const utlinksRelations = relations(utlinks, ({ one }) => ({
+  module: one(courseModules, {
+    fields: [utlinks.courseModulesId],
+    references: [courseModules.id],
+  }),
+}));
+
 export const studentsRelations = relations(students, ({ one }) => ({
   author: one(classes, {
     fields: [students.classId],
