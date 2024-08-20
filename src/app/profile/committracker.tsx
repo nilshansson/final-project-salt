@@ -3,6 +3,7 @@ const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
 const GitHubCommits = ({ username }: { username: string }) => {
   const [totalCommits, setTotalCommits] = useState<number | null>(null);
+  const [weeklyCommits, setWeeklyCommits] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,24 +15,11 @@ const GitHubCommits = ({ username }: { username: string }) => {
         return;
       }
 
-      const since = "2024-06-03T00:00:00Z";
-
+      const startDate = new Date("2024-06-03T00:00:00Z");
+      const oneWeek = 7 * 24 * 60 * 60 * 1000;
+      const endDate = new Date(startDate.getTime() + 4 * oneWeek);
       try {
-        const userUrl = `https://api.github.com/users/${username}`;
         const reposUrl = `https://api.github.com/users/${username}/repos`;
-
-        const userResponse = await fetch(userUrl, {
-          headers: {
-            Authorization: `token ${GITHUB_TOKEN}`,
-          },
-        });
-
-        if (!userResponse.ok) {
-          throw new Error(`User API error: ${userResponse.statusText}`);
-        }
-
-        const user = await userResponse.json();
-        console.log("Fetched user:", user);
 
         const reposResponse = await fetch(reposUrl, {
           headers: {
@@ -47,9 +35,12 @@ const GitHubCommits = ({ username }: { username: string }) => {
         console.log("Fetched repos:", repos);
 
         let totalCommits = 0;
+        const weeklyCommitsArray = Array(4).fill(0);
 
         for (const repo of repos) {
-          const commitsUrl = `https://api.github.com/repos/${username}/${repo.name}/commits?since=${since}&per_page=1`;
+          const commitsUrl = `https://api.github.com/repos/${username}/${
+            repo.name
+          }/commits?since=${startDate.toISOString()}&until=${endDate.toISOString()}`;
           const commitsResponse = await fetch(commitsUrl, {
             headers: {
               Authorization: `token ${GITHUB_TOKEN}`,
@@ -64,20 +55,29 @@ const GitHubCommits = ({ username }: { username: string }) => {
             throw new Error(`Commits API error: ${commitsResponse.statusText}`);
           }
 
-          const commits = commitsResponse.headers.get("link");
+          const commits = await commitsResponse.json();
 
-          if (commits) {
-            const match = commits.match(/&page=(\d+)>; rel="last"/);
-            if (match) {
-              totalCommits += parseInt(match[1], 10);
+          for (const commit of commits) {
+            const commitDate = new Date(commit.commit.author.date).getTime();
+            const weekIndex = Math.floor(
+              (commitDate - startDate.getTime()) / oneWeek
+            );
+            if (weekIndex >= 0 && weekIndex < 4) {
+              weeklyCommitsArray[weekIndex]++;
+              totalCommits++;
             }
           }
         }
 
         setTotalCommits(totalCommits);
+        setWeeklyCommits(weeklyCommitsArray);
         setLoading(false);
       } catch (err) {
-        setError(err.message || "Error fetching GitHub data.");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
         setLoading(false);
       }
     };
@@ -95,8 +95,15 @@ const GitHubCommits = ({ username }: { username: string }) => {
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>GitHub User: {username}</h1>
-      <h2>Total Commits since start of the precourse: {totalCommits}</h2>
+      <h2>Total Commits since Precourse start: {totalCommits}</h2>
+      <h3>Commits per Week:</h3>
+      <ul>
+        {weeklyCommits.map((commits, index) => (
+          <li key={index}>
+            Week {index + 1}: {commits} commits
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
