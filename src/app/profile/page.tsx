@@ -3,7 +3,7 @@ type GitHubCommitsProps = {
   totalCommits: number;
 };
 
-const fetchGitHubData = async (username: string) => {
+const fetchGitHubData = async (username: string, since: string) => {
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
   const userUrl = `https://api.github.com/users/${username}`;
@@ -26,12 +26,13 @@ const fetchGitHubData = async (username: string) => {
   let totalCommits = 0;
 
   for (const repo of repos) {
-    const commitsUrl = `https://api.github.com/repos/${username}/${repo.name}/commits?per_page=1`;
+    const commitsUrl = `https://api.github.com/repos/${username}/${repo.name}/commits?since=${since}&per_page=1`;
     const commitsResponse = await fetch(commitsUrl, {
       headers: {
         Authorization: `token ${GITHUB_TOKEN}`,
       },
     });
+
     const commits = commitsResponse.headers.get("link");
 
     if (commits) {
@@ -50,14 +51,18 @@ const fetchGitHubData = async (username: string) => {
 
 const GitHubCommits = async () => {
   const username = "nilshansson";
+
+  const since = "2024-06-03T00:00:00Z";
+
   const { username: fetchedUsername, totalCommits } = await fetchGitHubData(
-    username
+    username,
+    since
   );
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>GitHub User: {fetchedUsername}</h1>
-      <h2>Total Commits: {totalCommits}</h2>
+      <h2>Total Commits since start of the precourse: {totalCommits}</h2>
     </div>
   );
 };
