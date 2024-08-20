@@ -2,10 +2,36 @@
 
 import { useUser } from "@clerk/nextjs";
 import GitHubCommits from "./committracker";
+import { useEffect, useState } from "react";
+import { addGitHubUsername, createStudentIfNotExists } from "@/db/query";
+import {
+  handleAddGithubToDB,
+  handleCreateUserIfNotExist,
+} from "@/actions/actions";
 
 export default function ProfilePage() {
+  const [hasGithubUsername, setHasGithubUsername] = useState(false);
+  const [githubUsername, setGithubUsername] = useState("");
   const { user, isLoaded, isSignedIn } = useUser();
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (githubUsername.trim()) {
+      handleAddGithubToDB(githubUsername);
+      setGithubUsername("");
+      setHasGithubUsername(true);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      const userId = user.id;
+      const name = `${user.firstName} ${user.lastName}`;
+      handleCreateUserIfNotExist(userId, name);
+    }
+  }, [isLoaded, isSignedIn, user]);
+
+  const handleGithubUsername = () => {};
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
@@ -32,7 +58,21 @@ export default function ProfilePage() {
             />
           )}
 
-          <GitHubCommits username="nilshansson" />
+          {hasGithubUsername ? (
+            <GitHubCommits username="nilshansson" />
+          ) : (
+            <form onSubmit={handleSubmit} className="join">
+              <input
+                className="input input-bordered join-item"
+                placeholder="GitHub Username"
+                value={githubUsername}
+                onChange={(e) => setGithubUsername(e.target.value)}
+              />
+              <button type="submit" className="btn join-item rounded-r-full">
+                Add
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </>
