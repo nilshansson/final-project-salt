@@ -16,8 +16,8 @@ export default function LinkPoster({moduleId}:LinkProps){
 
   };
   return(
-  <form onSubmit={handleSubmit} className="card flex flex-col space-y-4">
-      <div className="flex flex-col space-y-2">
+  <form onSubmit={handleSubmit} className="card flex flex-row">
+      <div className="flex flex-row">
         <label className="font-semibold">Link:</label>
         <input
           type="text"
@@ -27,7 +27,7 @@ export default function LinkPoster({moduleId}:LinkProps){
           className="border border-gray-300 rounded p-2"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
+      <button type="submit" className="bg-blue-500 text-white px-4 rounded">
         Post link
       </button>
       </form>
