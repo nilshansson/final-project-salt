@@ -1,20 +1,21 @@
-export default function content({ params }: { params: { id: string } }) {
+import { selectCourseModule } from "@/db/query";
+
+export default async function content({ params }: { params: { id: string } }) {
+  const module = await selectCourseModule(Number(params.id));
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="card bg-base-100 w-full items-center shadow-xl">
-      <div className="card bg-base-100 w-96 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title">introduction</h2>
-          <p>introduction text here</p>
+      <div className="card bg-base-100 w-full shadow-xl">
+        <div className="card-body prose lg:prose-lg">
+          <h2 className="card-title">{module.title}</h2>
+          <p>{module.intro}</p>
           <div className="card-actions justify-end"></div>
         </div>
       </div>
 
-      <article className="prose lg:prose-xl">
-        <h1>{params.id}</h1>
-        <p>testing prose testing prose testing prose</p>
         <div className="collapse collapse-arrow bg-base-200">
-          <input type="radio" name="my-accordion-2" defaultChecked />
+          <input type="radio" name="my-accordion-2"/>
           <div className="collapse-title text-xl font-medium">
             Youtube links
           </div>
@@ -38,7 +39,6 @@ export default function content({ params }: { params: { id: string } }) {
             <p>here is the codewars kata</p>
           </div>
         </div>
-      </article>
       </div>
     </main>
   );
