@@ -1,9 +1,14 @@
-import Image from "next/image";
+"use server"
 
-export default function CreateModule() {
+import { ModuleForm } from './module-form';
+
+export default async function CreateModule(){
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>homepage</h1>
-    </main>
+    <div className='p-20'>
+      <h1>Create a New Course Module</h1>
+      <ModuleForm/>
+          </div>
   );
-}
+};
