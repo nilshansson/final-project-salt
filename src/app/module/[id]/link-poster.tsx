@@ -12,7 +12,7 @@ export default function LinkPoster({moduleId}:LinkProps){
   async function handleSubmit(e: React.FormEvent){
     e.preventDefault();
 
-    postLink(moduleId, url)
+    postLink(moduleId, url).then(()=>alert("LINK IS NOW LINKED"))
 
   };
   return(

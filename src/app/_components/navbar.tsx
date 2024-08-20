@@ -1,5 +1,4 @@
-"use client";
-
+import { selectAllCourseModules } from "@/db/query";
 import {
   SignedIn,
   SignedOut,
@@ -11,7 +10,8 @@ import Link from "next/link";
 
 import { z } from "zod";
 
-export function Navbar() {
+export async function Navbar() {
+  const modules = await selectAllCourseModules();
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -41,15 +41,11 @@ export function Navbar() {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              <li>
-                <Link href="/">General</Link>
+            {modules.map((module)=>(
+              <li key={module.id}>
+                <Link href={`/module/${module.id}`}>{module.title}</Link>
               </li>
-              <li>
-                <Link href="/precourse">Precourse</Link>
-              </li>
-              <li>
-                <Link href="/">Module</Link>
-              </li>
+            ))}
             </ul>
           </div>
         </SignedIn>

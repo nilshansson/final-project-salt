@@ -5,7 +5,6 @@ export async function fetchMetadata(url: string) {
     const response = await fetch(url);
     const html = await response.text();
     const $ = load(html);
-    console.log($);
 
     const metadata = {
       title:
