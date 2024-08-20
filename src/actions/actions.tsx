@@ -38,8 +38,11 @@ export async function postLink(courseModuleId: number, url: string) {
 export async function revalidatePathCreateModule() {
   revalidatePath("/admin/create-module/");
 }
-export async function handleAddGithubToDB(githubUsername: string) {
-  await addGitHubUsername(githubUsername);
+export async function handleAddGithubToDB(
+  userId: string,
+  githubUsername: string
+) {
+  await addGitHubUsername(userId, githubUsername);
 }
 export async function handleCreateUserIfNotExist(userId: string, name: string) {
   await createStudentIfNotExists(userId, name);

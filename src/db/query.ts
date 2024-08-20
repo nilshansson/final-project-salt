@@ -128,4 +128,12 @@ export async function createStudentIfNotExists(userId: string, name: string) {
   }
 }
 
-export async function addGitHubUsername(userId: string) {}
+export async function addGitHubUsername(
+  userId: string,
+  githubUsername: string
+) {
+  await db
+    .update(students)
+    .set({ github: githubUsername })
+    .where(eq(students.userId, userId));
+}
