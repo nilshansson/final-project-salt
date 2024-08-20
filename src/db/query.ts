@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { db, pool } from ".";
-import { courseModules, utlinks } from "./schema";
+import { courseModules, links, utlinks } from "./schema";
 import { eq } from "drizzle-orm";
 
 export type SelectModule = typeof courseModules.$inferSelect;
@@ -64,6 +64,40 @@ export async function selectUtlinksByModule(
       .where(eq(utlinks.courseModulesId, moduleId));
 
     return links;
+  } catch (error) {
+    console.error("Failed to select utlinks:", error);
+    throw new Error("Failed to select utlinks");
+  }
+}
+
+export type SelectLink = typeof links.$inferSelect;
+export type InsertLink = typeof links.$inferInsert;
+export async function insertLink(
+  courseModulesId: number,
+  url: string,
+  title: string,
+): Promise<InsertLink> {
+  try {
+    const link = await db
+      .insert(links)
+      .values({ courseModulesId, url, title })
+      .returning();
+    return link[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
+  }
+}
+
+export async function selectLinksByModule(
+  moduleId: number,
+): Promise<SelectLink[]> {
+  try {
+    const link = await db
+      .select()
+      .from(links)
+      .where(eq(links.courseModulesId, moduleId));
+    return link;
   } catch (error) {
     console.error("Failed to select utlinks:", error);
     throw new Error("Failed to select utlinks");

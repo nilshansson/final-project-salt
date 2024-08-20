@@ -1,20 +1,23 @@
 "use client"
 
 import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
-import { SelectUtlink } from "@/db/query";
+import { SelectLink, SelectUtlink } from "@/db/query";
 import { UploadButton } from "@/utils/uploadthing";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import LinkPoster from "./link-poster";
 
 interface LinksProps{
   utlinks:SelectUtlink[]
+  links:SelectLink[]
   moduleId: number
 }
 
 
-export function LinksCard({utlinks, moduleId}:LinksProps){
+export function LinksCard({utlinks, links, moduleId}:LinksProps){
   return (
     <>
+      <LinkPoster moduleId={moduleId}/>
       <UploadButton
         endpoint="fileUploader"
         onClientUploadComplete={(res) => {
@@ -40,6 +43,16 @@ export function LinksCard({utlinks, moduleId}:LinksProps){
                 {utlink.title}
                 </h3>
               </Link>
+            </div>
+          ))}
+          {links.map((link)=>(
+            <div key={link.id}>
+            <Link href={link.url}>
+              <h3>
+              {link.title}
+              </h3>
+            </Link>
+
             </div>
           ))}
           </div>
