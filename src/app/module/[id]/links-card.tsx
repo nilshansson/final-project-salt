@@ -1,26 +1,29 @@
 "use client"
 
+import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
 import { SelectUtlink } from "@/db/query";
 import { UploadButton } from "@/utils/uploadthing";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
 interface LinksProps{
   utlinks:SelectUtlink[]
+  moduleId: number
 }
 
 
-export function LinksCard({utlinks}:LinksProps){
+export function LinksCard({utlinks, moduleId}:LinksProps){
   return (
     <>
       <UploadButton
         endpoint="fileUploader"
         onClientUploadComplete={(res) => {
-          // Do something with the response
+          postUtlink(moduleId, res[0].name, res[0].url)
           console.log("Files: ", res);
           alert("Upload Completed");
+          revalidatePathCreateModule()
         }}
         onUploadError={(error: Error) => {
-          // Do something with the error.
           alert(`ERROR! ${error.message}`);
         }}
       />
@@ -36,9 +39,6 @@ export function LinksCard({utlinks}:LinksProps){
                 <h3>
                 {utlink.title}
                 </h3>
-                <p>
-                {utlink.description}
-                </p>
               </Link>
             </div>
           ))}

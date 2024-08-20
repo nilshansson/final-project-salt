@@ -11,7 +11,7 @@ export default async function content({ params }: { params: { id: string } }) {
       <div className="card bg-base-100 w-full items-center shadow-xl">
         <IntroCard title={module.title} intro={module.intro}/>
 
-        <LinksCard utlinks={utlinks}/>
+        <LinksCard utlinks={utlinks} moduleId={module.id}/>
       </div>
     </main>
   );
