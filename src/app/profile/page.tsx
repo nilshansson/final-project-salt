@@ -31,18 +31,17 @@ export default async function ProfilePage() {
         throw new Error("could not load or create user")
       }
 
-
   return (
     <>
       <div className="card bg-base-100 w-96 shadow-xl">
         <div className="card-body flex flex-col items-center justify-center text-center">
           <h1 className="text-lg font-bold mb-4">
-            Welcome, {user.firstName} {user.lastName}!
+            Welcome, {user.first_name} {user.last_name}!
           </h1>
 
-          {user.imageUrl && (
+          {user.image_url && (
             <img
-              src={user.imageUrl}
+              src={user.image_url}
               alt="User Profile Picture"
               width={150}
               height={150}
