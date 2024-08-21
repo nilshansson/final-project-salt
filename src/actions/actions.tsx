@@ -2,7 +2,7 @@
 
 import {
   addGitHubUsername,
-  createStudentIfNotExists,
+  createStudentandUserIfNotExists,
   insertCourseModule,
   insertLink,
   insertUtlink,
@@ -45,5 +45,5 @@ export async function handleAddGithubToDB(
   await addGitHubUsername(userId, githubUsername);
 }
 export async function handleCreateUserIfNotExist(userId: string, name: string) {
-  await createStudentIfNotExists(userId, name);
+  await createStudentandUserIfNotExists(userId, name);
 }
