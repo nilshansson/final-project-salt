@@ -46,6 +46,7 @@ export async function handleAddGithubToDB(
   githubUsername: string
 ) {
   await addGitHubUsername(userId, githubUsername);
+  revalidatePath("/profile")
 }
 export async function handleCreateUserIfNotExist(
   userId: string,
