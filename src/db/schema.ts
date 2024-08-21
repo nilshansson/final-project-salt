@@ -2,10 +2,18 @@ import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
-  userId: text("user_id").notNull().unique(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id),
   name: text("name").notNull(),
   github: text("github"),
   classId: serial("class_id").references(() => classes.id),
+});
+
+export const users = pgTable("users", {
+  id: text("id").notNull().unique(),
+  role: text("role"),
 });
 
 export const classes = pgTable("classes", {
@@ -22,7 +30,7 @@ export const courseModules = pgTable("course_modules", {
 export const links = pgTable("links", {
   id: serial("id").primaryKey(),
   courseModulesId: serial("course_modules_id").references(
-    () => courseModules.id
+    () => courseModules.id,
   ),
   url: text("url").notNull(),
   title: text("title").notNull(),
@@ -32,7 +40,7 @@ export const links = pgTable("links", {
 export const utlinks = pgTable("utlinks", {
   id: serial("id").primaryKey(),
   courseModulesId: serial("course_modules_id").references(
-    () => courseModules.id
+    () => courseModules.id,
   ),
   url: text("url").notNull(),
   title: text("title").notNull(),
@@ -59,9 +67,13 @@ export const utlinksRelations = relations(utlinks, ({ one }) => ({
 }));
 
 export const studentsRelations = relations(students, ({ one }) => ({
-  author: one(classes, {
+  class: one(classes, {
     fields: [students.classId],
     references: [classes.id],
+  }),
+  user: one(users, {
+    fields: [students.userId],
+    references: [users.id],
   }),
 }));
 

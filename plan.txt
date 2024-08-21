@@ -40,6 +40,7 @@ Admin page for seeing every class with github links
 homepage to have login prompt if not logged
 homepage to redirect to profile if student or admin class view if Admin
 
+create mock data sql
 
 9 sprints
 
