@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react";
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 

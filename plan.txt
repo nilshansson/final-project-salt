@@ -30,6 +30,16 @@ Commit tracker
 Admin page for seeing every class has commit tracker
 Flashcard quizzes
 
+commit tracker improvements
+track progress in literature
+
+***new cards***
+fix loading state for buttons
+Admin page for managing content and modules
+Admin page for seeing every class with github links
+homepage to have login prompt if not logged
+homepage to redirect to profile if student or admin class view if Admin
+
 
 9 sprints
 
@@ -41,16 +51,26 @@ sprint 2
 Profile page, Login, Content page
 
 sprint 3
-
+admin page for managing content
+landing page redirects to profile
+tweak Profile
+profile page.tsx use server
+admin page for seeing every class with github links
 
 sprint 4
+basic functionality done
 
 sprint 5
+validation/error handling (manual testing)
 
 sprint 6
+styling
 
 sprint 7
+styling/test writing
 
 sprint 8
+knyta ihop säcken
 
 sprint 9
+prepare presentation

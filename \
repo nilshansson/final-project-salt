@@ -55,8 +55,7 @@ export async function Navbar() {
       <div className="navbar-center">
         <a className="btn btn-ghost text-xl">&lt;/salt&gt;</a>
       </div>
-      <Image src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-dark.svg" width={80}
-      height={80} alt="</salt>"/>
+      <Image src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-light.svg" width="50px" alt="</salt>"/>
 
       <div className="navbar-end">
         <SignedIn>
