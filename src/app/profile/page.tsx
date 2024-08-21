@@ -1,20 +1,18 @@
 "use server";
 
 import { useUser } from "@clerk/nextjs";
-import GitHubCommits from "./committracker";
 import {
   handleAddGithubToDB,
   handleCreateUserIfNotExist,
 } from "@/actions/actions";
 import { GithubForm } from "./github-form";
 import { auth} from "@clerk/nextjs/server";
+import { GitHubCommits } from "./committracker";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
-  console.log("clerkauth")
-  console.log(clerkAuth)
   if (!clerkAuth) {
-    return <div>Please sign in to view your profile.</div>;
+    return( <div>Please sign in to view your profile.</div>)
     }
       const userId = clerkAuth.userId;
 
@@ -23,8 +21,6 @@ export default async function ProfilePage() {
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
   }).then((res) => res.json());
-  console.log("user ")
-  console.log(user)
       const name = `${user.first_name} ${user.last_name}`;
       const {user:loadedUser, student} = await handleCreateUserIfNotExist(userId!, name);
       if(!student){

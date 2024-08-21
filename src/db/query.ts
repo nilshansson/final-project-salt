@@ -9,7 +9,7 @@ export type SelectModule = typeof courseModules.$inferSelect;
 export type InsertModule = typeof courseModules.$inferInsert;
 export async function insertCourseModule(
   title: string,
-  intro: string | null
+  intro: string | null,
 ): Promise<InsertModule> {
   try {
     const result = await db
@@ -52,7 +52,7 @@ export async function insertUtlink(
   courseModulesId: number,
   url: string,
   title: string,
-  description: string | null
+  description: string | null,
 ): Promise<InsertUtlink> {
   try {
     const utlink = await db
@@ -67,7 +67,7 @@ export async function insertUtlink(
 }
 
 export async function selectUtlinksByModule(
-  moduleId: number
+  moduleId: number,
 ): Promise<SelectUtlink[]> {
   try {
     const links = await db
@@ -87,7 +87,7 @@ export type InsertLink = typeof links.$inferInsert;
 export async function insertLink(
   courseModulesId: number,
   url: string,
-  title: string
+  title: string,
 ): Promise<InsertLink> {
   try {
     const link = await db
@@ -102,7 +102,7 @@ export async function insertLink(
 }
 
 export async function selectLinksByModule(
-  moduleId: number
+  moduleId: number,
 ): Promise<SelectLink[]> {
   try {
     const link = await db
@@ -116,6 +116,26 @@ export async function selectLinksByModule(
   }
 }
 
+export interface combinedLink {
+  id: number;
+  title: string;
+  description: string | null;
+  courseModulesId: number;
+  url: string;
+}
+
+export async function selectAllLinksByModule(
+  moduleId: number,
+): Promise<combinedLink[]> {
+  const [links, utlinks] = await Promise.all([
+    selectLinksByModule(moduleId),
+    selectUtlinksByModule(moduleId),
+  ]);
+
+  const combinedLinks: combinedLink[] = [...links, ...utlinks];
+  return combinedLinks;
+}
+
 export type SelectUser = typeof users.$inferSelect;
 export type SelectStudent = typeof students.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
@@ -123,7 +143,7 @@ export type InsertStudent = typeof students.$inferInsert;
 
 export async function createStudentAndUserIfNotExists(
   userId: string,
-  name: string
+  name: string,
 ): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
   // Check if the student already exists
   const existingStudent = await db
@@ -180,7 +200,7 @@ export async function createStudentAndUserIfNotExists(
 
 export async function addGitHubUsername(
   userId: string,
-  githubUsername: string
+  githubUsername: string,
 ) {
   await db
     .update(students)

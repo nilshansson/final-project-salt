@@ -1,5 +1,3 @@
-"use server"
-
 import { ModuleForm } from './module-form';
 
 export default async function CreateModule(){

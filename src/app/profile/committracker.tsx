@@ -8,7 +8,7 @@ interface GHCommitProps {
   student: SelectStudent;
 }
 
-const GitHubCommits = ({ student }: GHCommitProps) => {
+export function GitHubCommits({ student }: GHCommitProps){
   const [totalCommits, setTotalCommits] = useState<number | null>(null);
   const [weeklyCommits, setWeeklyCommits] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -130,5 +130,3 @@ const GitHubCommits = ({ student }: GHCommitProps) => {
     </div>
   );
 };
-
-export default GitHubCommits;
