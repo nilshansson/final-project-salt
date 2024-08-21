@@ -1,20 +1,24 @@
-"use client";
+"use server";
 
 import { useUser } from "@clerk/nextjs";
 import GitHubCommits from "./committracker";
-import { useEffect, useState } from "react";
 import {
   handleAddGithubToDB,
   handleCreateUserIfNotExist,
 } from "@/actions/actions";
 
-export default function ProfilePage() {
-  const [hasGithubUsername, setHasGithubUsername] = useState(false);
-  const [githubUsername, setGithubUsername] = useState("");
+export default async function ProfilePage() {
   const { user, isLoaded, isSignedIn } = useUser();
 
-  const userId = user?.id;
-
+    if (!isLoaded || !isSignedIn || !user) {
+    return <div>Please sign in to view your profile.</div>;
+    }
+      const userId = user.id;
+      const name = `${user.firstName} ${user.lastName}`;
+      const {user:loadedUser, student} = await handleCreateUserIfNotExist(userId, name);
+      if(!student){
+        throw new Error("could not load or create user")
+      }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (githubUsername && userId) {
@@ -23,17 +27,6 @@ export default function ProfilePage() {
     }
   };
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn && user) {
-      const userId = user.id;
-      const name = `${user.firstName} ${user.lastName}`;
-      handleCreateUserIfNotExist(userId, name);
-    }
-  }, [isLoaded, isSignedIn, user]);
-
-  if (!isSignedIn) {
-    return <div>Please sign in to view your profile.</div>;
-  }
 
   return (
     <>
@@ -53,7 +46,7 @@ export default function ProfilePage() {
             />
           )}
 
-          {hasGithubUsername ? (
+          {student.github ? (
             <GitHubCommits username={githubUsername} />
           ) : (
             <form onSubmit={handleSubmit} className="join">

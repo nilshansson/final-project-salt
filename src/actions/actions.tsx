@@ -6,6 +6,8 @@ import {
   insertCourseModule,
   insertLink,
   insertUtlink,
+  SelectStudent,
+  SelectUser,
 } from "@/db/query";
 import { fetchMetadata } from "@/utils/metadata";
 import { revalidatePath } from "next/cache";
@@ -44,6 +46,7 @@ export async function handleAddGithubToDB(
 ) {
   await addGitHubUsername(userId, githubUsername);
 }
-export async function handleCreateUserIfNotExist(userId: string, name: string) {
-  await createStudentandUserIfNotExists(userId, name);
+export async function handleCreateUserIfNotExist(userId: string, name: string): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
+  const {user, student} = await createStudentandUserIfNotExists(userId, name);
+  return {user, student}
 }
