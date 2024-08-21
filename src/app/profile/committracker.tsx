@@ -1,9 +1,14 @@
 "use client"
 
+import { SelectStudent } from "@/db/query";
 import { useState, useEffect } from "react";
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
-const GitHubCommits = ({ username }: { username: string }) => {
+interface GHCommitProps{
+  student:SelectStudent
+}
+
+const GitHubCommits = ({ student }: GHCommitProps) => {
   const [totalCommits, setTotalCommits] = useState<number | null>(null);
   const [weeklyCommits, setWeeklyCommits] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +26,7 @@ const GitHubCommits = ({ username }: { username: string }) => {
       const oneWeek = 7 * 24 * 60 * 60 * 1000;
       const endDate = new Date(startDate.getTime() + 4 * oneWeek);
       try {
-        const reposUrl = `https://api.github.com/users/${username}/repos`;
+        const reposUrl = `https://api.github.com/users/${student.github}/repos`;
 
         const reposResponse = await fetch(reposUrl, {
           headers: {
@@ -39,7 +44,7 @@ const GitHubCommits = ({ username }: { username: string }) => {
         const weeklyCommitsArray = Array(4).fill(0);
 
         for (const repo of repos) {
-          const commitsUrl = `https://api.github.com/repos/${username}/${
+          const commitsUrl = `https://api.github.com/repos/${student.github}/${
             repo.name
           }/commits?since=${startDate.toISOString()}&until=${endDate.toISOString()}`;
           const commitsResponse = await fetch(commitsUrl, {
@@ -84,7 +89,7 @@ const GitHubCommits = ({ username }: { username: string }) => {
     };
 
     fetchGitHubData();
-  }, [username]);
+  }, [student.github]);
 
   if (loading) {
     return <div>Loading GitHub commits...</div>;

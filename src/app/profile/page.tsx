@@ -6,26 +6,30 @@ import {
   handleAddGithubToDB,
   handleCreateUserIfNotExist,
 } from "@/actions/actions";
+import { GithubForm } from "./github-form";
+import { auth} from "@clerk/nextjs/server";
 
 export default async function ProfilePage() {
-  const { user, isLoaded, isSignedIn } = useUser();
-
-    if (!isLoaded || !isSignedIn || !user) {
+  const clerkAuth = await auth();
+  console.log("clerkauth")
+  console.log(clerkAuth)
+  if (!clerkAuth) {
     return <div>Please sign in to view your profile.</div>;
     }
-      const userId = user.id;
-      const name = `${user.firstName} ${user.lastName}`;
-      const {user:loadedUser, student} = await handleCreateUserIfNotExist(userId, name);
+      const userId = clerkAuth.userId;
+
+  const user = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+    },
+  }).then((res) => res.json());
+  console.log("user ")
+  console.log(user)
+      const name = `${user.first_name} ${user.last_name}`;
+      const {user:loadedUser, student} = await handleCreateUserIfNotExist(userId!, name);
       if(!student){
         throw new Error("could not load or create user")
       }
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (githubUsername && userId) {
-      handleAddGithubToDB(userId, githubUsername);
-      setHasGithubUsername(true);
-    }
-  };
 
 
   return (
@@ -47,20 +51,10 @@ export default async function ProfilePage() {
           )}
 
           {student.github ? (
-            <GitHubCommits username={githubUsername} />
+            <GitHubCommits student={student} />
           ) : (
-            <form onSubmit={handleSubmit} className="join">
-              <input
-                className="input input-bordered join-item"
-                placeholder="GitHub Username"
-                value={githubUsername}
-                onChange={(e) => setGithubUsername(e.target.value)}
-              />
-              <button type="submit" className="btn join-item rounded-r-full">
-                Add
-              </button>
-            </form>
-          )}
+          <GithubForm student={student}/>
+                      )}
         </div>
       </div>
     </>

@@ -2,13 +2,12 @@ import { relations } from "drizzle-orm";
 import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
+  id: serial("id").primaryKey(),
   userId: text("user_id")
     .notNull()
-    .unique()
     .references(() => users.id),
   name: text("name").notNull(),
   github: text("github"),
-  classId: serial("class_id").references(() => classes.id),
 });
 
 export const users = pgTable("users", {
@@ -67,16 +66,8 @@ export const utlinksRelations = relations(utlinks, ({ one }) => ({
 }));
 
 export const studentsRelations = relations(students, ({ one }) => ({
-  class: one(classes, {
-    fields: [students.classId],
-    references: [classes.id],
-  }),
   user: one(users, {
     fields: [students.userId],
     references: [users.id],
   }),
-}));
-
-export const classesRelations = relations(classes, ({ many }) => ({
-  students: many(students),
 }));

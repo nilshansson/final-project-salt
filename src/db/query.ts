@@ -123,40 +123,59 @@ export async function createStudentAndUserIfNotExists(
   userId: string,
   name: string,
 ): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
+  // Check if the student already exists
   const existingStudent = await db
     .select()
     .from(students)
     .where(eq(students.userId, userId))
-    .then((result) => result[0] || null); // Ensure a single object or null
+    .then((result) => result[0] || null);
 
+  // Check if the user already exists
   const existingUser = await db
     .select()
     .from(users)
     .where(eq(users.id, userId))
-    .then((result) => result[0] || null); // Ensure a single object or null
+    .then((result) => result[0] || null);
 
-  if (!existingStudent && !existingUser) {
-    const [newStudent] = await db
-      .insert(students)
-      .values({
-        userId: userId,
-        name: name,
-      })
-      .returning();
+  let newUser = existingUser;
+  let newStudent = existingStudent;
 
-    const [newUser] = await db
+  // If the user doesn't exist, create it
+  if (!existingUser) {
+    [newUser] = await db
       .insert(users)
       .values({
         id: userId,
         role: "student",
       })
       .returning();
-
-    return { user: newUser, student: newStudent };
   }
 
-  return { user: existingUser, student: existingStudent };
+  // If the student doesn't exist, create it
+  if (!existingStudent) {
+    [newStudent] = await db
+      .insert(students)
+      .values({
+        userId: userId,
+        name: name,
+      })
+      .returning();
+  }
+
+  // Log the outcome (for debugging)
+  if (newUser !== existingUser || newStudent !== existingStudent) {
+    console.log("CREATED NEW OBJECTS\n\n\n");
+    console.log(newUser);
+    console.log(newStudent);
+  } else {
+    console.log("RETRIEVED EXISTING OBJECTS\n\n\n");
+    console.log(newUser);
+    console.log(newStudent);
+  }
+
+  return { user: newUser, student: newStudent };
 }
+
 export async function addGitHubUsername(
   userId: string,
   githubUsername: string,

@@ -1,19 +1,19 @@
 "use client"
 
+import { handleAddGithubToDB } from "@/actions/actions";
 import { SelectStudent, SelectUser } from "@/db/query";
 import { useState } from "react";
 
 interface GHFormProps{
   student:SelectStudent
-  user:SelectUser
 }
 
-export function GithubForm({student, user}:GHFormProps){
+export function GithubForm({student}:GHFormProps){
 const [githubUsername, setGithubUsername] = useState("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (githubUsername && userId) {
-      handleAddGithubToDB(userId, githubUsername);
+    if (githubUsername && student.userId) {
+      handleAddGithubToDB(student.userId, githubUsername);
     }
   };
 

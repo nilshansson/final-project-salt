@@ -2,7 +2,7 @@
 
 import {
   addGitHubUsername,
-  createStudentandUserIfNotExists,
+createStudentAndUserIfNotExists,
   insertCourseModule,
   insertLink,
   insertUtlink,
@@ -47,6 +47,6 @@ export async function handleAddGithubToDB(
   await addGitHubUsername(userId, githubUsername);
 }
 export async function handleCreateUserIfNotExist(userId: string, name: string): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
-  const {user, student} = await createStudentandUserIfNotExists(userId, name);
+  const {user, student} = await createStudentAndUserIfNotExists(userId, name);
   return {user, student}
 }
