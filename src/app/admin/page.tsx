@@ -29,10 +29,10 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <>
-      {studentsInfo.map((student) => {
-        return <StudentCard key={student.userId} student={student} />;
-      })}
-    </>
+    <div className="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-4 p-4">
+      {studentsInfo.map((student) => (
+        <StudentCard key={student.userId} student={student} />
+      ))}
+    </div>
   );
 }
