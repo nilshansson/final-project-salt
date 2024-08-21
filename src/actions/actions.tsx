@@ -2,7 +2,7 @@
 
 import {
   addGitHubUsername,
-  createStudentandUserIfNotExists,
+  createStudentAndUserIfNotExists,
   getAllStudentInfo,
   insertCourseModule,
   insertLink,
