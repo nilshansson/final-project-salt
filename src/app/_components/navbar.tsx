@@ -42,21 +42,25 @@ export async function Navbar() {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-            {modules.map((module)=>(
-              <li key={module.id}>
-                <Link href={`/module/${module.id}`}>{module.title}</Link>
-              </li>
-            ))}
+              {modules.map((module) => (
+                <li key={module.id}>
+                  <Link href={`/module/${module.id}`}>{module.title}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         </SignedIn>
       </div>
 
-      <div className="navbar-center">
-        <a className="btn btn-ghost text-xl">&lt;/salt&gt;</a>
-      </div>
-      <Image src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-dark.svg" width={80}
-      height={80} alt="</salt>"/>
+      <div className="navbar-center"></div>
+      <Link href="/profile">
+        <Image
+          src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-dark.svg"
+          width={80}
+          height={80}
+          alt="</salt>"
+        />
+      </Link>
 
       <div className="navbar-end">
         <SignedIn>
