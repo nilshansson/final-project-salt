@@ -15,16 +15,15 @@ export default function StudentCard({ student }: StudentCardProps) {
     <div className="card bg-base-100 w-96 shadow-xl">
       <div className="card-body flex flex-col items-center justify-center text-center">
         <h1 className="text-lg font-bold mb-4">{student.name}</h1>
-        <h2>
-          github:{" "}
-          {student.github ? (
-            student.github
-          ) : (
-            <p>this student hasnt added their github</p>
-          )}
-        </h2>
-
-        <GitHubCommits student={student} />
+        github:{" "}
+        {student.github ? (
+          <>
+            <p>{student.github}</p>
+            <GitHubCommits student={student} />
+          </>
+        ) : (
+          <p>this student hasnt added their github</p>
+        )}
       </div>
     </div>
   );
