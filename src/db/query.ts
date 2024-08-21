@@ -1,4 +1,6 @@
+"use server";
 import { drizzle } from "drizzle-orm/node-postgres";
+
 import { db, pool } from ".";
 import { courseModules, links, students, utlinks, users } from "./schema";
 import { eq } from "drizzle-orm";
@@ -195,6 +197,12 @@ export async function getGithubUserInfo(userId: string) {
 }
 
 export async function getAllStudentInfo() {
-  const getAllStudentInfo = await db.select().from(students).execute();
-  return getAllStudentInfo;
+  try {
+    const allStudentInfo = await db.select().from(students);
+    console.log("Fetched students:", allStudentInfo);
+    return allStudentInfo ?? [];
+  } catch (error) {
+    console.error("Failed to fetch students:", error);
+    return [];
+  }
 }

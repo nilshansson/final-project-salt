@@ -3,25 +3,24 @@
 import StudentCard from "../_components/studentcard";
 import { useEffect, useState } from "react";
 import { getAllStudentInfo } from "@/db/query";
-import { handleFetchingAllStudentInfo } from "@/actions/actions";
 
 type StudentInfo = {
-  name: string;
+  id: number;
   userId: string;
+  name: string;
   github: string | null;
-  classId: number;
 };
-
 export default function AdminPage() {
   const [studentsInfo, setStudentsInfo] = useState<StudentInfo[]>([]);
 
   useEffect(() => {
     async function fetchStudents() {
       try {
-        const allStudentInfo: StudentInfo[] =
-          await handleFetchingAllStudentInfo();
+        const allStudentInfo: StudentInfo[] = await getAllStudentInfo();
 
         setStudentsInfo(allStudentInfo);
+        console.log(studentsInfo);
+        console.log(allStudentInfo);
       } catch (error) {
         console.error("Failed to fetch student info:", error);
       }
@@ -31,14 +30,9 @@ export default function AdminPage() {
 
   return (
     <>
-      {studentsInfo.map((student) => (
-        <StudentCard
-          key={student.userId}
-          name={student.name}
-          github={student.github}
-        />
-      ))}
-      <h1>admin page</h1>
+      {studentsInfo.map((student) => {
+        return <StudentCard key={student.userId} student={student} />;
+      })}
     </>
   );
 }
