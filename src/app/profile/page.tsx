@@ -6,26 +6,30 @@ import {
   handleCreateUserIfNotExist,
 } from "@/actions/actions";
 import { GithubForm } from "./github-form";
-import { auth} from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { GitHubCommits } from "./committracker";
+import ContributionGraph from "./contributiongraph";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
   if (!clerkAuth) {
-    return( <div>Please sign in to view your profile.</div>)
-    }
-      const userId = clerkAuth.userId;
+    return <div>Please sign in to view your profile.</div>;
+  }
+  const userId = clerkAuth.userId;
 
   const user = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
     headers: {
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
   }).then((res) => res.json());
-      const name = `${user.first_name} ${user.last_name}`;
-      const {user:loadedUser, student} = await handleCreateUserIfNotExist(userId!, name);
-      if(!student){
-        throw new Error("could not load or create user")
-      }
+  const name = `${user.first_name} ${user.last_name}`;
+  const { user: loadedUser, student } = await handleCreateUserIfNotExist(
+    userId!,
+    name
+  );
+  if (!student) {
+    throw new Error("could not load or create user");
+  }
 
   return (
     <>
@@ -48,8 +52,11 @@ export default async function ProfilePage() {
           {student.github ? (
             <GitHubCommits student={student} />
           ) : (
-          <GithubForm student={student}/>
-                      )}
+            <>
+              <GithubForm student={student} />
+            </>
+          )}
+          <ContributionGraph username="nilshansson" />
         </div>
       </div>
     </>
