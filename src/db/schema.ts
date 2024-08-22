@@ -3,9 +3,7 @@ import { integer, pgTable, text } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
   id: integer("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
+  userId: text("user_id").references(() => users.id),
   classId: integer("class_id").references(() => classes.id),
   name: text("name").notNull(),
   github: text("github"),
