@@ -1,10 +1,9 @@
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
-  classId: integer("class_id").references(() => classes.id),
   name: text("name").notNull(),
   github: text("github"),
 });
@@ -15,40 +14,48 @@ export const users = pgTable("users", {
 });
 
 export const classes = pgTable("classes", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
   name: text("name").notNull(),
 });
 
 export const courseModules = pgTable("course_modules", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey(),
+  classId: integer("class_id").references(() => classes.id),
   title: text("title").notNull(),
   intro: text("intro"),
 });
 
 export const links = pgTable("links", {
-  id: integer("id").primaryKey(),
-  courseModulesId: integer("course_modules_id").references(
-    () => courseModules.id,
-  ),
+  id: serial("id").primaryKey(),
+  courseModulesId: integer("course_modules_id")
+    .references(() => courseModules.id)
+    .notNull(),
   url: text("url").notNull(),
   title: text("title").notNull(),
   description: text("description"),
 });
 
 export const utlinks = pgTable("utlinks", {
-  id: integer("id").primaryKey(),
-  courseModulesId: integer("course_modules_id").references(
-    () => courseModules.id,
-  ),
+  id: serial("id").primaryKey(),
+  courseModulesId: integer("course_modules_id")
+    .references(() => courseModules.id)
+    .notNull(),
   url: text("url").notNull(),
   title: text("title").notNull(),
   description: text("description"),
 });
 
-export const courseModulesRelations = relations(courseModules, ({ many }) => ({
-  links: many(links),
-  utlinks: many(utlinks),
-}));
+export const courseModulesRelations = relations(
+  courseModules,
+  ({ one, many }) => ({
+    links: many(links),
+    utlinks: many(utlinks),
+    class: one(classes, {
+      fields: [courseModules.classId],
+      references: [classes.id],
+    }),
+  }),
+);
 
 export const linksRelations = relations(links, ({ one }) => ({
   module: one(courseModules, {
@@ -64,17 +71,19 @@ export const utlinksRelations = relations(utlinks, ({ one }) => ({
   }),
 }));
 
+export const usersRelations = relations(users, ({ one }) => ({
+  student: one(students),
+}));
+
 export const studentsRelations = relations(students, ({ one }) => ({
   user: one(users, {
     fields: [students.userId],
     references: [users.id],
   }),
-  class: one(classes, {
-    fields: [students.classId],
-    references: [classes.id],
-  }),
+  class: one(classes),
 }));
 
 export const classesRelations = relations(classes, ({ many }) => ({
   students: many(students),
+  courseModules: many(courseModules),
 }));
