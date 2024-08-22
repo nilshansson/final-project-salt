@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { GitHubCommits } from "../profile/committracker";
+import ContributionGraph from "../profile/contributiongraph";
 
 // Update the props to expect the full student object
 type StudentCardProps = {
@@ -22,7 +22,7 @@ export default function StudentCard({ student }: StudentCardProps) {
         {student.github ? (
           <>
             <p>{student.github}</p>
-            <GitHubCommits student={student} />
+            <ContributionGraph student={student} />
           </>
         ) : (
           <p>this student hasnt added their github</p>

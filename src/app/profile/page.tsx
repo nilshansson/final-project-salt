@@ -7,7 +7,7 @@ import {
 } from "@/actions/actions";
 import { GithubForm } from "./github-form";
 import { auth } from "@clerk/nextjs/server";
-import { GitHubCommits } from "./committracker";
+
 import ContributionGraph from "./contributiongraph";
 
 export default async function ProfilePage() {
@@ -50,13 +50,12 @@ export default async function ProfilePage() {
           )}
 
           {student.github ? (
-            <GitHubCommits student={student} />
+            <ContributionGraph student={student} />
           ) : (
             <>
               <GithubForm student={student} />
             </>
           )}
-          <ContributionGraph username="nilshansson" />
         </div>
       </div>
     </>
