@@ -6,6 +6,7 @@ export const students = pgTable("students", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id),
+  classId: text("class_id").references(() => classes.id),
   name: text("name").notNull(),
   github: text("github"),
 });
@@ -70,4 +71,11 @@ export const studentsRelations = relations(students, ({ one }) => ({
     fields: [students.userId],
     references: [users.id],
   }),
+  class: one(classes, {
+    fields: [students.cl],
+  }),
+}));
+
+export const classesRelations = relations(classes, ({ many }) => ({
+  students: many(students),
 }));
