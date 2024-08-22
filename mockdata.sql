@@ -1,43 +1,72 @@
-
--- Inserting mock data into the `users` table
 INSERT INTO users (id, role) VALUES
-('user1', 'student'),
+('user1', 'admin'),
 ('user2', 'student'),
-('user3', 'student'),
-('user4', 'teacher'),
-('user5', 'admin');
+('user3', 'teacher'),
+('user4', 'student'),
+('user5', 'teacher'),
+('user6', 'student'),
+('user7', 'admin'),
+('user8', 'student'),
+('user9', 'teacher'),
+('user10', 'student');
 
--- Inserting mock data into the `students` table
-INSERT INTO students (userId, name, github) VALUES
-('user1', 'Alice Johnson', 'https://github.com/alice'),
-('user2', 'Bob Smith', 'https://github.com/bob'),
-('user3', 'Charlie Brown', 'https://github.com/charlie');
+INSERT INTO classes (id, name) VALUES
+(1, 'Math 101'),
+(2, 'Science 101'),
+(3, 'History 101'),
+(4, 'Physics 101'),
+(5, 'Chemistry 101'),
+(6, 'English Literature'),
+(7, 'Computer Science 101'),
+(8, 'Art History'),
+(9, 'Philosophy 101'),
+(10, 'Psychology 101');
 
--- Inserting mock data into the `classes` table
-INSERT INTO classes (name) VALUES
-('Web Development'),
-('Data Science'),
-('Mobile App Development');
+INSERT INTO students (id, user_id, class_id, name, github) VALUES
+(1, 'user2', 1, 'John Doe', 'https://github.com/johndoe'),
+(2, 'user2', 2, 'Jane Doe', 'https://github.com/janedoe'),
+(3, 'user4', 3, 'Jim Beam', 'https://github.com/jimbeam'),
+(4, 'user6', 4, 'Jack Daniels', 'https://github.com/jackdaniels'),
+(5, 'user8', 5, 'Johnny Walker', 'https://github.com/johnnywalker'),
+(6, 'user10', 6, 'Jameson Irish', 'https://github.com/jamesonirish'),
+(7, 'user2', 7, 'George Smith', 'https://github.com/georgesmith'),
+(8, 'user4', 8, 'Glen Morangie', 'https://github.com/glenmorangie'),
+(9, 'user6', 9, 'Mac Allan', 'https://github.com/macallan'),
+(10, 'user8', 10, 'Evan Williams', 'https://github.com/evanwilliams');
 
--- Inserting mock data into the `course_modules` table
-INSERT INTO course_modules (title, intro) VALUES
-('Introduction to HTML', 'Learn the basics of HTML, the standard language for creating web pages.'),
-('CSS Basics', 'This module covers the fundamentals of CSS, including selectors, properties, and the box model.'),
-('JavaScript for Beginners', 'An introduction to JavaScript, the programming language of the web.'),
-('Introduction to Python', 'Learn Python, a powerful programming language used in data science and machine learning.'),
-('Data Visualization with Python', 'Explore data visualization techniques using Python libraries such as Matplotlib and Seaborn.');
+INSERT INTO course_modules (id, title, intro) VALUES
+(1, 'Introduction to Algebra', 'Basics of Algebra covering equations and inequalities.'),
+(2, 'Introduction to Biology', 'Introduction to cell biology and genetics.'),
+(3, 'Introduction to World History', 'Overview of key events in world history.'),
+(4, 'Introduction to Newtonian Physics', 'Basic concepts in Newtonian Mechanics.'),
+(5, 'Introduction to Organic Chemistry', 'Fundamentals of organic molecules and reactions.'),
+(6, 'Shakespearean Literature', 'Analysis of key works by William Shakespeare.'),
+(7, 'Introduction to Programming', 'Learn the basics of programming in Python.'),
+(8, 'Renaissance Art History', 'A study of art and architecture during the Renaissance.'),
+(9, 'Introduction to Ethics', 'An overview of major ethical theories and thinkers.'),
+(10, 'Introduction to Cognitive Psychology', 'Basics of cognitive processes and how they influence behavior.');
 
--- Inserting mock data into the `links` table
-INSERT INTO links (courseModulesId, url, title, description) VALUES
-(1, 'https://developer.mozilla.org/en-US/docs/Web/HTML', 'MDN Web Docs: HTML', 'Comprehensive resource for HTML.'),
-(1, 'https://www.w3schools.com/html/', 'W3Schools HTML Tutorial', 'Learn HTML from scratch with examples.'),
-(2, 'https://developer.mozilla.org/en-US/docs/Web/CSS', 'MDN Web Docs: CSS', 'Comprehensive resource for CSS.'),
-(2, 'https://www.css-tricks.com/', 'CSS-Tricks', 'Tips, tricks, and techniques on using CSS.'),
-(3, 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', 'MDN Web Docs: JavaScript', 'Comprehensive resource for JavaScript.');
+-- Mock data for 'links' table
+INSERT INTO links (id, course_modules_id, url, title, description) VALUES
+(1, 1, 'https://algebra.com', 'Algebra Basics', 'Learn the basics of algebra.'),
+(2, 2, 'https://biology.com', 'Cell Biology', 'Introduction to cell biology.'),
+(3, 3, 'https://history.com', 'World History Overview', 'Key events in world history.'),
+(4, 4, 'https://physics.com', 'Newtonian Mechanics', 'Learn about Newtonian physics.'),
+(5, 5, 'https://organicchemistry.com', 'Organic Chemistry', 'Introduction to organic chemistry.'),
+(6, 6, 'https://shakespeare.com', 'Shakespeare', 'Analysis of Shakespeares works.'),
+(7, 7, 'https://programming.com', 'Python Programming', 'Learn to program in Python.'),
+(8, 8, 'https://renaissance.com', 'Renaissance Art', 'Study of Renaissance art.'),
+(9, 9, 'https://ethics.com', 'Ethics Overview', 'Learn about major ethical theories.'),
+(10, 10, 'https://cognitivepsychology.com', 'Cognitive Psychology', 'Introduction to cognitive psychology.');
 
--- Inserting mock data into the `utlinks` table
-INSERT INTO utlinks (courseModulesId, url, title, description) VALUES
-(4, 'https://docs.python.org/3/tutorial/', 'Official Python Tutorial', 'The official Python tutorial for beginners.'),
-(4, 'https://realpython.com/', 'Real Python', 'Learn Python with tutorials, quizzes, and exercises.'),
-(5, 'https://matplotlib.org/stable/tutorials/index.html', 'Matplotlib Tutorials', 'Learn data visualization with Matplotlib.'),
-(5, 'https://seaborn.pydata.org/tutorial.html', 'Seaborn Tutorial', 'Comprehensive guide to using Seaborn for data visualization.');
+INSERT INTO utlinks (id, course_modules_id, url, title, description) VALUES
+(1, 1, 'https://additional-algebra.com', 'Advanced Algebra', 'Advanced topics in algebra.'),
+(2, 2, 'https://genetics.com', 'Genetics Basics', 'Introduction to genetics.'),
+(3, 3, 'https://modern-history.com', 'Modern History', 'Exploring modern historical events.'),
+(4, 4, 'https://thermodynamics.com', 'Thermodynamics Basics', 'Introduction to thermodynamics.'),
+(5, 5, 'https://biochemistry.com', 'Biochemistry', 'Basics of biochemistry.'),
+(6, 6, 'https://poetry.com', 'Shakespearean Poetry', 'Study of Shakespeares poetry.'),
+(7, 7, 'https://advancedprogramming.com', 'Advanced Python', 'Advanced concepts in Python programming.'),
+(8, 8, 'https://baroque.com', 'Baroque Art', 'Study of Baroque art.'),
+(9, 9, 'https://moralphilosophy.com', 'Moral Philosophy', 'In-depth study of moral philosophy.'),
+(10, 10, 'https://neuroscience.com', 'Neuroscience Basics', 'Introduction to the neuroscience of behavior.');
