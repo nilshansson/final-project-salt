@@ -3,6 +3,7 @@
 import {
   addGitHubUsername,
   createStudentAndUserIfNotExists,
+  editClassName,
   getAllStudentInfo,
   insertCourseModule,
   insertLink,
@@ -36,6 +37,11 @@ export async function postLink(courseModuleId: number, url: string) {
   const link = await insertLink(courseModuleId, url, metadata.title);
   revalidatePathCreateModule();
   return link;
+}
+
+export async function updateClassNameAndRevalidate(classId:number, className:string){
+  await editClassName(classId, className);
+  revalidatePath("/admin/module")
 }
 
 export async function revalidatePathCreateModule() {

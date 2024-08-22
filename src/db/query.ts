@@ -261,3 +261,15 @@ export async function selectAllClasses(): Promise<SelectClasses[]> {
     throw new Error("could not get classes");
   }
 }
+
+export async function editClassName(classId: number, className: string) {
+  try {
+    await db
+      .update(classes)
+      .set({ name: className })
+      .where(eq(classes.id, classId));
+  } catch (error) {
+    console.log(error);
+    throw new Error("could not get classes");
+  }
+}
