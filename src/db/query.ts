@@ -137,8 +137,9 @@ export async function selectAllLinksByModule(
 }
 
 export type SelectUser = typeof users.$inferSelect;
-export type SelectStudent = typeof students.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
+
+export type SelectStudent = typeof students.$inferSelect;
 export type InsertStudent = typeof students.$inferInsert;
 
 export async function createStudentAndUserIfNotExists(

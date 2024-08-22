@@ -1,4 +1,6 @@
-import GitHubCommits from "../profile/committracker";
+"use client"
+
+import { GitHubCommits } from "../profile/committracker";
 
 // Update the props to expect the full student object
 type StudentCardProps = {

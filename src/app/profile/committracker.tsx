@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectStudent } from "@/db/query";
+import { getAllStudentInfo, selectAllCourseModules, SelectStudent } from "@/db/query";
 import { useState, useEffect } from "react";
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
