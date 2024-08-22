@@ -3,6 +3,7 @@
 import { combinedLink, selectAllClasses, selectAllCourseModules, selectAllCourseModulesByClassId, selectAllLinksByModule, SelectClasses, SelectModule } from "@/db/query";
 import Link from "next/link";
 import ClassCollapse from "./class-collapse";
+import { ModuleModal } from "./create-module-modal";
 
 interface moduleWithLinks {
   module: SelectModule;

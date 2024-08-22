@@ -1,18 +1,22 @@
-"use client"
+"use client";
 
-import { postModule } from "@/actions/actions";
+import { postModule, postModuleAndRevalidate } from "@/actions/actions";
+import { SelectClasses } from "@/db/query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function ModuleForm() {
+interface ModuleProps {
+  currClass:SelectClasses
+}
+
+export function ModuleForm({ currClass }: ModuleProps) {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [intro, setIntro] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const res = await postModule(title, intro);
+    const res = await postModuleAndRevalidate(title, intro, currClass.id);
 
     if (res) {
       router.push(`/module/${res.id}`);
@@ -24,6 +28,7 @@ export function ModuleForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
       <div className="flex flex-col space-y-2">
+      <h3>Create module for {currClass.name}</h3>
         <label className="font-semibold">Title:</label>
         <input
           type="text"
@@ -41,7 +46,10 @@ export function ModuleForm() {
           className="border border-gray-300 rounded p-2"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+      >
         Create Module
       </button>
     </form>

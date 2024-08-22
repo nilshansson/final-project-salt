@@ -17,6 +17,7 @@ export type InsertModule = typeof courseModules.$inferInsert;
 export async function insertCourseModule(
   title: string,
   intro: string | null,
+  classId: number,
 ): Promise<InsertModule> {
   try {
     const result = await db

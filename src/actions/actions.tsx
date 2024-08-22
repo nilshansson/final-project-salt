@@ -14,8 +14,14 @@ import {
 import { fetchMetadata } from "@/utils/metadata";
 import { revalidatePath } from "next/cache";
 
-export async function postModule(title: string, intro: string) {
-  const postedModule = await insertCourseModule(title, intro);
+export async function postModule(title: string, intro: string, classId:number) {
+  const postedModule = await insertCourseModule(title, intro, classId);
+  return postedModule;
+}
+
+export async function postModuleAndRevalidate(title: string, intro: string, classId:number) {
+  const postedModule = await insertCourseModule(title, intro, classId);
+  revalidatePath("/admin/module")
   return postedModule;
 }
 
