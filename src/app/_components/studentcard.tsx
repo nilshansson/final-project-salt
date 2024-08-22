@@ -2,7 +2,6 @@
 
 import ContributionGraph from "../profile/contributiongraph";
 
-// Update the props to expect the full student object
 type StudentCardProps = {
   student: {
     id: number;
