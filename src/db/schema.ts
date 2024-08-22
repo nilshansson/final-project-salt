@@ -1,9 +1,10 @@
-import { relations } from "drizzle-orm";
-import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
   id: serial("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
+  classId: integer("class_id").references(() => classes.id),
   name: text("name").notNull(),
   github: text("github"),
 });
@@ -16,6 +17,8 @@ export const users = pgTable("users", {
 export const classes = pgTable("classes", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  startDate: timestamp("start_date", { withTimezone: true }),
+  gradDate: timestamp("grad_date", { withTimezone: true }),
 });
 
 export const courseModules = pgTable("course_modules", {
@@ -23,6 +26,12 @@ export const courseModules = pgTable("course_modules", {
   classId: integer("class_id").references(() => classes.id),
   title: text("title").notNull(),
   intro: text("intro"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const links = pgTable("links", {
@@ -33,6 +42,12 @@ export const links = pgTable("links", {
   url: text("url").notNull(),
   title: text("title").notNull(),
   description: text("description"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const utlinks = pgTable("utlinks", {
@@ -43,6 +58,12 @@ export const utlinks = pgTable("utlinks", {
   url: text("url").notNull(),
   title: text("title").notNull(),
   description: text("description"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date(),
+  ),
 });
 
 export const courseModulesRelations = relations(
@@ -80,7 +101,10 @@ export const studentsRelations = relations(students, ({ one }) => ({
     fields: [students.userId],
     references: [users.id],
   }),
-  class: one(classes),
+  class: one(classes, {
+    fields: [students.classId],
+    references: [classes.id],
+  }),
 }));
 
 export const classesRelations = relations(classes, ({ many }) => ({

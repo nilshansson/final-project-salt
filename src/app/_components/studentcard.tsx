@@ -6,8 +6,9 @@ import { GitHubCommits } from "../profile/committracker";
 type StudentCardProps = {
   student: {
     id: number;
-    userId: string;
     name: string;
+    userId: string | null;
+    classId: number | null;
     github: string | null;
   };
 };
