@@ -2,7 +2,14 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 
 import { db, pool } from ".";
-import { courseModules, links, students, utlinks, users } from "./schema";
+import {
+  courseModules,
+  links,
+  students,
+  utlinks,
+  users,
+  classes,
+} from "./schema";
 import { eq } from "drizzle-orm";
 
 export type SelectModule = typeof courseModules.$inferSelect;
@@ -40,6 +47,21 @@ export async function selectAllCourseModules(): Promise<SelectModule[]> {
   try {
     const modules = await db.select().from(courseModules);
     return modules;
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
+  }
+}
+
+export async function selectAllCourseModulesByClassId(
+  classId: number,
+): Promise<SelectModule[]> {
+  try {
+    const allClasses = await db
+      .select()
+      .from(courseModules)
+      .where(eq(courseModules.classId, classId));
+    return allClasses;
   } catch (error) {
     console.error(error);
     throw new Error("error");
@@ -225,5 +247,17 @@ export async function getAllStudentInfo() {
   } catch (error) {
     console.error("Failed to fetch students:", error);
     return [];
+  }
+}
+
+export type SelectClasses = typeof classes.$inferSelect;
+export type InsertClasses = typeof classes.$inferInsert;
+export async function selectAllClasses(): Promise<SelectClasses[]> {
+  try {
+    const allClasses = await db.select().from(classes);
+    return allClasses;
+  } catch (error) {
+    console.log(error);
+    throw new Error("could not get classes");
   }
 }

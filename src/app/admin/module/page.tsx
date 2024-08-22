@@ -1,51 +1,63 @@
 "use server";
 
-import { combinedLink, selectAllCourseModules, selectAllLinksByModule, SelectModule } from "@/db/query";
+import { combinedLink, selectAllClasses, selectAllCourseModules, selectAllCourseModulesByClassId, selectAllLinksByModule, SelectClasses, SelectModule } from "@/db/query";
+import Link from "next/link";
 
 interface moduleWithLinks {
   module: SelectModule;
   links: combinedLink[];
 }
 
-export default async function Module() {
-  const allModules = await selectAllCourseModules();
+interface classesWithModules{
+  class: SelectClasses;
+  modules: SelectModule[];
+}
 
-  // Map over allModules and collect moduleWithLinks using Promise.all
-  const allModulesWithLinks: moduleWithLinks[] = await Promise.all(
-    allModules.map(async (module) => {
-      const moduleLinks: combinedLink[] = await selectAllLinksByModule(module.id);
-      return { module, links: moduleLinks };
+interface classesWithModulesWithLinks{
+  class:SelectClasses
+  moduleWLink:moduleWithLinks[]
+}
+
+export default async function Module() {
+  const allClasses = await selectAllClasses();
+
+  const allClassesWithModules: classesWithModulesWithLinks[] = await Promise.all(
+    allClasses.map(async (currentClass) => {
+      const modules = await selectAllCourseModulesByClassId(currentClass.id);
+
+      // Step 3: For each module, fetch its links
+      const moduleWLink = await Promise.all(
+        modules.map(async (module) => {
+          const links = await selectAllLinksByModule(module.id);
+          return { module, links };
+        })
+      );
+
+      return {
+        class: currentClass,
+        moduleWLink,
+      };
     })
   );
 
   return (
     <div className="container mx-auto p-10 space-y-8">
-      {allModulesWithLinks.map(({ module, links }) => (
-        <div key={module.id} className="card bg-white shadow-md rounded-lg p-6 space-y-4">
-          <div className="module-header">
-            <h2 className="text-2xl font-semibold">{module.title}</h2>
-            {module.intro && <p className="text-gray-600 mt-2">{module.intro}</p>}
-          </div>
-          <div className="links space-y-4">
-            {links.map((link) => (
-              <div key={link.id} className="link-item bg-gray-50 p-4 rounded-lg shadow-sm">
-                <h3 className="text-lg font-medium">
-                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    {link.title}
-                  </a>
-                </h3>
-                {link.description && <p className="text-gray-500 mt-1">{link.description}</p>}
-                <div className="mt-4">
-                  <button className="text-sm text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1">Edit Link</button>
+      {allClassesWithModules.map(({ class:currClass, moduleWLink }) => (
+              <div className="card bg-base-100 prose lg:prose-lg p-4">
+              <h1>{currClass.name}</h1>
+              {moduleWLink.map((module)=>(
+                <div className="card bg-base-200 p-4 my-1">
+                <h2>{module.module.title}</h2>
+                <p>{module.module.intro}</p>
+                {module.links.map((link)=>(
+                  <div className="card bg-base-300 p-2 my-1">
+                  <Link href={link.url}>{link.title}</Link>
+                  </div>
+                ))}
                 </div>
+              ))}
               </div>
             ))}
-          </div>
-          <div className="mt-6">
-            <button className="text-sm text-white bg-green-500 hover:bg-green-600 rounded px-4 py-2">Edit Module</button>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
