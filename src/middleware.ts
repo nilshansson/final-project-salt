@@ -11,7 +11,7 @@ export default clerkMiddleware(async (auth, request) => {
       return NextResponse.redirect("/");
     }
 
-    const userRole = sessionClaims?.role;
+    const userRole = sessionClaims?.role.role;
 
     if (userRole !== "admin") {
       return new NextResponse(
