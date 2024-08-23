@@ -3,7 +3,6 @@
 import { postModule, postUtlink, revalidatePathCreateModule } from "@/actions/actions";
 import { SelectModule } from "@/db/query";
 import { useState, useEffect } from "react";
-import { ModuleForm } from "../create-module/module-form";
 import { UploadButton } from "@/utils/uploadthing";
 import LinkPoster from "@/app/module/[id]/link-poster";
 

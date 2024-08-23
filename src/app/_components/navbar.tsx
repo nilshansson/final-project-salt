@@ -1,4 +1,4 @@
-import { selectAllCourseModules } from "@/db/query";
+import { selectAllClasses, selectAllCourseModules, selectAllCourseModulesByClassId, SelectClasses, SelectModule } from "@/db/query";
 import {
   SignedIn,
   SignedOut,
@@ -10,9 +10,19 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { z } from "zod";
-
+interface ClassWithModules {
+  class: SelectClasses;
+  modules: SelectModule[];
+}
 export async function Navbar() {
-  const modules = await selectAllCourseModules();
+  const allClasses = await selectAllClasses();
+
+  const allClassesWithModules: ClassWithModules[] = await Promise.all(
+    allClasses.map(async (currClass) => {
+      const modules = await selectAllCourseModulesByClassId(currClass.id);
+      return { class: currClass, modules };
+    })
+  );
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -42,10 +52,18 @@ export async function Navbar() {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              {modules.map((module) => (
+              {allClassesWithModules.map(({class:currClass, modules}) => (
+                <>
+                <li key={currClass.id}>
+                <Link className="font-bold" href={`/class/${currClass.id}`}>{currClass.name}</Link>
+                </li>
+                {modules.map((module:SelectModule)=>(
                 <li key={module.id}>
                   <Link href={`/module/${module.id}`}>{module.title}</Link>
                 </li>
+                ))}
+
+                </>
               ))}
             </ul>
           </div>

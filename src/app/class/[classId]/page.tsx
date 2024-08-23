@@ -27,8 +27,6 @@ export default async function classPage({ params }: { params: { classId: string 
       );
   const classWModules:classesWithModulesWithLinks = {class:newClass, moduleWLink:moduleWLink}
 
-
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="card bg-base-100 w-full items-center prose lg:prose-lg shadow-xl">
