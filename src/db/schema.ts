@@ -23,7 +23,9 @@ export const classes = pgTable("classes", {
 
 export const courseModules = pgTable("course_modules", {
   id: serial("id").primaryKey(),
-  classId: integer("class_id").references(() => classes.id),
+  classId: integer("class_id")
+    .references(() => classes.id)
+    .notNull(),
   title: text("title").notNull(),
   intro: text("intro"),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -37,7 +39,7 @@ export const courseModules = pgTable("course_modules", {
 export const links = pgTable("links", {
   id: serial("id").primaryKey(),
   courseModulesId: integer("course_modules_id")
-    .references(() => courseModules.id)
+    .references(() => courseModules.id, { onDelete: "cascade" })
     .notNull(),
   url: text("url").notNull(),
   title: text("title").notNull(),
@@ -53,7 +55,7 @@ export const links = pgTable("links", {
 export const utlinks = pgTable("utlinks", {
   id: serial("id").primaryKey(),
   courseModulesId: integer("course_modules_id")
-    .references(() => courseModules.id)
+    .references(() => courseModules.id, { onDelete: "cascade" })
     .notNull(),
   url: text("url").notNull(),
   title: text("title").notNull(),

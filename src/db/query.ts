@@ -22,7 +22,7 @@ export async function insertCourseModule(
   try {
     const result = await db
       .insert(courseModules)
-      .values({ title, intro })
+      .values({ title, intro, classId })
       .returning();
     return result[0];
   } catch (error) {
@@ -63,6 +63,31 @@ export async function selectAllCourseModulesByClassId(
       .from(courseModules)
       .where(eq(courseModules.classId, classId));
     return allClasses;
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
+  }
+}
+
+export async function updateCourseModule(
+  moduleId: number,
+  updatedTitle: string,
+  updatedIntro: string,
+) {
+  try {
+    await db
+      .update(courseModules)
+      .set({ title: updatedTitle, intro: updatedIntro })
+      .where(eq(courseModules.id, moduleId));
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
+  }
+}
+
+export async function deleteCourseModule(moduleId: number) {
+  try {
+    await db.delete(courseModules).where(eq(courseModules.id, moduleId));
   } catch (error) {
     console.error(error);
     throw new Error("error");
@@ -115,7 +140,7 @@ export async function insertLink(
   try {
     const link = await db
       .insert(links)
-      .values({ courseModulesId, url, title })
+      .values({ title, courseModulesId, url })
       .returning();
     return link[0];
   } catch (error) {
@@ -169,14 +194,12 @@ export async function createStudentAndUserIfNotExists(
   userId: string,
   name: string,
 ): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
-  // Check if the student already exists
   const existingStudent = await db
     .select()
     .from(students)
     .where(eq(students.userId, userId))
     .then((result) => result[0] || null);
 
-  // Check if the user already exists
   const existingUser = await db
     .select()
     .from(users)
@@ -186,7 +209,6 @@ export async function createStudentAndUserIfNotExists(
   let newUser = existingUser;
   let newStudent = existingStudent;
 
-  // If the user doesn't exist, create it
   if (!existingUser) {
     [newUser] = await db
       .insert(users)
@@ -197,7 +219,6 @@ export async function createStudentAndUserIfNotExists(
       .returning();
   }
 
-  // If the student doesn't exist, create it
   if (!existingStudent) {
     [newStudent] = await db
       .insert(students)
@@ -208,7 +229,6 @@ export async function createStudentAndUserIfNotExists(
       .returning();
   }
 
-  // Log the outcome (for debugging)
   if (newUser !== existingUser || newStudent !== existingStudent) {
     console.log("CREATED NEW OBJECTS\n\n\n");
     console.log(newUser);
@@ -272,5 +292,14 @@ export async function editClassName(classId: number, className: string) {
   } catch (error) {
     console.log(error);
     throw new Error("could not get classes");
+  }
+}
+
+export async function deleteClass(classId: number) {
+  try {
+    await db.delete(classes).where(eq(classes.id, classId));
+  } catch (error) {
+    console.error(error);
+    throw new Error("error");
   }
 }

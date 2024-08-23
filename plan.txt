@@ -62,6 +62,12 @@ sprint 4
 basic functionality done
 
 sprint 5
+admin student/class page
+student/admin class page
+profile page also shows class and modules
+navbar needs to show classes
+permissions for admin/ only for admin
+permissions for ex. "jsjs/" only visible for student of that class and admin
 validation/error handling (manual testing)
 
 sprint 6

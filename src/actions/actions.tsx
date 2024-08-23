@@ -3,6 +3,8 @@
 import {
   addGitHubUsername,
   createStudentAndUserIfNotExists,
+  deleteClass,
+  deleteCourseModule,
   editClassName,
   getAllStudentInfo,
   insertCourseModule,
@@ -10,6 +12,7 @@ import {
   insertUtlink,
   SelectStudent,
   SelectUser,
+  updateCourseModule,
 } from "@/db/query";
 import { fetchMetadata } from "@/utils/metadata";
 import { revalidatePath } from "next/cache";
@@ -48,6 +51,21 @@ export async function postLink(courseModuleId: number, url: string) {
 export async function updateClassNameAndRevalidate(classId:number, className:string){
   await editClassName(classId, className);
   revalidatePath("/admin/module")
+}
+
+export async function updateModuleDetailsAndRevalidate(moduleId:number, updatedTitle:string, updatedIntro:string){
+  await updateCourseModule(moduleId, updatedTitle, updatedIntro)
+  revalidatePath("/admin/module")
+}
+
+export async function deleteClassAndRevalidate(classId:number){
+  await deleteClass(classId)
+  revalidatePath("/admin/module")
+}
+
+export async function deleteModuleAndRevalidate(moduleId:number){
+  await deleteCourseModule(moduleId)
+  revalidatePath("admin/module")
 }
 
 export async function revalidatePathCreateModule() {

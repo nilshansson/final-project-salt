@@ -19,8 +19,8 @@ export function ModuleForm({ currClass }: ModuleProps) {
     const res = await postModuleAndRevalidate(title, intro, currClass.id);
 
     if (res) {
-      router.push(`/module/${res.id}`);
-    } else {
+     console.log("success")
+   } else {
       console.error('Failed to create module');
     }
   };
