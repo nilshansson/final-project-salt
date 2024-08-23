@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ContributionGraph from "../profile/contributiongraph";
 
 type StudentCardProps = {
@@ -20,7 +21,11 @@ export default function StudentCard({ student }: StudentCardProps) {
         github:{" "}
         {student.github ? (
           <>
-            <p>{student.github}</p>
+            <p>
+              <Link href={`https://github.com/${student.github}`}>
+                {student.github}
+              </Link>
+            </p>
             <ContributionGraph student={student} />
           </>
         ) : (
