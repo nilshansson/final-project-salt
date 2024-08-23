@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { getCourseDatesByClassId } from "@/db/query";
 
 interface GHCommitProps {
   student: {
@@ -10,9 +11,15 @@ interface GHCommitProps {
     classId: number | null;
     github: string | null;
   };
+  courseStart: Date | null;
+  courseEnd: Date | null;
 }
 
-export default function ContributionGraph({ student }: GHCommitProps) {
+export default function ContributionGraph({
+  student,
+  courseStart,
+  courseEnd,
+}: GHCommitProps) {
   const [contributionCalendar, setContributionCalendar] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,11 +28,15 @@ export default function ContributionGraph({ student }: GHCommitProps) {
   useEffect(() => {
     async function fetchContributions() {
       try {
+        if (!studentGithub || !courseStart || !courseEnd) {
+          throw new Error("Missing necessary data (GitHub username or dates)");
+        }
+
         const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
         const GITHUB_ACCESS_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
         const query = `
-          query ($username: String!, $fromDate: DateTime!, $toDate: DateTime) {
+          query ($username: String!, $fromDate: DateTime!, $toDate: DateTime!) {
             user(login: $username) {
               contributionsCollection(from: $fromDate, to: $toDate) {
                 contributionCalendar {
@@ -42,8 +53,10 @@ export default function ContributionGraph({ student }: GHCommitProps) {
           }
         `;
 
-        const fromDate = "2024-06-03T00:00:00Z";
-        const toDate = "2024-07-03T23:59:59Z";
+        const today = new Date();
+        const fromDate = courseStart.toISOString();
+        const toDate =
+          courseEnd > today ? today.toISOString() : courseEnd.toISOString();
 
         const response = await fetch(GITHUB_GRAPHQL_URL, {
           method: "POST",
@@ -65,15 +78,15 @@ export default function ContributionGraph({ student }: GHCommitProps) {
         setContributionCalendar(
           data.data.user.contributionsCollection.contributionCalendar.weeks
         );
-      } catch (error) {
-        setError("Error fetching contributions. Please try again.");
+      } catch (error: any) {
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }
     }
 
     fetchContributions();
-  }, [studentGithub]);
+  }, [studentGithub, courseStart, courseEnd]);
 
   const getColor = (count: number) => {
     if (count === 0) return "#ebedf0";
