@@ -1,20 +1,19 @@
 "use client"
 
 import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
-import { SelectLink, SelectUtlink } from "@/db/query";
+import { combinedLink, SelectLink, SelectUtlink } from "@/db/query";
 import { UploadButton } from "@/utils/uploadthing";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import LinkPoster from "./link-poster";
 
 interface LinksProps{
-  utlinks:SelectUtlink[]
-  links:SelectLink[]
+  links:combinedLink[]
   moduleId: number
 }
 
 
-export function LinksCard({utlinks, links, moduleId}:LinksProps){
+export function LinksCard({links, moduleId}:LinksProps){
 
   return (
     <>
@@ -34,17 +33,6 @@ export function LinksCard({utlinks, links, moduleId}:LinksProps){
       />
       </div>
         <div className="card bg-base-200 p-4 mt-4">
-          {utlinks.map((utlink)=>(
-            <div key={utlink.id}>
-              <Link href={utlink.url}>
-              <div className="card bg-base-300 p-2 m-2">
-                <h3>
-                {utlink.title}
-                </h3>
-                </div>
-              </Link>
-            </div>
-          ))}
           {links.map((link)=>(
             <div key={link.id}>
             <Link href={link.url}>
