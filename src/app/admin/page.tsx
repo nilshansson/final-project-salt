@@ -5,17 +5,6 @@ import StudentCard from "../_components/studentcard";
 import { getAllStudentInfo, SelectStudent } from "@/db/query";
 
 export default async function AdminPage() {
-  const { userId, sessionClaims } = auth(); // Get the user's session and claims from Clerk
-
-  // Access the custom role from the claims
-  const userRole = sessionClaims?.role.role; // This is the role we added to the JWT
-
-  // Check if the user has the "admin" role
-  if (userRole !== "admin") {
-    return <h1>Unauthorized: You do not have access to this page.</h1>;
-  }
-
-  // Fetch student information if the user is an admin
   const allStudentInfo: SelectStudent[] = await getAllStudentInfo();
 
   return (
