@@ -24,7 +24,7 @@ export const classes = pgTable("classes", {
 export const courseModules = pgTable("course_modules", {
   id: serial("id").primaryKey(),
   classId: integer("class_id")
-    .references(() => classes.id)
+    .references(() => classes.id, { onDelete: "cascade" })
     .notNull(),
   title: text("title").notNull(),
   intro: text("intro"),
