@@ -170,6 +170,7 @@ export interface combinedLink {
   description: string | null;
   courseModulesId: number;
   url: string;
+  isUploadThing: boolean;
 }
 
 export async function selectAllLinksByModule(
@@ -180,7 +181,23 @@ export async function selectAllLinksByModule(
     selectUtlinksByModule(moduleId),
   ]);
 
-  const combinedLinks: combinedLink[] = [...links, ...utlinks];
+  // Add `isUploadThing: false` for regular links
+  const processedLinks = links.map((link) => ({
+    ...link,
+    isUploadThing: false,
+  }));
+
+  // Add `isUploadThing: true` for UploadThing links
+  const processedUtlinks = utlinks.map((utlink) => ({
+    ...utlink,
+    isUploadThing: true,
+  }));
+
+  // Combine the arrays
+  const combinedLinks: combinedLink[] = [
+    ...processedLinks,
+    ...processedUtlinks,
+  ];
   return combinedLinks;
 }
 
@@ -283,11 +300,36 @@ export async function selectAllClasses(): Promise<SelectClasses[]> {
   }
 }
 
-export async function editClassName(classId: number, className: string) {
+export async function createClass(newClass: InsertClasses) {
   try {
+    await db.insert(classes).values(newClass);
+  } catch (error) {
+    console.error(error);
+    throw new Error("could not create class");
+  }
+}
+
+export async function editClass(
+  classId: number,
+  className: string,
+  newStartDate: string | Date,
+  newGradDate: string | Date,
+) {
+  try {
+    const startDate =
+      typeof newStartDate === "string" ? new Date(newStartDate) : newStartDate;
+    const gradDate =
+      typeof newGradDate === "string" ? new Date(newGradDate) : newGradDate;
+
+    console.log(classId, className, startDate, gradDate);
+
     await db
       .update(classes)
-      .set({ name: className })
+      .set({
+        name: className,
+        startDate: startDate,
+        gradDate: gradDate,
+      })
       .where(eq(classes.id, classId));
   } catch (error) {
     console.log(error);
@@ -302,4 +344,32 @@ export async function deleteClass(classId: number) {
     console.error(error);
     throw new Error("error");
   }
+}
+
+// Update regular link
+export async function updateLinkDetails(
+  linkId: number,
+  title: string,
+  url: string,
+) {
+  await db.update(links).set({ title, url }).where(eq(links.id, linkId));
+}
+
+// Update uploadthing link
+export async function updateUTLinkDetails(
+  linkId: number,
+  title: string,
+  url: string,
+) {
+  await db.update(utlinks).set({ title, url }).where(eq(utlinks.id, linkId));
+}
+
+// Delete regular link
+export async function deleteLink(linkId: number) {
+  await db.delete(links).where(eq(links.id, linkId));
+}
+
+// Delete uploadthing link
+export async function deleteUTLink(linkId: number) {
+  await db.delete(utlinks).where(eq(utlinks.id, linkId));
 }

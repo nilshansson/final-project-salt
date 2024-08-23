@@ -2,10 +2,13 @@
 
 import {
   addGitHubUsername,
+  createClass,
   createStudentAndUserIfNotExists,
   deleteClass,
   deleteCourseModule,
-  editClassName,
+  deleteLink,
+  deleteUTLink,
+  editClass,
   getAllStudentInfo,
   insertCourseModule,
   insertLink,
@@ -13,8 +16,11 @@ import {
   SelectStudent,
   SelectUser,
   updateCourseModule,
+  updateLinkDetails,
+  updateUTLinkDetails,
 } from "@/db/query";
 import { fetchMetadata } from "@/utils/metadata";
+import { link } from "fs";
 import { revalidatePath } from "next/cache";
 
 export async function postModule(title: string, intro: string, classId:number) {
@@ -24,7 +30,7 @@ export async function postModule(title: string, intro: string, classId:number) {
 
 export async function postModuleAndRevalidate(title: string, intro: string, classId:number) {
   const postedModule = await insertCourseModule(title, intro, classId);
-  revalidatePath("/admin/module")
+  await revalidatePath("/admin/module")
   return postedModule;
 }
 
@@ -44,39 +50,39 @@ export async function postLink(courseModuleId: number, url: string) {
     throw new Error("unable to get metadata");
   }
   const link = await insertLink(courseModuleId, url, metadata.title);
-  revalidatePathCreateModule();
+  await revalidatePathCreateModule();
   return link;
 }
 
-export async function updateClassNameAndRevalidate(classId:number, className:string){
-  await editClassName(classId, className);
-  revalidatePath("/admin/module")
+export async function updateClassAndRevalidate(classId:number, className:string, startDate:Date, gradDate:Date){
+  await editClass(classId, className, startDate, gradDate);
+  await revalidatePath("/admin/module")
 }
 
 export async function updateModuleDetailsAndRevalidate(moduleId:number, updatedTitle:string, updatedIntro:string){
   await updateCourseModule(moduleId, updatedTitle, updatedIntro)
-  revalidatePath("/admin/module")
+  await revalidatePath("/admin/module")
 }
 
 export async function deleteClassAndRevalidate(classId:number){
   await deleteClass(classId)
-  revalidatePath("/admin/module")
+  await revalidatePath("/admin/module")
 }
 
 export async function deleteModuleAndRevalidate(moduleId:number){
   await deleteCourseModule(moduleId)
-  revalidatePath("admin/module")
+  await revalidatePath("admin/module")
 }
 
 export async function revalidatePathCreateModule() {
-  revalidatePath("/admin/create-module/");
+  await revalidatePath("/admin/create-module/");
 }
 export async function handleAddGithubToDB(
   userId: string,
   githubUsername: string
 ) {
   await addGitHubUsername(userId, githubUsername);
-  revalidatePath("/profile")
+  await revalidatePath("/profile")
 }
 export async function handleCreateUserIfNotExist(
   userId: string,
@@ -84,4 +90,44 @@ export async function handleCreateUserIfNotExist(
 ): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
   const { user, student } = await createStudentAndUserIfNotExists(userId, name);
   return { user, student };
+}
+
+export async function updateLinkDetailsRevalidate(linkId: number, title: string, url: string) {
+  await updateLinkDetails(linkId, title, url)
+  await revalidatePath("admin/module")
+}
+
+// Update uploadthing link
+export async function updateUTLinkDetailsRevalidate(linkId: number, title: string, url: string) {
+  await updateUTLinkDetails(linkId, title, url)
+  await revalidatePath("admin/module")
+}
+
+// Delete regular link
+export async function deleteLinkRevalidate(linkId: number) {
+  await deleteLink(linkId)
+  await revalidatePath("admin/module")
+}
+
+// Delete uploadthing link
+export async function deleteUTLinkRevalidate(linkId: number) {
+  await deleteUTLink(linkId)
+  await revalidatePath("admin/module")
+}
+
+export async function postClassAndRevalidate(name: string, startDate: Date, gradDate: Date) {
+  try {
+    const newClass = {
+      name,
+      startDate,
+      gradDate,
+    };
+
+    await createClass(newClass);
+    await revalidatePath("admin/module")
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }

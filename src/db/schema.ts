@@ -4,7 +4,9 @@ import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 export const students = pgTable("students", {
   id: serial("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
-  classId: integer("class_id").references(() => classes.id),
+  classId: integer("class_id").references(() => classes.id, {
+    onDelete: "set null",
+  }),
   name: text("name").notNull(),
   github: text("github"),
 });

@@ -7,17 +7,15 @@ import {
 } from "@/db/query";
 import { useState } from "react";
 import ModuleCollapse from "./module-collapse";
-import { updateClassNameAndRevalidate } from "@/actions/actions";
+import {
+  deleteClassAndRevalidate,
+  updateClassAndRevalidate,
+} from "@/actions/actions";
 import { ModuleModal } from "./create-module-modal";
 
 interface moduleWithLinks {
   module: SelectModule;
   links: combinedLink[];
-}
-
-interface classesWithModules {
-  class: SelectClasses;
-  modules: SelectModule[];
 }
 
 interface classesWithModulesWithLinks {
@@ -34,21 +32,41 @@ export default function ClassCollapse({
 }: ClassCollapseProps) {
   const [editingClassId, setEditingClassId] = useState<number | null>(null);
   const [updatedClassName, setUpdatedClassName] = useState<string>("");
+  const [updatedStartDate, setUpdatedStartDate] = useState<string>("");
+  const [updatedGradDate, setUpdatedGradDate] = useState<string>("");
   const [openClassId, setOpenClassId] = useState<number | null>(null);
 
-  const handleEditClick = (classId: number, currentName: string) => {
+  const handleEditClick = (
+    classId: number,
+    currentName: string,
+    startDate: Date,
+    gradDate: Date
+  ) => {
     setEditingClassId(classId);
     setUpdatedClassName(currentName);
+    setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+    setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
   };
 
   const handleSaveClick = async (classId: number) => {
-    await updateClassNameAndRevalidate(classId, updatedClassName);
+    await updateClassAndRevalidate(
+      classId,
+      updatedClassName,
+      new Date(updatedStartDate), // Convert back to Date object
+      new Date(updatedGradDate) // Convert back to Date object
+    );
     setEditingClassId(null);
   };
 
   const handleCancelClick = () => {
     setEditingClassId(null);
     setUpdatedClassName("");
+    setUpdatedStartDate("");
+    setUpdatedGradDate("");
+  };
+
+  const handleDeleteClick = async (classId: number) => {
+    await deleteClassAndRevalidate(classId);
   };
 
   const toggleCollapse = (classId: number) => {
@@ -73,54 +91,70 @@ export default function ClassCollapse({
           />
           <div className="collapse-title text-3xl font-bold flex justify-between items-center p-6 relative">
             {editingClassId === currClass.id ? (
-              <div className="flex space-x-2 w-full relative z-10">
+              <div className="flex flex-col space-y-2 w-full relative z-10">
                 <input
                   type="text"
                   value={updatedClassName}
                   onChange={(e) => setUpdatedClassName(e.target.value)}
-                  className="input input-bordered  input-lg flex-grow"
+                  className="input input-bordered input-lg flex-grow"
                   style={{ pointerEvents: "auto" }}
                 />
-                <button
-                  onClick={() => handleSaveClick(currClass.id)}
-                  className="btn text-white btn-success"
+                <label className="font-semibold">Start Date:</label>
+                <input
+                  type="date"
+                  value={updatedStartDate}
+                  onChange={(e) => setUpdatedStartDate(e.target.value)}
+                  className="input input-bordered input-sm"
                   style={{ pointerEvents: "auto" }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-9 h-9"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleCancelClick}
-                  className="btn text-white btn-error"
+                />
+                <label className="font-semibold">Graduation Date:</label>
+                <input
+                  type="date"
+                  value={updatedGradDate}
+                  onChange={(e) => setUpdatedGradDate(e.target.value)}
+                  className="input input-bordered input-sm"
                   style={{ pointerEvents: "auto" }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-9 w-9"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                />
+                <div className="flex space-x-2 z-10">
+                  <button
+                    onClick={() => handleSaveClick(currClass.id)}
+                    className="btn text-white btn-success"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-9 h-9"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleCancelClick}
+                    className="btn text-white btn-error"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-9 w-9"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex justify-between items-center w-full">
@@ -129,7 +163,14 @@ export default function ClassCollapse({
                   <div className="flex space-x-2 relative z-10">
                     <ModuleModal currClass={currClass} />
                     <button
-                      onClick={() => handleEditClick(currClass.id, currClass.name)}
+                      onClick={() =>
+                        handleEditClick(
+                          currClass.id,
+                          currClass.name,
+                          currClass.startDate,
+                          currClass.gradDate
+                        )
+                      }
                       className="btn text-3xl btn-warning relative z-10"
                       style={{ pointerEvents: "auto" }}
                     >
@@ -148,6 +189,25 @@ export default function ClassCollapse({
                         />
                       </svg>
                     </button>
+                    <button
+                      onClick={() => handleDeleteClick(currClass.id)}
+                      className="btn btn-error"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 )}
               </div>
@@ -155,6 +215,10 @@ export default function ClassCollapse({
           </div>
 
           <div className="collapse-content p-0">
+            <div className="p-4">
+              <p><strong>Start Date:</strong> {new Date(currClass.startDate).toDateString()}</p>
+              <p><strong>Graduation Date:</strong> {new Date(currClass.gradDate).toDateString()}</p>
+            </div>
             <ModuleCollapse allModulesWithLinks={moduleWLink} />
           </div>
         </div>

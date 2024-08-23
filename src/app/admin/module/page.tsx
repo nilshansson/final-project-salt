@@ -4,6 +4,7 @@ import { combinedLink, selectAllClasses, selectAllCourseModules, selectAllCourse
 import Link from "next/link";
 import ClassCollapse from "./class-collapse";
 import { ModuleModal } from "./create-module-modal";
+import { ClassModal } from "./create-class-modal";
 
 interface moduleWithLinks {
   module: SelectModule;
@@ -43,6 +44,7 @@ export default async function Module() {
 
   return (
     <div className="container mx-auto p-10 space-y-8">
+    <ClassModal/>
       <ClassCollapse allClassesWithModules={allClassesWithModules}/>
     </div>
   );
