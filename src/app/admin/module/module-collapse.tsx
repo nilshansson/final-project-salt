@@ -141,6 +141,8 @@ export default function ModuleCollapse({
                       </svg>
                     )}
                   </button>
+                  {error && <p>{error}</p>}
+
                   <button
                     onClick={handleCancelClick}
                     className="btn text-white btn-error"
