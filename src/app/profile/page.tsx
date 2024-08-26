@@ -25,9 +25,26 @@ export default async function ProfilePage() {
     throw new Error("Could not load or create user");
   }
 
-  const { courseStart, courseEnd } = await getCourseDatesByClassId(
-    student.classId
-  );
+  let content;
+
+  if (student.classId) {
+    const { courseStart, courseEnd } = await getCourseDatesByClassId(student.classId);
+
+    content = student.github ? (
+      <>
+        <h1>Commits since precourse start:</h1>
+        <ContributionGraph
+          student={student}
+          courseStart={courseStart}
+          courseEnd={courseEnd}
+        />
+      </>
+    ) : (
+      <GithubForm student={student} />
+    );
+  } else {
+    content = <h1>Please ask admin to assign a class to you</h1>;
+  }
 
   return (
     <div className="card bg-base-100 w-96 shadow-xl">
@@ -44,18 +61,7 @@ export default async function ProfilePage() {
             className="rounded-full mb-4"
           />
         )}
-        {student.github ? (
-          <>
-            <h1>commits since precourse start: </h1>
-            <ContributionGraph
-              student={student}
-              courseStart={courseStart}
-              courseEnd={courseEnd}
-            />
-          </>
-        ) : (
-          <GithubForm student={student} />
-        )}
+        {content}
       </div>
     </div>
   );
