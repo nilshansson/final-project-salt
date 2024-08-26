@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./_components/navbar";
 import { ClerkProvider } from "@clerk/nextjs";
+import Footer from "./_components/footer";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -37,6 +38,7 @@ export default function RootLayout({
         <body className={`${manrope.className} bg-saltLightGrey`}>
           <Navbar />
           {children}
+          <Footer />
         </body>
       </html>
     </ClerkProvider>
