@@ -6,7 +6,7 @@ import { UploadButton } from "@/utils/uploadthing";
 import Link from "next/link";
 import LinkPoster from "./link-poster";
 
-interface LinksProps {
+export interface LinksProps {
   links: combinedLink[];
   moduleId: number;
 }

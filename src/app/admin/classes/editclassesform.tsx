@@ -5,24 +5,7 @@ import Loading from "@/app/_components/loading";
 import React, { useState } from "react";
 import { updateClassOnStudentorStudents } from "@/db/query";
 import SuccessToast from "@/app/_components/successtoast";
-
-type Student = {
-  id: number;
-  name: string;
-  userId: string | null;
-  classId: number | null;
-  github: string | null;
-};
-
-type ClassType = {
-  id: number;
-  name: string;
-};
-
-interface EditClassesFormProps {
-  allStudents: Student[];
-  allClasses: ClassType[];
-}
+import { EditClassesFormProps, Student } from "@/app/types/index";
 
 export default function EditClassesForm({
   allStudents: initialStudents,
