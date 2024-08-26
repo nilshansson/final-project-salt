@@ -1,22 +1,38 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { selectAllClasses, getAllStudentInfo, SelectStudent } from "@/db/query";
 import StudentCard from "../_components/studentcard";
-import { getAllStudentInfo, SelectStudent } from "@/db/query";
 
 export default async function AdminPage() {
+  // Fetch all student info and class info
   const allStudentInfo: SelectStudent[] = await getAllStudentInfo();
+  const allClasses = await selectAllClasses();
 
   return (
     <>
       <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 underline">
         Admin Dashboard
       </h1>
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 p-4 justify-items-center">
-        {allStudentInfo.map((student) => (
-          <StudentCard key={student.userId} student={student} />
-        ))}
-      </div>
+
+      {allClasses.map((classItem) => (
+        <div key={classItem.id} className="w-full p-4">
+          <h2 className="text-3xl font-bold text-saltDarkBlue mb-6">
+            {classItem.name}
+          </h2>
+
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
+            {allStudentInfo
+              .filter((student) => student.classId === classItem.id)
+              .map((student) => (
+                <StudentCard key={student.userId} student={student} />
+              ))}
+
+            {allStudentInfo.filter(
+              (student) => student.classId === classItem.id
+            ).length === 0 && <p>No students in this class.</p>}
+          </div>
+        </div>
+      ))}
     </>
   );
 }
