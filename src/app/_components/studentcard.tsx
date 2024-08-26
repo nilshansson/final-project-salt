@@ -28,7 +28,10 @@ export default async function StudentCard({ student }: StudentCardProps) {
         {student.github ? (
           <>
             <p>
-              <Link href={`https://github.com/${student.github}`}>
+              <Link
+                href={`https://github.com/${student.github}`}
+                className="underline"
+              >
                 {student.github}
               </Link>
             </p>

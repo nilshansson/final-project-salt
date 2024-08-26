@@ -9,9 +9,13 @@ export default async function ClassesOverviewPage() {
 
   return (
     <div>
-      <h1>Class Management</h1>
+      <div>
+        <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 mb-24 underline">
+          Class Management
+        </h1>
 
-      <EditClassesForm allStudents={allStudents} allClasses={allClasses} />
+        <EditClassesForm allStudents={allStudents} allClasses={allClasses} />
+      </div>
     </div>
   );
 }

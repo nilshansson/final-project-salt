@@ -4,7 +4,6 @@ import { selectAllClasses, getAllStudentInfo, SelectStudent } from "@/db/query";
 import StudentCard from "../_components/studentcard";
 
 export default async function AdminPage() {
-  // Fetch all student info and class info
   const allStudentInfo: SelectStudent[] = await getAllStudentInfo();
   const allClasses = await selectAllClasses();
 
