@@ -1,10 +1,14 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { combinedLink, SelectModule } from "@/db/query";
 import { LinkBoxes } from "./link-boxes";
-import { deleteModuleAndRevalidate, updateModuleDetailsAndRevalidate } from "@/actions/actions";
+import {
+  deleteModuleAndRevalidate,
+  updateModuleDetailsAndRevalidate,
+} from "@/actions/actions";
 import { LinkModal } from "./create-link-modal";
+import Loading from "@/app/_components/loading";
 
 interface moduleWithLinks {
   module: SelectModule;
@@ -15,21 +19,45 @@ interface ModuleCollapseProps {
   allModulesWithLinks: moduleWithLinks[];
 }
 
-export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapseProps) {
+export default function ModuleCollapse({
+  allModulesWithLinks,
+}: ModuleCollapseProps) {
   const [editingModuleId, setEditingModuleId] = useState<number | null>(null);
   const [updatedModuleTitle, setUpdatedModuleTitle] = useState<string>("");
   const [updatedModuleIntro, setUpdatedModuleIntro] = useState<string>("");
   const [openModuleId, setOpenModuleId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleEditClick = (moduleId: number, currentTitle: string, currentIntro: string | null) => {
+  const handleEditClick = (
+    moduleId: number,
+    currentTitle: string,
+    currentIntro: string | null
+  ) => {
     setEditingModuleId(moduleId);
     setUpdatedModuleTitle(currentTitle);
     setUpdatedModuleIntro(currentIntro || "");
   };
 
   const handleSaveClick = async (moduleId: number) => {
-    await updateModuleDetailsAndRevalidate(moduleId, updatedModuleTitle, updatedModuleIntro);
-    setEditingModuleId(null);
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      await updateModuleDetailsAndRevalidate(
+        moduleId,
+        updatedModuleTitle,
+        updatedModuleIntro
+      );
+      setSuccess("Module updated successfully!");
+      setEditingModuleId(null);
+    } catch {
+      setError("Failed to update module. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancelClick = () => {
@@ -38,9 +66,20 @@ export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapsePr
     setUpdatedModuleIntro("");
   };
 
-  const handleDeleteClick = async (moduleId:number) => {
-    await deleteModuleAndRevalidate(moduleId)
-  }
+  const handleDeleteClick = async (moduleId: number) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      await deleteModuleAndRevalidate(moduleId);
+      setSuccess("Module deleted successfully!");
+    } catch {
+      setError("Failed to delete module. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleCollapse = (moduleId: number) => {
     if (openModuleId === moduleId) {
@@ -53,7 +92,10 @@ export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapsePr
   return (
     <div className="collapse-content">
       {allModulesWithLinks.map((module) => (
-        <div key={"module" + module.module.id} className="collapse bg-base-200 my-1">
+        <div
+          key={"module" + module.module.id}
+          className="collapse bg-base-200 my-1"
+        >
           <input
             type="checkbox"
             checked={openModuleId === module.module.id}
@@ -78,21 +120,26 @@ export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapsePr
                   <button
                     onClick={() => handleSaveClick(module.module.id)}
                     className="btn text-white btn-success"
+                    disabled={loading}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    {loading ? (
+                      <Loading />
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
                   </button>
                   <button
                     onClick={handleCancelClick}
@@ -120,10 +167,14 @@ export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapsePr
                 <span>{module.module.title}</span>
                 {openModuleId === module.module.id && (
                   <div className="flex space-x-2 z-10">
-                  <LinkModal currModule={module.module} />
+                    <LinkModal currModule={module.module} />
                     <button
                       onClick={() =>
-                        handleEditClick(module.module.id, module.module.title, module.module.intro)
+                        handleEditClick(
+                          module.module.id,
+                          module.module.title,
+                          module.module.intro
+                        )
                       }
                       className="btn btn-warning"
                     >
@@ -142,27 +193,29 @@ export default function ModuleCollapse({ allModulesWithLinks }: ModuleCollapsePr
                         />
                       </svg>
                     </button>
-                    <button
-                      onClick={() =>
-                        handleDeleteClick(module.module.id)
-                      }
-                      className="btn btn-error"
-                    >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                    </button>
+                    {loading ? (
+                      <Loading />
+                    ) : (
+                      <button
+                        onClick={() => handleDeleteClick(module.module.id)}
+                        className="btn btn-error"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

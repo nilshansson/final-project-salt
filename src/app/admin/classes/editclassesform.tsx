@@ -150,7 +150,7 @@ export default function EditClassesForm({
                       }
                       disabled={loading}
                     >
-                      {loading ? <Loading /> : "Add students to class"}
+                      {loading ? <Loading /> : "Add students to this class"}
                     </button>
                   </div>
                 </div>
