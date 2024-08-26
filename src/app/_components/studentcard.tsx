@@ -19,9 +19,11 @@ export default async function StudentCard({ student }: StudentCardProps) {
     student.classId
   );
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
+    <div className="card bg-saltLightPink min-w-80 shadow-xl">
       <div className="card-body flex flex-col items-center justify-center text-center">
-        <h1 className="text-lg font-bold mb-4">{student.name}</h1>
+        <h1 className="text-lg font-bold mb-4 text-saltDarkBlue">
+          {student.name}
+        </h1>
         github:{" "}
         {student.github ? (
           <>
@@ -37,7 +39,7 @@ export default async function StudentCard({ student }: StudentCardProps) {
             />
           </>
         ) : (
-          <p>this student hasnt added their github</p>
+          <p className="text-red-700">this student hasnt added their github</p>
         )}
       </div>
     </div>
