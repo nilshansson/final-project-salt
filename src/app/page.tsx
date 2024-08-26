@@ -4,6 +4,7 @@ import { SignedOut, SignedIn, useUser } from "@clerk/nextjs";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import PreloggedInHero from "./_components/preloggedinhero";
 
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
@@ -15,9 +16,9 @@ export default function Home() {
     }
   }, [isLoaded, isSignedIn, router]);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between">
       <SignedOut>
-        <h1>please sign in above</h1>
+        <PreloggedInHero />
       </SignedOut>
     </main>
   );
