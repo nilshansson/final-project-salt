@@ -9,13 +9,27 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
+import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 interface ClassWithModules {
   class: SelectClasses;
   modules: SelectModule[];
 }
+
+function getRoleFromSessionClaims(sessionClaims: any): string | undefined {
+  return sessionClaims?.role?.role;
+}
+
 export async function Navbar() {
   const allClasses = await selectAllClasses();
+  const { sessionClaims } = auth()
+
+  console.log("CLERKAUTH \n\n\n\n")
+  console.log(sessionClaims)
+
+  const userRole = getRoleFromSessionClaims(sessionClaims);
+  const isAdmin = userRole === "admin";
+  console.log(isAdmin)
 
   const allClassesWithModules: ClassWithModules[] = await Promise.all(
     allClasses.map(async (currClass) => {
@@ -82,6 +96,11 @@ export async function Navbar() {
 
       <div className="navbar-end">
         <SignedIn>
+          {isAdmin && (
+            <button className="btn btn-primary ml-4">
+              Admin Dashboard
+            </button>
+          )}
           <button className="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
