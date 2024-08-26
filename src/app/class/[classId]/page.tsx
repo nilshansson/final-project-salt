@@ -5,7 +5,6 @@ import {
   selectAllCourseModulesByClassId,
   selectAllLinksByModule,
   selectClass,
-  selectClassByName,
   SelectClasses,
   SelectModule,
 } from "@/db/query";
@@ -15,15 +14,11 @@ interface moduleWithLinks {
   links: combinedLink[];
 }
 
-interface classesWithModules {
-  class: SelectClasses;
-  modules: SelectModule[];
-}
-
 interface classesWithModulesWithLinks {
   class: SelectClasses;
   moduleWLink: moduleWithLinks[];
 }
+
 export default async function classPage({
   params,
 }: {
@@ -43,22 +38,31 @@ export default async function classPage({
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-10">
-      <h1 className="text-5xl font-bold my-4">{classWModules.class.name}</h1>
-      <div className="card bg-base-100 w-full items-center prose lg:prose-lg shadow-xl">
-        {classWModules.moduleWLink.map((moduleWLink) => (
-          <>
+    <main className="flex min-h-screen flex-col items-center p-10">
+      <h1 className="text-5xl font-bold my-4 text-saltDarkBlue">
+        {classWModules.class.name}
+      </h1>
+
+      {classWModules.moduleWLink.map((moduleWLink) => (
+        <div
+          key={moduleWLink.module.id}
+          className="flex flex-col md:flex-row gap-8 mb-8 w-full mt-5"
+        >
+          <div className="w-full md:w-8/12">
             <IntroCard
               title={moduleWLink.module.title}
               intro={moduleWLink.module.intro}
             />
+          </div>
+
+          <div className="w-full md:w-4/12">
             <LinksCard
               links={moduleWLink.links}
               moduleId={moduleWLink.module.id}
             />
-          </>
-        ))}
-      </div>
+          </div>
+        </div>
+      ))}
     </main>
   );
 }

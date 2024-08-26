@@ -7,14 +7,12 @@ export default async function content({ params }: { params: { id: string } }) {
   const links = await selectAllLinksByModule(module.id);
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="card bg-base-100 w-full items-center shadow-xl">
-          <IntroCard title={module.title} intro={module.intro} />
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="card bg-base-100 w-full items-center shadow-xl">
+        <IntroCard title={module.title} intro={module.intro} />
 
-          <LinksCard links={links} moduleId={module.id} />
-        </div>
-      </main>
-    </div>
+        <LinksCard links={links} moduleId={module.id} />
+      </div>
+    </main>
   );
 }

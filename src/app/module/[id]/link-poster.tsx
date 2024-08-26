@@ -32,7 +32,7 @@ export default function LinkPoster({ moduleId }: LinkProps) {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-2 sm:mt-0"
+          className="bg-saltOrange text-white px-4 py-2 rounded mt-2 sm:mt-0"
         >
           Post link
         </button>
