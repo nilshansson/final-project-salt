@@ -21,6 +21,8 @@ export default withUt({
         saltLightPink: "#eed3d0",
         saltBlack: "#353535",
         saltLightGrey: "#EBEBEB",
+        saltGreenPastell: "#E1FFED",
+        saltBluePastell: "#ECF7FA",
       },
     },
   },
