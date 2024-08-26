@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getCourseDatesByClassId } from "@/db/query";
 
 interface GHCommitProps {
   student: {

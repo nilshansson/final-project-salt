@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { handleCreateUserIfNotExist } from "@/actions/actions";
-import { selectAllClasses, getCourseDatesByClassId } from "@/db/query"; // Updated function
+import { getCourseDatesByClassId } from "@/db/query";
 import ContributionGraph from "./contributiongraph";
 import { GithubForm } from "./github-form";
 
@@ -45,11 +45,14 @@ export default async function ProfilePage() {
           />
         )}
         {student.github ? (
-          <ContributionGraph
-            student={student}
-            courseStart={courseStart}
-            courseEnd={courseEnd}
-          />
+          <>
+            <h1>commits since precourse start: </h1>
+            <ContributionGraph
+              student={student}
+              courseStart={courseStart}
+              courseEnd={courseEnd}
+            />
+          </>
         ) : (
           <GithubForm student={student} />
         )}

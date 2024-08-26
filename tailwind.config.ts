@@ -14,6 +14,14 @@ export default withUt({
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        saltOrange: "#FF7961",
+        saltDarkBlue: "#0F2D45",
+        saltDarkPink: "#F35c7e",
+        saltLightPink: "#eed3d0",
+        saltBlack: "#353535",
+        saltLightGrey: "#EBEBEB",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
