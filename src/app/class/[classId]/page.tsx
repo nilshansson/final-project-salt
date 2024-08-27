@@ -39,7 +39,7 @@ export default async function classPage({
 
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
-      <h1 className="text-5xl font-extrabold my-8 text-saltDarkBlue">
+      <h1 className="text-5xl font-extrabold mb-8 text-saltDarkBlue bg-saltOrange w-full py-4 text-center rounded-2xl">
         {classWModules.class.name}
       </h1>
 

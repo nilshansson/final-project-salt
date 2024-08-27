@@ -10,7 +10,7 @@ export default async function ClassesOverviewPage() {
   return (
     <div>
       <div>
-        <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 mb-24 underline">
+        <h1 className="text-center text-5xl font-extrabold text-white py-10 mb-24 underline bg-saltDarkBlue w-full">
           Class Management
         </h1>
 

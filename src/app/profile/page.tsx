@@ -28,11 +28,13 @@ export default async function ProfilePage() {
   let content;
 
   if (student.classId) {
-    const { courseStart, courseEnd } = await getCourseDatesByClassId(student.classId);
+    const { courseStart, courseEnd } = await getCourseDatesByClassId(
+      student.classId
+    );
 
     content = student.github ? (
       <>
-        <h1>Commits since precourse start:</h1>
+        <h1 className="text-saltDarkPink">Commits since precourse start:</h1>
         <ContributionGraph
           student={student}
           courseStart={courseStart}
@@ -47,22 +49,24 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
-      <div className="card-body flex flex-col items-center justify-center text-center">
-        <h1 className="text-lg font-bold mb-4">
-          Welcome, {user.first_name} {user.last_name}!
-        </h1>
-        {user.image_url && (
-          <img
-            src={user.image_url}
-            alt="User Profile Picture"
-            width={150}
-            height={150}
-            className="rounded-full mb-4"
-          />
-        )}
-        {content}
+    <>
+      <div className="card w-96 shadow-xl bg-saltDarkBlue mt-4">
+        <div className="card-body flex flex-col items-center justify-center text-center">
+          <h1 className="text-lg font-bold mb-4 text-white">
+            Welcome, {user.first_name} {user.last_name}!
+          </h1>
+          {user.image_url && (
+            <img
+              src={user.image_url}
+              alt="User Profile Picture"
+              width={150}
+              height={150}
+              className="rounded-full mb-4"
+            />
+          )}
+          {content}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

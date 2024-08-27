@@ -24,6 +24,7 @@ export default function EditClassesForm({
       }
     });
   };
+  const orange = "#FF7961";
 
   const handleClassSubmit = async (event: React.FormEvent, classId: number) => {
     event.preventDefault();
@@ -61,7 +62,9 @@ export default function EditClassesForm({
       <div className="flex flex-col lg:flex-row gap-8 w-full px-8">
         <div className="card bg-saltGreenPastell w-full lg:w-1/2 shadow-xl">
           <div className="card-body flex flex-col items-start justify-start text-center">
-            <h1 className="text-4xl font-bold mb-4 pb-11">Students</h1>
+            <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
+              Students
+            </h1>
 
             <div className="w-full mb-6">
               <h2 className="text-2xl font-semibold mb-4 text-saltDarkBlue">
@@ -94,7 +97,7 @@ export default function EditClassesForm({
             {allClasses.map((classItem) => (
               <div
                 key={classItem.id}
-                className="w-full mb-6 bg-white p-3 rounded-xl"
+                className="w-full mb-6 bg-saltLightGrey p-3 rounded-xl"
               >
                 <h2 className="text-2xl font-semibold mb-4 text-saltDarkBlue">
                   {classItem.name}
@@ -107,7 +110,7 @@ export default function EditClassesForm({
                         <span className="label-text mr-3">{student.name}</span>
                         <input
                           type="checkbox"
-                          className="checkbox"
+                          className="checkbox checkbox-error"
                           name={`student-${student.id}`}
                           checked={
                             selectedStudentsId.includes(student.id) || false
@@ -127,7 +130,9 @@ export default function EditClassesForm({
 
         <div className="card bg-saltBluePastell w-full lg:w-1/2 shadow-xl">
           <div className="card-body flex flex-col items-start justify-start text-center">
-            <h1 className="text-4xl font-bold mb-4 pb-11">Classes Overview</h1>
+            <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
+              Classes Overview
+            </h1>
 
             {error && <ErrorToast errorMessage={error} />}
             {success && <SuccessToast successMessage={success} />}
@@ -136,7 +141,7 @@ export default function EditClassesForm({
               return (
                 <div
                   key={classItem.id}
-                  className="mb-4 flex flex-row items-center w-full"
+                  className="mb-4 flex flex-row items-center w-full bg-saltLightPink p-3 rounded-xl"
                 >
                   <h1 className="text-saltDarkBlue text-3xl text-center">
                     {classItem.name}
@@ -145,7 +150,7 @@ export default function EditClassesForm({
                   <div className="ml-auto">
                     <button
                       type="button"
-                      className="btn bg-saltOrange mt-4 text-white"
+                      className="btn btn-outline"
                       onClick={(event) =>
                         handleClassSubmit(event, classItem.id)
                       }
