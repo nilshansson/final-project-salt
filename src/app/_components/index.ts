@@ -1,6 +1,7 @@
 export * from "./forms";
 export * from "./toasts";
 export * from "./modals";
+export * from "./layouts";
 
 export * from "./footer";
 export * from "./loading";

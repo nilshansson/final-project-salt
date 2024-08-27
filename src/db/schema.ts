@@ -21,6 +21,7 @@ export const classes = pgTable("classes", {
   name: text("name").notNull(),
   startDate: timestamp("start_date", { withTimezone: true }),
   gradDate: timestamp("grad_date", { withTimezone: true }),
+  precourseStartDate: timestamp("precourse_start_date", { withTimezone: true }),
 });
 
 export const courseModules = pgTable("course_modules", {

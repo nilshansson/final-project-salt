@@ -34,18 +34,21 @@ export default function ClassCollapse({
   const [updatedClassName, setUpdatedClassName] = useState<string>("");
   const [updatedStartDate, setUpdatedStartDate] = useState<string>("");
   const [updatedGradDate, setUpdatedGradDate] = useState<string>("");
+  const [updatedPrecourseStartDate, setUpdatedPrecourseStartDate] = useState<string>("");
   const [openClassId, setOpenClassId] = useState<number | null>(null);
 
   const handleEditClick = (
     classId: number,
     currentName: string,
     startDate: Date,
-    gradDate: Date
+    gradDate: Date,
+    precourseStartDate: Date
   ) => {
     setEditingClassId(classId);
     setUpdatedClassName(currentName);
     setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
     setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+    setUpdatedPrecourseStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
   };
 
   const handleSaveClick = async (classId: number) => {
@@ -63,6 +66,7 @@ export default function ClassCollapse({
     setUpdatedClassName("");
     setUpdatedStartDate("");
     setUpdatedGradDate("");
+    setUpdatedPrecourseStartDate("");
   };
 
   const handleDeleteClick = async (classId: number) => {

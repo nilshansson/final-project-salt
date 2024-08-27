@@ -8,14 +8,15 @@ import "daisyui/dist/full.css"; // Make sure DaisyUI is included in your project
 export function ClassForm() {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [precourseStartDate, setPrecourseStartDate] = useState<Date | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [gradDate, setGradDate] = useState<Date | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!startDate || !gradDate) {
-      console.error("Please select both start and graduation dates");
+    if (!precourseStartDate || !startDate || !gradDate) {
+      console.error("Please select precourse start date, start date and graduation date");
       return;
     }
 
@@ -39,6 +40,19 @@ export function ClassForm() {
           onChange={(e) => setName(e.target.value)}
           required
           className="border border-gray-300 rounded p-2"
+        />
+      </div>
+
+
+
+      <div className="flex flex-col space-y-2">
+        <label className="font-semibold">Precourse Start Date:</label>
+        <input
+          type="date"
+          className="input input-bordered w-full max-w-xs"
+          value={precourseStartDate ? precourseStartDate.toISOString().split("T")[0] : ""}
+          onChange={(e) => setPrecourseStartDate(e.target.value ? new Date(e.target.value) : null)}
+          required
         />
       </div>
       <div className="flex flex-col space-y-2">
