@@ -5,6 +5,6 @@ export * from "./layouts";
 
 export * from "./footer";
 export * from "./loading";
-export * from "./preloggedinhero";
-export * from "./studentcard";
+export * from "./pre-logged-in-hero";
+export * from "./student-card";
 export * from "./navbar";
