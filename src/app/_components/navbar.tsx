@@ -69,7 +69,8 @@ export async function Navbar() {
             <div className="relative group">
               {/* Dropdown Trigger */}
               <div className="flex items-center px-2 py-1 space-x-2 cursor-pointer">
-                <div className="flex items-center space-x-2">
+                      <Link className="flex items-center space-x-2"
+                        href={`/admin`}>
                   <svg
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -90,6 +91,7 @@ export async function Navbar() {
                   <span className="text-saltDarkBlue group-hover:text-saltOrange transition-colors duration-300 hidden md:inline">
                     Admin Dashboard
                   </span>
+                  </Link>
                   {/* Dropdown Arrow */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +107,6 @@ export async function Navbar() {
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>
-                </div>
               </div>
 
               {/* Dropdown Menu */}
@@ -126,14 +127,6 @@ export async function Navbar() {
                         className="block px-4 py-2 text-black hover:bg-saltDarkBlue hover:text-white transition-colors duration-300"
                       >
                         Module editor
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href={`/admin`}
-                        className="block px-4 py-2 text-black hover:bg-saltDarkBlue hover:text-white transition-colors duration-300"
-                      >
-                        Commits Graph
                       </Link>
                     </li>
                   </ul>
