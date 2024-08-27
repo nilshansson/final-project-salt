@@ -89,11 +89,18 @@ export default function CommitTracker({
     fetchContributions();
   }, [studentGithub, precourseStart, bootcampStart]);
 
+  // const getColor = (count: number) => {
+  //   if (count === 0) return "#ebedf0";
+  //   if (count < 5) return "#c6e48b";
+  //   if (count < 10) return "#7bc96f";
+  //   return "#239a3b";
+  // };
+
   const getColor = (count: number) => {
-    if (count === 0) return "#ebedf0";
-    if (count < 5) return "#c6e48b";
-    if (count < 10) return "#7bc96f";
-    return "#239a3b";
+    if (count === 0) return "#EAF4FB";
+    if (count < 5) return "#A9C9E6";
+    if (count < 10) return "#668AB0";
+    return "#3A5675";
   };
 
   if (isLoading) {
@@ -122,7 +129,7 @@ export default function CommitTracker({
   }
 
 return (
-  <div className="flex flex-col bg-saltDarkBlue w-full rounded p-3 justify-center items-center">
+  <div className="flex flex-col bg-saltDarkPink w-full rounded p-3 justify-center items-center">
     {/* Header Row for Days of the Week */}
     <div className="grid grid-cols-7 w-full">
       {[ 'S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
