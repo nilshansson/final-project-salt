@@ -4,7 +4,7 @@ import { SignedOut, SignedIn, useUser } from "@clerk/nextjs";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import PreloggedInHero from "./_components/preloggedinhero";
+import {PreloggedInHero} from "./_components";
 
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
