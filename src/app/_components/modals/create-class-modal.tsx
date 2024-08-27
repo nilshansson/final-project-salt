@@ -1,17 +1,15 @@
 "use client";
 
 import { postModule } from "@/actions/actions";
+import { ClassForm } from "@/app/_components";
 import { SelectClasses } from "@/db/query";
 import { useState, useEffect } from "react";
-import { ModuleForm } from "./module-form";
 
-interface ModalProps {
-  currClass: SelectClasses;
-}
 
-export function ModuleModal({ currClass }: ModalProps) {
+
+export function ClassModal() {
   useEffect(() => {
-    const modal = document.getElementById('my_modal_5') as HTMLDialogElement | null;
+    const modal = document.getElementById('class_modal') as HTMLDialogElement | null;
 
     const handleBackdropClick = (event: MouseEvent) => {
       if (modal && event.target === modal) {
@@ -27,18 +25,18 @@ export function ModuleModal({ currClass }: ModalProps) {
   }, []);
 
   const openModal = () => {
-    const modal = document.getElementById('my_modal_5') as HTMLDialogElement | null;
+    const modal = document.getElementById('class_modal') as HTMLDialogElement | null;
     modal?.showModal();
   };
 
   return (
     <>
       <button className="btn" onClick={openModal}>
-        Create new module for {currClass.name}
+        Create new class
       </button>
-      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+      <dialog id="class_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <ModuleForm currClass={currClass} />
+        <ClassForm/>
         </div>
       </dialog>
     </>

@@ -11,7 +11,7 @@ import {
   deleteClassAndRevalidate,
   updateClassAndRevalidate,
 } from "@/actions/actions";
-import { ModuleModal } from "./create-module-modal";
+import { ModuleModal } from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;

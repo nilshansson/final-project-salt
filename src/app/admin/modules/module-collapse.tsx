@@ -7,8 +7,7 @@ import {
   deleteModuleAndRevalidate,
   updateModuleDetailsAndRevalidate,
 } from "@/actions/actions";
-import { LinkModal } from "./create-link-modal";
-import {Loading} from "@/app/_components";
+import {LinkModal, Loading} from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;

@@ -1,8 +1,7 @@
 "use client";
 
 import { postLink } from "@/actions/actions";
-import { ErrorToast } from "@/app/_components/toast/errortoast";
-import { SuccessToast } from "@/app/_components/toast/successtoast";
+import { ErrorToast, SuccessToast } from "@/app/_components";
 import { useState } from "react";
 
 interface LinkProps {
