@@ -1,3 +1,4 @@
+"use client"
 type successMessageProps = {
   successMessage: string;
 };

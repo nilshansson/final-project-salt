@@ -1,3 +1,4 @@
+"use client"
 import { SignedOut, SignInButton } from "@clerk/nextjs";
 
 export function PreloggedInHero() {

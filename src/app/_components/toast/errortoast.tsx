@@ -1,3 +1,4 @@
+"use client"
 interface ErrorToastProps {
   errorMessage: string;
 }
