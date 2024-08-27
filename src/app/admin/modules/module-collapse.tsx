@@ -8,7 +8,7 @@ import {
   updateModuleDetailsAndRevalidate,
 } from "@/actions/actions";
 import { LinkModal } from "./create-link-modal";
-import Loading from "@/app/_components/loading";
+import {Loading} from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;

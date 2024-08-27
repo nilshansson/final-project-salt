@@ -3,7 +3,6 @@
 import { postModule } from "@/actions/actions";
 import { SelectClasses } from "@/db/query";
 import { useState, useEffect } from "react";
-import { ModuleForm } from "../create-module/module-form";
 import { ClassForm } from "./class-form";
 
 

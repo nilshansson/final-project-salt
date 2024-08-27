@@ -44,6 +44,9 @@ export default async function Module() {
 
   return (
     <div className="container mx-auto p-10 space-y-8">
+      <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 underline">
+        Admin Dashboard
+      </h1>
     <ClassModal/>
       <ClassCollapse allClassesWithModules={allClassesWithModules}/>
     </div>

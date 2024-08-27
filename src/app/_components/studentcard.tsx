@@ -14,7 +14,7 @@ type StudentCardProps = {
   };
 };
 
-export default async function StudentCard({ student }: StudentCardProps) {
+export async function StudentCard({ student }: StudentCardProps) {
   const { courseStart, courseEnd } = await getCourseDatesByClassId(
     student.classId
   );

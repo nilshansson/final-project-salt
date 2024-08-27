@@ -1,7 +1,7 @@
 "use client";
 
 import { postModuleAndRevalidate } from "@/actions/actions";
-import Loading from "@/app/_components/loading";
+import { Loading } from "@/app/_components/loading";
 import { SelectClasses } from "@/db/query";
 import { useState } from "react";
 

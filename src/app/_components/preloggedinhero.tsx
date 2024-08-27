@@ -1,6 +1,6 @@
 import { SignedOut, SignInButton } from "@clerk/nextjs";
 
-export default function PreloggedInHero() {
+export function PreloggedInHero() {
   return (
     <div
       className="hero min-h-screen"

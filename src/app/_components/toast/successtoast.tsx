@@ -2,7 +2,7 @@ type successMessageProps = {
   successMessage: string;
 };
 
-export default function SuccessToast({ successMessage }: successMessageProps) {
+export function SuccessToast({ successMessage }: successMessageProps) {
   return (
     <div role="alert" className="alert alert-success">
       <svg

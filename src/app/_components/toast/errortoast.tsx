@@ -2,7 +2,7 @@ interface ErrorToastProps {
   errorMessage: string;
 }
 
-export default function ErrorToast({ errorMessage }: ErrorToastProps) {
+export function ErrorToast({ errorMessage }: ErrorToastProps) {
   return (
     <div role="alert" className="alert alert-error">
       <svg

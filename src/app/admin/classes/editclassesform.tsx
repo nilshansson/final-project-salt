@@ -1,11 +1,9 @@
 "use client";
 
-import ErrorToast from "@/app/_components/errortoast";
-import Loading from "@/app/_components/loading";
 import React, { useState } from "react";
 import { updateClassOnStudentorStudents } from "@/db/query";
-import SuccessToast from "@/app/_components/successtoast";
 import { EditClassesFormProps, Student } from "@/app/types/index";
+import {ErrorToast, SuccessToast, Loading} from "@/app/_components";
 
 export default function EditClassesForm({
   allStudents: initialStudents,
