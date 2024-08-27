@@ -54,8 +54,8 @@ export async function postLink(courseModuleId: number, url: string) {
   return link;
 }
 
-export async function updateClassAndRevalidate(classId:number, className:string, startDate:Date, gradDate:Date){
-  await editClass(classId, className, startDate, gradDate);
+export async function updateClassAndRevalidate(classId:number, className:string, startDate:Date, gradDate:Date, preCDate:Date){
+  await editClass(classId, className, startDate, gradDate, preCDate);
   await revalidatePath("/admin/module")
 }
 

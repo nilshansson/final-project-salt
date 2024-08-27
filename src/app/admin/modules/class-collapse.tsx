@@ -55,8 +55,9 @@ export default function ClassCollapse({
     await updateClassAndRevalidate(
       classId,
       updatedClassName,
-      new Date(updatedStartDate), // Convert back to Date object
-      new Date(updatedGradDate) // Convert back to Date object
+      new Date(updatedStartDate),
+      new Date(updatedGradDate),
+      new Date(updatedPrecourseStartDate)
     );
     setEditingClassId(null);
   };
@@ -119,6 +120,14 @@ export default function ClassCollapse({
                   className="input input-bordered input-sm"
                   style={{ pointerEvents: "auto" }}
                 />
+                <label className="font-semibold">Precourse Start Date:</label>
+                <input
+                  type="date"
+                  value={updatedPrecourseStartDate}
+                  onChange={(e) => setUpdatedPrecourseStartDate(e.target.value)}
+                  className="input input-bordered input-sm"
+                  style={{ pointerEvents: "auto" }}
+                />
                 <div className="flex space-x-2 z-10">
                   <button
                     onClick={() => handleSaveClick(currClass.id)}
@@ -172,7 +181,8 @@ export default function ClassCollapse({
                           currClass.id,
                           currClass.name,
                           currClass.startDate,
-                          currClass.gradDate
+                          currClass.gradDate,
+                          currClass.precourseStartDate
                         )
                       }
                       className="btn text-3xl btn-warning relative z-10"
@@ -220,6 +230,7 @@ export default function ClassCollapse({
 
           <div className="collapse-content p-0">
             <div className="p-4">
+              <p><strong>Precourse Start Date:</strong> {new Date(currClass.precourseStartDate).toDateString()}</p>
               <p><strong>Start Date:</strong> {new Date(currClass.startDate).toDateString()}</p>
               <p><strong>Graduation Date:</strong> {new Date(currClass.gradDate).toDateString()}</p>
             </div>

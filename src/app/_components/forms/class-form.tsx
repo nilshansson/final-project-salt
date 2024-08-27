@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { postClassAndRevalidate } from "@/actions/actions"; // Assuming you have this action
+import { postClassAndRevalidate } from "@/actions/actions";
 import { useRouter } from "next/navigation";
-import "daisyui/dist/full.css"; // Make sure DaisyUI is included in your project
+import "daisyui/dist/full.css";
 
 export function ClassForm() {
   const router = useRouter();
