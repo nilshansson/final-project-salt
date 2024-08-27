@@ -1,7 +1,7 @@
 "use server";
 
 import { selectAllClasses, getAllStudentInfo, SelectStudent } from "@/db/query";
-import {StudentCard} from "../_components";
+import { StudentCard } from "../_components";
 
 export default async function AdminPage() {
   const allStudentInfo: SelectStudent[] = await getAllStudentInfo();
@@ -14,8 +14,8 @@ export default async function AdminPage() {
       </h1>
 
       {allClasses.map((classItem) => (
-        <div key={classItem.id} className="w-full p-4">
-          <h2 className="text-3xl font-bold text-saltDarkBlue mb-6">
+        <div key={classItem.id} className="w-full p-4 pb-10">
+          <h2 className="text-3xl font-bold bg-saltDarkBlue text-white mb-6 w-fit px-3 rounded-2xl">
             {classItem.name}
           </h2>
 

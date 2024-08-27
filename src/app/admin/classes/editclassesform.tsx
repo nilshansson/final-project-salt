@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { updateClassOnStudentorStudents } from "@/db/query";
 import { EditClassesFormProps, Student } from "@/app/types/index";
-import {ErrorToast, SuccessToast, Loading} from "@/app/_components";
+import { ErrorToast, SuccessToast, Loading } from "@/app/_components";
 
 export default function EditClassesForm({
   allStudents: initialStudents,
@@ -92,19 +92,22 @@ export default function EditClassesForm({
             </div>
 
             {allClasses.map((classItem) => (
-              <div key={classItem.id} className="w-full mb-6">
+              <div
+                key={classItem.id}
+                className="w-full mb-6 bg-white p-3 rounded-xl"
+              >
                 <h2 className="text-2xl font-semibold mb-4 text-saltDarkBlue">
                   {classItem.name}
                 </h2>
                 {allStudents
                   .filter((student) => student.classId === classItem.id)
                   .map((student) => (
-                    <div className="form-control justify-end" key={student.id}>
+                    <div className="form-control justify-end " key={student.id}>
                       <label className="label cursor-pointer">
                         <span className="label-text mr-3">{student.name}</span>
                         <input
                           type="checkbox"
-                          className="checkbox checkbox-primary"
+                          className="checkbox"
                           name={`student-${student.id}`}
                           checked={
                             selectedStudentsId.includes(student.id) || false

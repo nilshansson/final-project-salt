@@ -120,7 +120,7 @@ export default function ContributionGraph({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-gray-200 w-full rounded-3xl py-3 justify-center items-center">
       {contributionCalendar.map((week: any, i: number) => {
         const weekTotalContributions = week.contributionDays.reduce(
           (sum: number, day: any) => sum + day.contributionCount,
