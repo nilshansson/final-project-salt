@@ -382,8 +382,8 @@ export async function getCourseDatesByClassId(classId: number | null) {
 
   const result = await db
     .select({
-      courseStart: classes.startDate,
-      courseEnd: classes.gradDate,
+      precourseStart: classes.precourseStartDate,
+      bootcampStart: classes.startDate,
     })
     .from(classes)
     .where(eq(classes.id, classId))

@@ -1,8 +1,9 @@
 "use server";
 
 import Link from "next/link";
-import ContributionGraph from "../profile/contributiongraph";
+import ContributionGraph from "./commit-tracker";
 import { getCourseDatesByClassId } from "@/db/query";
+import CommitTracker from "./commit-tracker";
 
 type StudentCardProps = {
   student: {
@@ -15,12 +16,12 @@ type StudentCardProps = {
 };
 
 export async function StudentCard({ student }: StudentCardProps) {
-  const { courseStart, courseEnd } = await getCourseDatesByClassId(
+  const { precourseStart, bootcampStart } = await getCourseDatesByClassId(
     student.classId
   );
 
   return (
-    <div className="card bg-saltLightPink min-w-80 shadow-xl">
+    <div className="card bg-saltLightPink min-w-60 max-w-72 shadow-xl">
       <div className="card-body flex flex-col items-center justify-center text-center">
         <h1 className="text-2xl font-bold mb-4 text-saltDarkBlue">
           {student.name}
@@ -34,15 +35,15 @@ export async function StudentCard({ student }: StudentCardProps) {
               </label>
               <Link
                 href={`https://github.com/${student.github}`}
-                className="underline text-white ml-2 font-bold hover:text-saltDarkBlue"
+                className="underline text-white ml-2 font-bold text-sm hover:text-saltDarkBlue"
               >
                 {student.github}
               </Link>
             </div>
-            <ContributionGraph
+            <CommitTracker
               student={student}
-              courseStart={courseStart}
-              courseEnd={courseEnd}
+              precourseStart={precourseStart}
+              bootcampStart={bootcampStart}
             />
           </div>
         ) : (

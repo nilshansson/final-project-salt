@@ -3,8 +3,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { handleCreateUserIfNotExist } from "@/actions/actions";
 import { getCourseDatesByClassId } from "@/db/query";
-import ContributionGraph from "./contributiongraph";
+import ContributionGraph from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
+import CommitTracker from "../_components/commit-tracker";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
@@ -28,17 +29,17 @@ export default async function ProfilePage() {
   let content;
 
   if (student.classId) {
-    const { courseStart, courseEnd } = await getCourseDatesByClassId(
+    const { precourseStart, bootcampStart } = await getCourseDatesByClassId(
       student.classId
     );
 
     content = student.github ? (
       <>
         <h1 className="text-saltDarkPink">Commits since precourse start:</h1>
-        <ContributionGraph
+        <CommitTracker
           student={student}
-          courseStart={courseStart}
-          courseEnd={courseEnd}
+          precourseStart={precourseStart}
+          bootcampStart={bootcampStart}
         />
       </>
     ) : (
