@@ -1,6 +1,10 @@
 "use client";
 
-import { postModule, postUtlink, revalidatePathCreateModule } from "@/actions/actions";
+import {
+  postModule,
+  postUtlink,
+  revalidatePathCreateModule,
+} from "@/actions/actions";
 import { SelectModule } from "@/db/query";
 import { useState, useEffect } from "react";
 import { UploadButton } from "@/utils/uploadthing";
@@ -12,7 +16,9 @@ interface ModalProps {
 
 export function LinkModal({ currModule }: ModalProps) {
   useEffect(() => {
-    const modal = document.getElementById('my_modal_6') as HTMLDialogElement | null;
+    const modal = document.getElementById(
+      "my_modal_6"
+    ) as HTMLDialogElement | null;
 
     const handleBackdropClick = (event: MouseEvent) => {
       if (modal && event.target === modal) {
@@ -20,38 +26,40 @@ export function LinkModal({ currModule }: ModalProps) {
       }
     };
 
-    modal?.addEventListener('click', handleBackdropClick);
+    modal?.addEventListener("click", handleBackdropClick);
 
     return () => {
-      modal?.removeEventListener('click', handleBackdropClick);
+      modal?.removeEventListener("click", handleBackdropClick);
     };
   }, []);
 
   const openModal = () => {
-    const modal = document.getElementById('my_modal_6') as HTMLDialogElement | null;
+    const modal = document.getElementById(
+      "my_modal_6"
+    ) as HTMLDialogElement | null;
     modal?.showModal();
   };
 
   return (
     <>
-      <button className="btn" onClick={openModal}>
+      <button className="btn text-saltDarkBlue" onClick={openModal}>
         Add link
       </button>
       <dialog id="my_modal_6" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-      <LinkPoster moduleId={currModule.id}/>
-      <UploadButton
-        endpoint="fileUploader"
-        onClientUploadComplete={(res) => {
-          postUtlink(currModule.id, res[0].name, res[0].url)
-          console.log("Files: ", res);
-          alert("Upload Completed");
-          revalidatePathCreateModule()
-        }}
-        onUploadError={(error: Error) => {
-          alert(`ERROR! ${error.message}`);
-        }}
-      />
+          <LinkPoster moduleId={currModule.id} />
+          <UploadButton
+            endpoint="fileUploader"
+            onClientUploadComplete={(res) => {
+              postUtlink(currModule.id, res[0].name, res[0].url);
+              console.log("Files: ", res);
+              alert("Upload Completed");
+              revalidatePathCreateModule();
+            }}
+            onUploadError={(error: Error) => {
+              alert(`ERROR! ${error.message}`);
+            }}
+          />
         </div>
       </dialog>
     </>

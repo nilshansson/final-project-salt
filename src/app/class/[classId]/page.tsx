@@ -44,24 +44,31 @@ export default async function classPage({
       </h1>
 
       {classWModules.moduleWLink.map((moduleWLink) => (
-        <div
-          key={moduleWLink.module.id}
-          className="flex flex-col md:flex-row gap-8 mb-8 w-full mt-5"
-        >
-          <div className="w-full md:w-8/12">
-            <IntroCard
-              title={moduleWLink.module.title}
-              intro={moduleWLink.module.intro}
-            />
-          </div>
+        <details className="collapse bg-saltDarkBlue my-2">
+          <summary className="collapse-title text-xl font-bold text-white">
+            {moduleWLink.module.title}
+          </summary>
+          <div className="collapse-content">
+            <div
+              key={moduleWLink.module.id}
+              className="flex flex-col md:flex-row gap-8 mb-8 w-full mt-5"
+            >
+              <div className="w-full md:w-8/12">
+                <IntroCard
+                  title={moduleWLink.module.title}
+                  intro={moduleWLink.module.intro}
+                />
+              </div>
 
-          <div className="w-full md:w-4/12">
-            <LinksCard
-              links={moduleWLink.links}
-              moduleId={moduleWLink.module.id}
-            />
+              <div className="w-full md:w-4/12">
+                <LinksCard
+                  links={moduleWLink.links}
+                  moduleId={moduleWLink.module.id}
+                />
+              </div>
+            </div>
           </div>
-        </div>
+        </details>
       ))}
     </main>
   );
