@@ -10,14 +10,14 @@ interface GHCommitProps {
     classId: number | null;
     github: string | null;
   };
-  courseStart: Date | null;
-  courseEnd: Date | null;
+  precourseStart: Date | null;
+  bootcampStart: Date | null;
 }
 
 export default function ContributionGraph({
   student,
-  courseStart,
-  courseEnd,
+  precourseStart,
+  bootcampStart,
 }: GHCommitProps) {
   const [contributionCalendar, setContributionCalendar] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,7 @@ export default function ContributionGraph({
   useEffect(() => {
     async function fetchContributions() {
       try {
-        if (!studentGithub || !courseStart || !courseEnd) {
+        if (!studentGithub || !precourseStart || !bootcampStart) {
           throw new Error("Missing necessary data (GitHub username or dates)");
         }
 
@@ -53,9 +53,11 @@ export default function ContributionGraph({
         `;
 
         const today = new Date();
-        const fromDate = courseStart.toISOString();
+        const fromDate = precourseStart.toISOString();
         const toDate =
-          courseEnd > today ? today.toISOString() : courseEnd.toISOString();
+          bootcampStart > today
+            ? today.toISOString()
+            : bootcampStart.toISOString();
 
         const response = await fetch(GITHUB_GRAPHQL_URL, {
           method: "POST",
@@ -85,7 +87,7 @@ export default function ContributionGraph({
     }
 
     fetchContributions();
-  }, [studentGithub, courseStart, courseEnd]);
+  }, [studentGithub, precourseStart, bootcampStart]);
 
   const getColor = (count: number) => {
     if (count === 0) return "#ebedf0";
@@ -114,13 +116,13 @@ export default function ContributionGraph({
             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <span>{error}</span>
+        <span className="text-sm">{error}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col bg-saltOrange w-full rounded-3xl py-3 justify-center items-center">
+    <div className="flex flex-col bg-gray-200 w-full rounded-3xl py-3 justify-center items-center">
       {contributionCalendar.map((week: any, i: number) => {
         const weekTotalContributions = week.contributionDays.reduce(
           (sum: number, day: any) => sum + day.contributionCount,
@@ -128,8 +130,8 @@ export default function ContributionGraph({
         );
 
         return (
-          <div key={i} className="flex flex-row">
-            <h3 className="text-sm">
+          <div key={i} className="mb-4">
+            <h3 className="text-sm mb-2">
               Week {i + 1}: {weekTotalContributions} commits
             </h3>
 
