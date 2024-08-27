@@ -9,10 +9,22 @@ interface LinkProps {
 
 export default function LinkPoster({ moduleId }: LinkProps) {
   const [url, setUrl] = useState("");
+
+  function formatUrl(inputUrl: string): string {
+    let formattedUrl = inputUrl.trim();
+    if (
+      !formattedUrl.startsWith("http://") &&
+      !formattedUrl.startsWith("https://")
+    ) {
+      formattedUrl = `http://${formattedUrl}`;
+    }
+    return formattedUrl;
+  }
   async function handleSubmit(e: React.FormEvent) {
+    const formattedUrl = formatUrl(url);
     e.preventDefault();
 
-    postLink(moduleId, url).then(() => alert("LINK IS NOW LINKED"));
+    postLink(moduleId, formattedUrl).then(() => alert("LINK IS NOW LINKED"));
   }
   return (
     <form
