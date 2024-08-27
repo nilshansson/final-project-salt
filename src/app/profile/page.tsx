@@ -5,6 +5,7 @@ import { handleCreateUserIfNotExist } from "@/actions/actions";
 import { getCourseDatesByClassId } from "@/db/query";
 import ContributionGraph from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
+import CommitTracker from "../_components/commit-tracker";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
@@ -35,7 +36,7 @@ export default async function ProfilePage() {
     content = student.github ? (
       <>
         <h1 className="text-saltDarkPink">Commits since precourse start:</h1>
-        <ContributionGraph
+        <CommitTracker
           student={student}
           precourseStart={precourseStart}
           bootcampStart={bootcampStart}

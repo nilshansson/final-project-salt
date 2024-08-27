@@ -14,7 +14,7 @@ interface GHCommitProps {
   bootcampStart: Date | null;
 }
 
-export default function ContributionGraph({
+export default function CommitTracker({
   student,
   precourseStart,
   bootcampStart,

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import ContributionGraph from "./commit-tracker";
 import { getCourseDatesByClassId } from "@/db/query";
+import CommitTracker from "./commit-tracker";
 
 type StudentCardProps = {
   student: {
@@ -39,7 +40,7 @@ export async function StudentCard({ student }: StudentCardProps) {
                 {student.github}
               </Link>
             </div>
-            <ContributionGraph
+            <CommitTracker
               student={student}
               precourseStart={precourseStart}
               bootcampStart={bootcampStart}
