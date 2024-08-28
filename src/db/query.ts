@@ -17,7 +17,7 @@ export type InsertModule = typeof courseModules.$inferInsert;
 export async function insertCourseModule(
   title: string,
   intro: string | null,
-  classId: number,
+  classId: number
 ): Promise<InsertModule> {
   try {
     const result = await db
@@ -55,7 +55,7 @@ export async function selectAllCourseModules(): Promise<SelectModule[]> {
 }
 
 export async function selectAllCourseModulesByClassId(
-  classId: number,
+  classId: number
 ): Promise<SelectModule[]> {
   try {
     const allClasses = await db
@@ -72,7 +72,7 @@ export async function selectAllCourseModulesByClassId(
 export async function updateCourseModule(
   moduleId: number,
   updatedTitle: string,
-  updatedIntro: string,
+  updatedIntro: string
 ) {
   try {
     await db
@@ -100,7 +100,7 @@ export async function insertUtlink(
   courseModulesId: number,
   url: string,
   title: string,
-  description: string | null,
+  description: string | null
 ): Promise<InsertUtlink> {
   try {
     const utlink = await db
@@ -115,7 +115,7 @@ export async function insertUtlink(
 }
 
 export async function selectUtlinksByModule(
-  moduleId: number,
+  moduleId: number
 ): Promise<SelectUtlink[]> {
   try {
     const links = await db
@@ -135,7 +135,7 @@ export type InsertLink = typeof links.$inferInsert;
 export async function insertLink(
   courseModulesId: number,
   url: string,
-  title: string,
+  title: string
 ): Promise<InsertLink> {
   try {
     const link = await db
@@ -150,7 +150,7 @@ export async function insertLink(
 }
 
 export async function selectLinksByModule(
-  moduleId: number,
+  moduleId: number
 ): Promise<SelectLink[]> {
   try {
     const link = await db
@@ -176,7 +176,7 @@ export interface combinedLink {
 }
 
 export async function selectAllLinksByModule(
-  moduleId: number,
+  moduleId: number
 ): Promise<combinedLink[]> {
   const [links, utlinks] = await Promise.all([
     selectLinksByModule(moduleId),
@@ -211,7 +211,7 @@ export type InsertStudent = typeof students.$inferInsert;
 
 export async function createStudentAndUserIfNotExists(
   userId: string,
-  name: string,
+  name: string
 ): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
   const existingStudent = await db
     .select()
@@ -263,7 +263,7 @@ export async function createStudentAndUserIfNotExists(
 
 export async function addGitHubUsername(
   userId: string,
-  githubUsername: string,
+  githubUsername: string
 ) {
   await db
     .update(students)
@@ -271,7 +271,7 @@ export async function addGitHubUsername(
     .where(eq(students.userId, userId));
 }
 
-export async function getGithubUserInfo(userId: string) {
+export async function getStudentInfo(userId: string) {
   const Userinfo = await db
     .select()
     .from(students)
@@ -315,7 +315,7 @@ export async function selectClass(classId: number): Promise<SelectClasses> {
   }
 }
 export async function selectClassByName(
-  className: string,
+  className: string
 ): Promise<SelectClasses> {
   try {
     const [newClass] = await db
@@ -342,7 +342,7 @@ export async function editClass(
   className: string,
   newStartDate: string | Date,
   newGradDate: string | Date,
-  newPCDate: string | Date,
+  newPCDate: string | Date
 ) {
   try {
     const startDate =
@@ -402,7 +402,7 @@ export async function getCourseDatesByClassId(classId: number | null) {
 export async function updateLinkDetails(
   linkId: number,
   title: string,
-  url: string,
+  url: string
 ) {
   await db.update(links).set({ title, url }).where(eq(links.id, linkId));
 }
@@ -411,7 +411,7 @@ export async function updateLinkDetails(
 export async function updateUTLinkDetails(
   linkId: number,
   title: string,
-  url: string,
+  url: string
 ) {
   await db.update(utlinks).set({ title, url }).where(eq(utlinks.id, linkId));
 }
@@ -427,7 +427,7 @@ export async function deleteUTLink(linkId: number) {
 }
 export async function updateClassOnStudentorStudents(
   newClassId: number,
-  studentIds: number[],
+  studentIds: number[]
 ) {
   try {
     await db
