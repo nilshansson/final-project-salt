@@ -61,7 +61,7 @@ export function LinkModal({ moduleId, addNewLink }: ModalProps) {
   return (
     <>
       <button
-        className=" text-white bg-saltOrange  px-4 font-semibold rounded-full"
+        className=" text-white bg-saltOrange  px-4 font-semibold rounded-full mt-6"
         onClick={openModal}
       >
         Add link

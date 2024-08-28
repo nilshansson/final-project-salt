@@ -121,7 +121,7 @@ export default function ModuleCollapse({
   return (
     <>
       <ModuleModal currClass={currClass} addNewModule={addNewModule} />
-      <div className="collapse-content">
+      <div className="collapse-content ">
         {modules.map((module) => (
           <div
             key={"module" + module.id}

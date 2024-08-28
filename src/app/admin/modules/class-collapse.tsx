@@ -243,15 +243,15 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
           {openClassId === currClass.id && (
             <div className="collapse-content p-0">
               <div className="p-4">
-                <p>
+                <p className="my-1">
                   <strong className="text-white ">Precourse Start Date:</strong>{" "}
                   {new Date(currClass.precourseStartDate).toDateString()}
                 </p>
-                <p>
+                <p className="my-1">
                   <strong className="text-white ">Start Date:</strong>{" "}
                   {new Date(currClass.startDate).toDateString()}
                 </p>
-                <p>
+                <p className="my-1">
                   <strong className="text-white ">Graduation Date:</strong>{" "}
                   {new Date(currClass.gradDate).toDateString()}
                 </p>
