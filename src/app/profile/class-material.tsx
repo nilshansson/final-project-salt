@@ -1,14 +1,24 @@
 import { IntroCard } from "@/app/module/[id]/intro-card";
 import { LinksCard } from "@/app/module/[id]/links-card";
+// import {
+//   combinedLink,
+//   getStudentInfo,
+//   selectAllCourseModulesByClassId,
+//   selectAllLinksByModule,
+//   selectClass,
+//   SelectClasses,
+//   SelectModule,
+// } from "@/db/query";
 import {
   combinedLink,
-  getStudentInfo,
-  selectAllCourseModulesByClassId,
   selectAllLinksByModule,
-  selectClass,
-  SelectClasses,
+} from "@/db/queries/link-queries";
+import { getStudentInfo } from "@/db/queries/student-queries";
+import {
   SelectModule,
-} from "@/db/query";
+  selectAllCourseModulesByClassId,
+} from "@/db/queries/module-queries";
+import { SelectClasses, selectClass } from "@/db/queries/class-queries";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function ClassMaterial() {

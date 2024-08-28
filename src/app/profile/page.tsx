@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { handleCreateUserIfNotExist } from "@/actions/actions";
-import { getCourseDatesByClassId } from "@/db/query";
+import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import { GithubForm } from "./github-form";
 import CommitTracker from "../_components/commit-tracker";
 import ClassMaterial from "./class-material";

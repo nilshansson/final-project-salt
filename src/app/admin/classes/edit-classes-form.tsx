@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { updateClassOnStudentorStudents } from "@/db/query";
+import { updateClassOnStudentorStudents } from "@/db/queries/student-queries";
 import { EditClassesFormProps, Student } from "@/app/types/index";
 import { ErrorToast, SuccessToast, Loading } from "@/app/_components";
 

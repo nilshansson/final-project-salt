@@ -1,7 +1,7 @@
 "use client";
 
 import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
-import { combinedLink } from "@/db/query";
+import { combinedLink } from "@/db/queries/link-queries";
 import { UploadButton } from "@/utils/uploadthing";
 import Link from "next/link";
 import LinkPoster from "./link-poster";

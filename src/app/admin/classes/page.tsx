@@ -1,6 +1,7 @@
 "use server";
 
-import { getAllStudentInfo, selectAllClasses } from "@/db/query";
+import { selectAllClasses } from "@/db/queries/class-queries";
+import { getAllStudentInfo } from "@/db/queries/student-queries";
 import EditClassesForm from "./edit-classes-form";
 import { Main } from "@/app/_components";
 

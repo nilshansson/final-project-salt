@@ -1,8 +1,7 @@
 "use server";
 
 import Link from "next/link";
-import ContributionGraph from "./commit-tracker";
-import { getCourseDatesByClassId } from "@/db/query";
+import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import CommitTracker from "./commit-tracker";
 
 type StudentCardProps = {

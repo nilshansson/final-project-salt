@@ -1,10 +1,9 @@
 "use server";
 import {
-  selectAllClasses,
   selectAllCourseModulesByClassId,
-  SelectClasses,
   SelectModule,
-} from "@/db/query";
+} from "@/db/queries/module-queries";
+import { selectAllClasses, SelectClasses } from "@/db/queries/class-queries";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
