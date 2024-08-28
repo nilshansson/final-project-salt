@@ -1,20 +1,65 @@
 "use client";
 
 import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
-import { combinedLink } from "@/db/queries/link-queries";
+import { combinedLink, selectAllLinksByModule } from "@/db/queries/link-queries";
 import { UploadButton } from "@/utils/uploadthing";
 import Link from "next/link";
 import LinkPoster from "./link-poster";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export interface LinksProps {
-  links: combinedLink[];
   moduleId: number;
 }
 
-export function LinksCard({ links, moduleId }: LinksProps) {
+export function LinksCard({ moduleId }: LinksProps) {
+  const [links, setLinks] = useState<combinedLink[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      try {
+        const fetchedLinks = await selectAllLinksByModule(moduleId);
+        setLinks(fetchedLinks);
+      } catch (error) {
+        setErrorMessage("Failed to load links.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLinks();
+  }, [moduleId]);
+
+  const addNewLink = (newLink: combinedLink) => {
+    setLinks((prevLinks) => [...prevLinks, newLink]);
+  };
+
+  const handleLinkUpload = async (name: string, url: string) => {
+    try {
+      await postUtlink(moduleId, name, url);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+      }, 5000);
+      revalidatePathCreateModule();
+      // Re-fetch links after uploading a new one
+      const updatedLinks = await selectAllLinksByModule(moduleId);
+      setLinks(updatedLinks);
+    } catch (error) {
+      setErrorMessage("Failed to upload link.");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading links...</div>;
+  }
+
+
 
   return (
     <>
@@ -23,19 +68,23 @@ export function LinksCard({ links, moduleId }: LinksProps) {
           Links
         </h2>
         <div className="card bg-base-200 p-4 mt-4">
-          {links.map((link) => (
-            <div key={link.id}>
-              <Link href={link.url}>
-                <div className="card bg-base-300 m-2">
-                  <h3 className="text-center text-lg px-3 text-saltDarkPink">
-                    {link.title}
-                  </h3>
-                </div>
-              </Link>
-            </div>
-          ))}
+          {links.length > 0 ? (
+            links.map((link) => (
+              <div key={link.id}>
+                <Link href={link.url}>
+                  <div className="card bg-base-300 m-2">
+                    <h3 className="text-center text-lg px-3 text-saltDarkPink">
+                      {link.title}
+                    </h3>
+                  </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <p>No links available.</p>
+          )}
         </div>
-        <LinkPoster moduleId={moduleId} />
+        <LinkPoster moduleId={moduleId} onLinkAdded={addNewLink} />
         {success && (
           <div className="toast toast-top toast-center">
             <div className="alert alert-success">
@@ -76,17 +125,10 @@ export function LinksCard({ links, moduleId }: LinksProps) {
               },
             }}
             onClientUploadComplete={(res) => {
-              postUtlink(moduleId, res[0].name, res[0].url);
-              console.log("Files: ", res);
-              setSuccess(true);
-              setTimeout(() => {
-                setSuccess(false);
-              }, 5000);
-
-              revalidatePathCreateModule();
+              handleLinkUpload(res[0].name, res[0].url);
             }}
             onUploadError={(error: Error) => {
-              setErrorMessage(error.message);
+              setErrorMessage(`ERROR! ${error.message}`);
               setTimeout(() => {
                 setErrorMessage(null);
               }, 5000);
