@@ -12,6 +12,7 @@ import {
   deleteClassAndRevalidate,
   updateClassAndRevalidate,
 } from "@/actions/actions";
+import { Loading } from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;
@@ -97,7 +98,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
       {allClasses.map((currClass) => (
         <div
           key={"classCollapse" + currClass.id}
-          className="collapse bg-saltDarkBlue  text-white prose lg:prose-lg"
+          className="collapse bg-saltDarkBlue  text-white w-full my-2"
         >
           <input
             type="checkbox"
@@ -130,7 +131,9 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                   className="input input-bordered input-sm"
                   style={{ pointerEvents: "auto" }}
                 />
-                <label className="font-semibold">Precourse Start Date:</label>
+                <label className="font-semibold py-1">
+                  Precourse Start Date:
+                </label>
                 <input
                   type="date"
                   value={updatedPrecourseStartDate}
@@ -254,7 +257,10 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                 </p>
               </div>
               {isLoadingModules ? (
-                <div>Loading modules...</div>
+                <>
+                  <div>Loading modules...</div>
+                  <Loading />
+                </>
               ) : (
                 <ModuleCollapse allModules={modules} currClass={currClass} />
               )}
