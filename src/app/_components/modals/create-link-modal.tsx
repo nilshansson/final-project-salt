@@ -13,7 +13,9 @@ interface ModalProps {
 
 export function LinkModal({ moduleId, addNewLink }: ModalProps) {
   useEffect(() => {
-    const modal = document.getElementById("my_modal_6") as HTMLDialogElement | null;
+    const modal = document.getElementById(
+      "my_modal_6"
+    ) as HTMLDialogElement | null;
 
     const handleBackdropClick = (event: MouseEvent) => {
       if (modal && event.target === modal) {
@@ -29,7 +31,9 @@ export function LinkModal({ moduleId, addNewLink }: ModalProps) {
   }, []);
 
   const openModal = () => {
-    const modal = document.getElementById("my_modal_6") as HTMLDialogElement | null;
+    const modal = document.getElementById(
+      "my_modal_6"
+    ) as HTMLDialogElement | null;
     modal?.showModal();
   };
 
@@ -56,7 +60,10 @@ export function LinkModal({ moduleId, addNewLink }: ModalProps) {
 
   return (
     <>
-      <button className="btn text-saltDarkBlue" onClick={openModal}>
+      <button
+        className=" text-white bg-saltOrange  px-4 font-semibold rounded-full"
+        onClick={openModal}
+      >
         Add link
       </button>
       <dialog id="my_modal_6" className="modal modal-bottom sm:modal-middle">

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 interface ModuleProps {
   currClass: SelectClasses;
-  onModuleCreated: (newModule:SelectModule) => void; // Callback function to notify module creation
+  onModuleCreated: (newModule: SelectModule) => void; // Callback function to notify module creation
 }
 
 export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
@@ -26,8 +26,8 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
     try {
       const res = await postModuleAndRevalidate(title, intro, currClass.id);
       if (res) {
-        console.log("res \n\n\n\n\n")
-        console.log(res)
+        console.log("res \n\n\n\n\n");
+        console.log(res);
         setSuccess("Module successfully created!");
         setTitle("");
         setIntro("");
