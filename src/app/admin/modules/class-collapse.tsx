@@ -2,10 +2,12 @@
 
 import {
   combinedLink,
+  selectAllCourseModulesByClassId,
+  selectAllLinksByModule,
   SelectClasses,
   SelectModule,
 } from "@/db/query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModuleCollapse from "./module-collapse";
 import {
   deleteClassAndRevalidate,
@@ -24,18 +26,18 @@ interface classesWithModulesWithLinks {
 }
 
 interface ClassCollapseProps {
-  allClassesWithModules: classesWithModulesWithLinks[];
+  allClasses: SelectClasses[];
 }
 
-export default function ClassCollapse({
-  allClassesWithModules,
-}: ClassCollapseProps) {
+export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
   const [editingClassId, setEditingClassId] = useState<number | null>(null);
   const [updatedClassName, setUpdatedClassName] = useState<string>("");
   const [updatedStartDate, setUpdatedStartDate] = useState<string>("");
   const [updatedGradDate, setUpdatedGradDate] = useState<string>("");
   const [updatedPrecourseStartDate, setUpdatedPrecourseStartDate] = useState<string>("");
   const [openClassId, setOpenClassId] = useState<number | null>(null);
+  const [modules, setModules] = useState<SelectModule[]>([]);
+  const [isLoadingModules, setIsLoadingModules] = useState<boolean>(false);
 
   const handleEditClick = (
     classId: number,
@@ -48,7 +50,7 @@ export default function ClassCollapse({
     setUpdatedClassName(currentName);
     setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
     setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
-    setUpdatedPrecourseStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+    setUpdatedPrecourseStartDate(precourseStartDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
   };
 
   const handleSaveClick = async (classId: number) => {
@@ -74,17 +76,24 @@ export default function ClassCollapse({
     await deleteClassAndRevalidate(classId);
   };
 
-  const toggleCollapse = (classId: number) => {
+  const toggleCollapse = async (classId: number) => {
     if (openClassId === classId) {
       setOpenClassId(null);
+      setModules([]);
     } else {
       setOpenClassId(classId);
+      setIsLoadingModules(true);
+
+      // Fetch modules and links for the selected class
+      const newModules = await selectAllCourseModulesByClassId(classId);
+      setModules(newModules)
+      setIsLoadingModules(false);
     }
   };
 
   return (
     <>
-      {allClassesWithModules.map(({ class: currClass, moduleWLink }) => (
+      {allClasses.map((currClass) => (
         <div
           key={"classCollapse" + currClass.id}
           className="collapse bg-base-100 prose lg:prose-lg"
@@ -228,14 +237,20 @@ export default function ClassCollapse({
             )}
           </div>
 
-          <div className="collapse-content p-0">
-            <div className="p-4">
-              <p><strong>Precourse Start Date:</strong> {new Date(currClass.precourseStartDate).toDateString()}</p>
-              <p><strong>Start Date:</strong> {new Date(currClass.startDate).toDateString()}</p>
-              <p><strong>Graduation Date:</strong> {new Date(currClass.gradDate).toDateString()}</p>
+          {openClassId === currClass.id && (
+            <div className="collapse-content p-0">
+              <div className="p-4">
+                <p><strong>Precourse Start Date:</strong> {new Date(currClass.precourseStartDate).toDateString()}</p>
+                <p><strong>Start Date:</strong> {new Date(currClass.startDate).toDateString()}</p>
+                <p><strong>Graduation Date:</strong> {new Date(currClass.gradDate).toDateString()}</p>
+              </div>
+              {isLoadingModules ? (
+                <div>Loading modules...</div>
+              ) : (
+                <ModuleCollapse allModules={modules} />
+              )}
             </div>
-            <ModuleCollapse allModulesWithLinks={moduleWLink} />
-          </div>
+          )}
         </div>
       ))}
     </>

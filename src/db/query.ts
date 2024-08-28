@@ -171,6 +171,8 @@ export interface combinedLink {
   courseModulesId: number;
   url: string;
   isUploadThing: boolean;
+  createdAt: Date;
+  updatedAt: Date | null;
 }
 
 export async function selectAllLinksByModule(

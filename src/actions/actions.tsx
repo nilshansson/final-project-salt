@@ -131,3 +131,4 @@ export async function postClassAndRevalidate(name: string, startDate: Date, grad
     return false;
   }
 }
+

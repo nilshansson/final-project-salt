@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { combinedLink, SelectModule } from "@/db/query";
+import { useState, useEffect } from "react";
+import { combinedLink, SelectModule, selectAllLinksByModule } from "@/db/query";
 import { LinkBoxes } from "./link-boxes";
 import {
   deleteModuleAndRevalidate,
   updateModuleDetailsAndRevalidate,
 } from "@/actions/actions";
-import {LinkModal, Loading} from "@/app/_components";
+import { LinkModal, Loading } from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;
@@ -15,17 +15,18 @@ interface moduleWithLinks {
 }
 
 interface ModuleCollapseProps {
-  allModulesWithLinks: moduleWithLinks[];
+  allModules: SelectModule[];
 }
 
 export default function ModuleCollapse({
-  allModulesWithLinks,
+  allModules,
 }: ModuleCollapseProps) {
   const [editingModuleId, setEditingModuleId] = useState<number | null>(null);
   const [updatedModuleTitle, setUpdatedModuleTitle] = useState<string>("");
   const [updatedModuleIntro, setUpdatedModuleIntro] = useState<string>("");
   const [openModuleId, setOpenModuleId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [links, setLinks] = useState<combinedLink[]>([]);
+  const [isLoadingLinks, setIsLoadingLinks] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -40,7 +41,7 @@ export default function ModuleCollapse({
   };
 
   const handleSaveClick = async (moduleId: number) => {
-    setLoading(true);
+    setIsLoadingLinks(true);
     setError(null);
     setSuccess(null);
 
@@ -55,7 +56,7 @@ export default function ModuleCollapse({
     } catch {
       setError("Failed to update module. Please try again.");
     } finally {
-      setLoading(false);
+      setIsLoadingLinks(false);
     }
   };
 
@@ -66,7 +67,7 @@ export default function ModuleCollapse({
   };
 
   const handleDeleteClick = async (moduleId: number) => {
-    setLoading(true);
+    setIsLoadingLinks(true);
     setError(null);
     setSuccess(null);
 
@@ -76,32 +77,36 @@ export default function ModuleCollapse({
     } catch {
       setError("Failed to delete module. Please try again.");
     } finally {
-      setLoading(false);
+      setIsLoadingLinks(false);
     }
   };
 
-  const toggleCollapse = (moduleId: number) => {
+  const toggleCollapse = async (moduleId: number) => {
     if (openModuleId === moduleId) {
       setOpenModuleId(null);
+      setLinks([]);
     } else {
       setOpenModuleId(moduleId);
+      setIsLoadingLinks(true);
+
+      // Fetch links for the selected module
+      const fetchedLinks = await selectAllLinksByModule(moduleId);
+      setLinks(fetchedLinks);
+      setIsLoadingLinks(false);
     }
   };
 
   return (
     <div className="collapse-content">
-      {allModulesWithLinks.map((module) => (
-        <div
-          key={"module" + module.module.id}
-          className="collapse bg-base-200 my-1"
-        >
+      {allModules.map((module) => (
+        <div key={"module" + module.id} className="collapse bg-base-200 my-1">
           <input
             type="checkbox"
-            checked={openModuleId === module.module.id}
-            onChange={() => toggleCollapse(module.module.id)}
+            checked={openModuleId === module.id}
+            onChange={() => toggleCollapse(module.id)}
           />
           <div className="collapse-title text-xl font-semibold flex justify-between items-center">
-            {editingModuleId === module.module.id ? (
+            {editingModuleId === module.id ? (
               <div className="flex flex-col space-y-2 w-full">
                 <input
                   type="text"
@@ -117,11 +122,11 @@ export default function ModuleCollapse({
                 />
                 <div className="flex space-x-2 z-10">
                   <button
-                    onClick={() => handleSaveClick(module.module.id)}
+                    onClick={() => handleSaveClick(module.id)}
                     className="btn text-white btn-success"
-                    disabled={loading}
+                    disabled={isLoadingLinks}
                   >
-                    {loading ? (
+                    {isLoadingLinks ? (
                       <Loading />
                     ) : (
                       <svg
@@ -165,16 +170,15 @@ export default function ModuleCollapse({
               </div>
             ) : (
               <div className="flex justify-between items-center w-full">
-                <span>{module.module.title}</span>
-                {openModuleId === module.module.id && (
-                  <div className="flex space-x-2 z-10">
-                    <LinkModal currModule={module.module} />
+                <span>{module.title}</span>
+            {openModuleId === module.id && (
+              <div className="flex space-x-2 z-10">
                     <button
                       onClick={() =>
                         handleEditClick(
-                          module.module.id,
-                          module.module.title,
-                          module.module.intro
+                          module.id,
+                          module.title,
+                          module.intro
                         )
                       }
                       className="btn btn-warning"
@@ -194,11 +198,11 @@ export default function ModuleCollapse({
                         />
                       </svg>
                     </button>
-                    {loading ? (
+                    {isLoadingLinks ? (
                       <Loading />
                     ) : (
                       <button
-                        onClick={() => handleDeleteClick(module.module.id)}
+                        onClick={() => handleDeleteClick(module.id)}
                         className="btn btn-error"
                       >
                         <svg
@@ -223,10 +227,14 @@ export default function ModuleCollapse({
             )}
           </div>
           <div className="collapse-content">
-            {editingModuleId !== module.module.id && (
+            {editingModuleId !== module.id && (
               <>
-                <p>{module.module.intro}</p>
-                <LinkBoxes moduleId={module.module.id} links={module.links} />
+                <p>{module.intro}</p>
+                {isLoadingLinks ? (
+                  <div>Loading links...</div>
+                ) : (
+                  <LinkBoxes moduleId={module.id} links={links} />
+                )}
               </>
             )}
           </div>
@@ -234,4 +242,5 @@ export default function ModuleCollapse({
       ))}
     </div>
   );
+
 }
