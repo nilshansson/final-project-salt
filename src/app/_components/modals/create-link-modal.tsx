@@ -1,24 +1,19 @@
 "use client";
 
-import {
-  postModule,
-  postUtlink,
-  revalidatePathCreateModule,
-} from "@/actions/actions";
-import { SelectModule } from "@/db/query";
-import { useState, useEffect } from "react";
+import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
+import { combinedLink } from "@/db/query";
+import { useEffect } from "react";
 import { UploadButton } from "@/utils/uploadthing";
 import LinkPoster from "@/app/module/[id]/link-poster";
 
 interface ModalProps {
-  currModule: SelectModule;
+  moduleId: number;
+  addNewLink: (newLink: combinedLink) => void; // Pass the callback function here
 }
 
-export function LinkModal({ currModule }: ModalProps) {
+export function LinkModal({ moduleId, addNewLink }: ModalProps) {
   useEffect(() => {
-    const modal = document.getElementById(
-      "my_modal_6"
-    ) as HTMLDialogElement | null;
+    const modal = document.getElementById("my_modal_6") as HTMLDialogElement | null;
 
     const handleBackdropClick = (event: MouseEvent) => {
       if (modal && event.target === modal) {
@@ -34,10 +29,29 @@ export function LinkModal({ currModule }: ModalProps) {
   }, []);
 
   const openModal = () => {
-    const modal = document.getElementById(
-      "my_modal_6"
-    ) as HTMLDialogElement | null;
+    const modal = document.getElementById("my_modal_6") as HTMLDialogElement | null;
     modal?.showModal();
+  };
+
+  const handleLinkAdded = async (name: string, url: string) => {
+    const postedLink = await postUtlink(moduleId, name, url);
+
+    if (!postedLink.id) {
+      throw new Error("Link ID is undefined. This should not happen.");
+    }
+
+    const newLink: combinedLink = {
+      ...postedLink,
+      isUploadThing: true,
+      id: postedLink.id,
+      description: postedLink.description ?? null,
+      createdAt: postedLink.createdAt!,
+      updatedAt: postedLink.updatedAt!,
+    };
+
+    addNewLink(newLink); // Call the parent callback function to add the link
+    alert("Upload Completed");
+    revalidatePathCreateModule();
   };
 
   return (
@@ -47,14 +61,12 @@ export function LinkModal({ currModule }: ModalProps) {
       </button>
       <dialog id="my_modal_6" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <LinkPoster moduleId={currModule.id} />
+          <LinkPoster moduleId={moduleId} onLinkAdded={addNewLink} />
           <UploadButton
             endpoint="fileUploader"
             onClientUploadComplete={(res) => {
-              postUtlink(currModule.id, res[0].name, res[0].url);
+              handleLinkAdded(res[0].name, res[0].url);
               console.log("Files: ", res);
-              alert("Upload Completed");
-              revalidatePathCreateModule();
             }}
             onUploadError={(error: Error) => {
               alert(`ERROR! ${error.message}`);

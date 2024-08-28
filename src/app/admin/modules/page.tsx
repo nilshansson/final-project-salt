@@ -31,29 +31,11 @@ interface classesWithModulesWithLinks {
 export default async function Module() {
   const allClasses = await selectAllClasses();
 
-  const allClassesWithModules: classesWithModulesWithLinks[] =
-    await Promise.all(
-      allClasses.map(async (currentClass) => {
-        const modules = await selectAllCourseModulesByClassId(currentClass.id);
-
-        const moduleWLink = await Promise.all(
-          modules.map(async (module) => {
-            const links = await selectAllLinksByModule(module.id);
-            return { module, links };
-          })
-        );
-
-        return {
-          class: currentClass,
-          moduleWLink,
-        };
-      })
-    );
 
   return (
       <Main title="Admin Modules">
       <ClassModal />
-      <ClassCollapse allClassesWithModules={allClassesWithModules} />
+      <ClassCollapse allClasses={allClasses} />
     </Main>
   );
 }

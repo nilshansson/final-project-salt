@@ -1,14 +1,14 @@
-"use client";
-
 import { postLink } from "@/actions/actions";
 import { ErrorToast, SuccessToast } from "@/app/_components";
+import { combinedLink } from "@/db/query";
 import { useState } from "react";
 
 interface LinkProps {
   moduleId: number;
+  onLinkAdded: (newLink: combinedLink) => void; // Add this prop
 }
 
-export default function LinkPoster({ moduleId }: LinkProps) {
+export default function LinkPoster({ moduleId, onLinkAdded }: LinkProps) {
   const [url, setUrl] = useState("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -33,11 +33,21 @@ export default function LinkPoster({ moduleId }: LinkProps) {
     setLoading(true);
 
     try {
-      await postLink(moduleId, formattedUrl);
+      const postedLink = await postLink(moduleId, formattedUrl);
       setSuccessMessage("Link has been posted successfully!");
       setErrorMessage(null);
       setUrl("");
       setTimeout(() => setSuccessMessage(null), 5000);
+
+  const newLink: combinedLink = {
+    ...postedLink,
+    isUploadThing: true,
+    id: postedLink.id!,
+    description: postedLink.description ?? null,
+    createdAt : postedLink.createdAt!,
+    updatedAt : postedLink.updatedAt!
+  };
+      onLinkAdded(newLink); // This should now work fine
     } catch (error) {
       setErrorMessage("Failed to post the link. Please try again.");
       setSuccessMessage(null);

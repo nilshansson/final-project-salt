@@ -3,14 +3,21 @@
 import { useState } from "react";
 import { combinedLink } from "@/db/query";
 import Link from "next/link";
-import { deleteLinkRevalidate, deleteUTLinkRevalidate, updateLinkDetailsRevalidate, updateUTLinkDetailsRevalidate } from "@/actions/actions";
+import {
+  deleteLinkRevalidate,
+  deleteUTLinkRevalidate,
+  updateLinkDetailsRevalidate,
+  updateUTLinkDetailsRevalidate,
+} from "@/actions/actions";
+import { LinkModal } from "@/app/_components";
 
 interface LinkBoxProps {
   moduleId: number;
   links: combinedLink[];
 }
 
-export function LinkBoxes({ moduleId, links }: LinkBoxProps) {
+export function LinkBoxes({ moduleId, links: initialLinks }: LinkBoxProps) {
+  const [links, setLinks] = useState<combinedLink[]>(initialLinks);
   const [editingLinkId, setEditingLinkId] = useState<number | null>(null);
   const [updatedLinkTitle, setUpdatedLinkTitle] = useState<string>("");
   const [updatedLinkUrl, setUpdatedLinkUrl] = useState<string>("");
@@ -27,6 +34,13 @@ export function LinkBoxes({ moduleId, links }: LinkBoxProps) {
     } else {
       await updateLinkDetailsRevalidate(link.id, updatedLinkTitle, updatedLinkUrl);
     }
+
+    // Update the UI
+    setLinks((prevLinks) =>
+      prevLinks.map((l) =>
+        l.id === link.id ? { ...l, title: updatedLinkTitle, url: updatedLinkUrl } : l
+      )
+    );
     setEditingLinkId(null);
   };
 
@@ -42,10 +56,21 @@ export function LinkBoxes({ moduleId, links }: LinkBoxProps) {
     } else {
       await deleteLinkRevalidate(link.id);
     }
+
+    // Update the UI to remove the deleted link
+    setLinks((prevLinks) => prevLinks.filter((l) => l.id !== link.id));
+  };
+
+  // New method to add a link to the list
+  const addNewLink = (newLink: combinedLink) => {
+    setLinks((prevLinks) => [...prevLinks, newLink]);
   };
 
   return (
     <>
+      <div>
+        <LinkModal moduleId={moduleId} addNewLink={addNewLink} />
+      </div>
       {links.map((link) => (
         <div
           key={`${moduleId}-${link.id}`} // Combine moduleId and link.id for uniqueness
@@ -108,9 +133,42 @@ export function LinkBoxes({ moduleId, links }: LinkBoxProps) {
             </div>
           ) : (
             <div className="flex justify-between items-center w-full">
-              <Link href={link.url} className="flex-grow">
-                {link.title}
-              </Link>
+              <div className="flex flex-col">
+                <Link href={link.url} className="font-bold text-lg">
+                  {link.title}
+                </Link>
+                <div
+                  className="text-sm text-gray-500"
+                  style={{ lineHeight: "normal", padding: 0 }}
+                >
+                  <p className="my-0" style={{ marginBottom: 0, marginTop: 0 }}>
+                    Created at:{" "}
+                    {new Date(link.createdAt).toLocaleString("en-GB", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                  {link.updatedAt && (
+                    <p
+                      className="my-0"
+                      style={{ marginBottom: 0, marginTop: 0 }}
+                    >
+                      Updated at:{" "}
+                      {new Date(link.updatedAt).toLocaleString("en-GB", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  )}
+                </div>
+              </div>
+
               <div className="flex space-x-2 z-10">
                 <button
                   onClick={() => handleEditClick(link)}
