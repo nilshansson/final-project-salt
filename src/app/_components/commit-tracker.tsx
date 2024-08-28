@@ -89,19 +89,19 @@ export default function CommitTracker({
     fetchContributions();
   }, [studentGithub, precourseStart, bootcampStart]);
 
-  // const getColor = (count: number) => {
-  //   if (count === 0) return "#ebedf0";
-  //   if (count < 5) return "#c6e48b";
-  //   if (count < 10) return "#7bc96f";
-  //   return "#239a3b";
-  // };
-
   const getColor = (count: number) => {
-    if (count === 0) return "#EAF4FB";
-    if (count < 5) return "#A9C9E6";
-    if (count < 10) return "#668AB0";
-    return "#3A5675";
+    if (count === 0) return "#eeeeee";
+    if (count < 5) return "#c6e48b";
+    if (count < 10) return "#7bc96f";
+    return "#239a3b";
   };
+
+  // const getColor = (count: number) => {
+  //   if (count === 0) return "#EAF4FB";
+  //   if (count < 5) return "#A9C9E6";
+  //   if (count < 10) return "#668AB0";
+  //   return "#3A5675";
+  // };
 
   if (isLoading) {
     return <span className="loading loading-spinner loading-sm"></span>;
@@ -129,11 +129,11 @@ export default function CommitTracker({
   }
 
 return (
-  <div className="flex flex-col bg-saltDarkPink w-full rounded p-3 justify-center items-center">
+  <div className="flex flex-col bg-saltLightGrey w-full rounded p-3 justify-center items-center">
     {/* Header Row for Days of the Week */}
     <div className="grid grid-cols-7 w-full">
       {[ 'S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-        <div key={index} className="text-xs text-white text-center">
+        <div key={index} className="text-xs text-black text-center mb-2">
           {day}
         </div>
       ))}
@@ -154,7 +154,7 @@ return (
         <div key={i} className="grid grid-cols-7 w-full">
           {/* Week Label with Tooltip */}
           <div className="tooltip col-span-7" data-tip={`Total ${weekTotalContributions} contributions on week ${i + 1}`}>
-            <h3 className="text-xs text-white">
+            <h3 className="text-xs text-black">
               Week {i + 1}:
             </h3>
           </div>
@@ -166,14 +166,17 @@ return (
 
           {/* Contribution Days */}
           {week.contributionDays.map((day: any, j: number) => (
-            <div key={j} className="tooltip" data-tip={`${day.contributionCount} contributions on ${day.date}`}>
+            <div key={j}>
+            <div className="tooltip" data-tip={`${day.contributionCount} contributions on ${day.date}`}>
               <div
                 title={`${day.contributionCount} contributions on ${day.date}`}
-                className="w-4 h-4 m-[0.5px]"
+                className="w-4 h-4 m-[0.5px] rounded"
                 style={{
                   backgroundColor: getColor(day.contributionCount),
+border: "1px solid #bcbcbc",
                 }}
               ></div>
+            </div>
             </div>
           ))}
         </div>
