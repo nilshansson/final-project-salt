@@ -51,8 +51,8 @@ export default async function ProfilePage() {
 
   return (
     <main className=" min-h-screen p-10">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="card col-span-1 shadow-xl bg-saltDarkBlue mt-4 h-160">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="card col-span-1 shadow-xl bg-saltDarkBlue h-160">
           <div className="card-body flex flex-col items-center justify-center text-center ">
             <h1 className="text-lg font-bold mb-4 text-white">
               Welcome, {user.first_name} {user.last_name}!
