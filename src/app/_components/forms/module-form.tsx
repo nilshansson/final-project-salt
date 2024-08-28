@@ -2,14 +2,15 @@
 
 import { postModuleAndRevalidate } from "@/actions/actions";
 import { Loading } from "@/app/_components/loading";
-import { SelectClasses } from "@/db/query";
+import { SelectClasses, SelectModule } from "@/db/query";
 import { useState } from "react";
 
 interface ModuleProps {
   currClass: SelectClasses;
+  onModuleCreated: (newModule:SelectModule) => void; // Callback function to notify module creation
 }
 
-export function ModuleForm({ currClass }: ModuleProps) {
+export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
   const [title, setTitle] = useState("");
   const [intro, setIntro] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,9 +26,12 @@ export function ModuleForm({ currClass }: ModuleProps) {
     try {
       const res = await postModuleAndRevalidate(title, intro, currClass.id);
       if (res) {
+        console.log("res \n\n\n\n\n")
+        console.log(res)
         setSuccess("Module successfully created!");
         setTitle("");
         setIntro("");
+        onModuleCreated(res); // Notify the parent component
       } else {
         setError("Failed to create module.");
       }

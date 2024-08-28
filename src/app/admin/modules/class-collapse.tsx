@@ -3,17 +3,15 @@
 import {
   combinedLink,
   selectAllCourseModulesByClassId,
-  selectAllLinksByModule,
   SelectClasses,
   SelectModule,
 } from "@/db/query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ModuleCollapse from "./module-collapse";
 import {
   deleteClassAndRevalidate,
   updateClassAndRevalidate,
 } from "@/actions/actions";
-import { ModuleModal } from "@/app/_components";
 
 interface moduleWithLinks {
   module: SelectModule;
@@ -183,7 +181,6 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                 <span>{currClass.name}</span>
                 {openClassId === currClass.id && (
                   <div className="flex space-x-2 relative z-10">
-                    <ModuleModal currClass={currClass} />
                     <button
                       onClick={() =>
                         handleEditClick(
@@ -247,7 +244,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
               {isLoadingModules ? (
                 <div>Loading modules...</div>
               ) : (
-                <ModuleCollapse allModules={modules} />
+                <ModuleCollapse allModules={modules} currClass={currClass} />
               )}
             </div>
           )}

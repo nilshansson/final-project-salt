@@ -1,15 +1,15 @@
 "use client";
 
-import { postModule } from "@/actions/actions";
 import { ModuleForm } from "@/app/_components";
-import { SelectClasses } from "@/db/query";
-import { useState, useEffect } from "react";
+import { SelectClasses, SelectModule } from "@/db/query";
+import { useEffect } from "react";
 
 interface ModalProps {
   currClass: SelectClasses;
+  addNewModule: (newModule: SelectModule) => void; 
 }
 
-export function ModuleModal({ currClass }: ModalProps) {
+export function ModuleModal({ currClass, addNewModule }: ModalProps) {
   useEffect(() => {
     const modal = document.getElementById('my_modal_5') as HTMLDialogElement | null;
 
@@ -31,6 +31,10 @@ export function ModuleModal({ currClass }: ModalProps) {
     modal?.showModal();
   };
 
+  const handleModuleCreated = (newModule:SelectModule) => {
+    addNewModule(newModule);  
+  };
+
   return (
     <>
       <button className="btn" onClick={openModal}>
@@ -38,7 +42,7 @@ export function ModuleModal({ currClass }: ModalProps) {
       </button>
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <ModuleForm currClass={currClass} />
+          <ModuleForm currClass={currClass} onModuleCreated={handleModuleCreated} />
         </div>
       </dialog>
     </>

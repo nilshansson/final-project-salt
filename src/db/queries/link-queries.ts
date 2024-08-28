@@ -9,7 +9,7 @@ export async function insertUtlink(
   courseModulesId: number,
   url: string,
   title: string,
-  description: string | null
+  description: string | null,
 ): Promise<InsertUtlink> {
   try {
     const utlink = await db
@@ -24,7 +24,7 @@ export async function insertUtlink(
 }
 
 export async function selectUtlinksByModule(
-  moduleId: number
+  moduleId: number,
 ): Promise<SelectUtlink[]> {
   try {
     const links = await db
@@ -44,7 +44,7 @@ export type InsertLink = typeof links.$inferInsert;
 export async function insertLink(
   courseModulesId: number,
   url: string,
-  title: string
+  title: string,
 ): Promise<InsertLink> {
   try {
     const link = await db
@@ -59,7 +59,7 @@ export async function insertLink(
 }
 
 export async function selectLinksByModule(
-  moduleId: number
+  moduleId: number,
 ): Promise<SelectLink[]> {
   try {
     const link = await db
@@ -80,10 +80,12 @@ export interface combinedLink {
   courseModulesId: number;
   url: string;
   isUploadThing: boolean;
+  createdAt: Date;
+  updatedAt: Date | null;
 }
 
 export async function selectAllLinksByModule(
-  moduleId: number
+  moduleId: number,
 ): Promise<combinedLink[]> {
   const [links, utlinks] = await Promise.all([
     selectLinksByModule(moduleId),
@@ -112,7 +114,7 @@ export async function selectAllLinksByModule(
 export async function updateLinkDetails(
   linkId: number,
   title: string,
-  url: string
+  url: string,
 ) {
   await db.update(links).set({ title, url }).where(eq(links.id, linkId));
 }
@@ -121,7 +123,7 @@ export async function updateLinkDetails(
 export async function updateUTLinkDetails(
   linkId: number,
   title: string,
-  url: string
+  url: string,
 ) {
   await db.update(utlinks).set({ title, url }).where(eq(utlinks.id, linkId));
 }

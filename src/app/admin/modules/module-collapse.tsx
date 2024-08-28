@@ -1,26 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { combinedLink, SelectModule, selectAllLinksByModule } from "@/db/query";
+import { useState } from "react";
 import { LinkBoxes } from "./link-boxes";
 import {
   deleteModuleAndRevalidate,
   updateModuleDetailsAndRevalidate,
 } from "@/actions/actions";
-import { LinkModal, Loading } from "@/app/_components";
-
-interface moduleWithLinks {
-  module: SelectModule;
-  links: combinedLink[];
-}
+import { Loading, ModuleModal } from "@/app/_components";
+import { SelectModule } from "@/db/queries/module-queries";
+import { combinedLink, selectAllLinksByModule } from "@/db/queries/link-queries";
+import { SelectClasses } from "@/db/query";
 
 interface ModuleCollapseProps {
   allModules: SelectModule[];
+  currClass: SelectClasses; // Assuming you have classId to fetch modules
 }
 
-export default function ModuleCollapse({
-  allModules,
-}: ModuleCollapseProps) {
+export default function ModuleCollapse({ allModules, currClass }: ModuleCollapseProps) {
+  const [modules, setModules] = useState<SelectModule[]>(allModules);
   const [editingModuleId, setEditingModuleId] = useState<number | null>(null);
   const [updatedModuleTitle, setUpdatedModuleTitle] = useState<string>("");
   const [updatedModuleIntro, setUpdatedModuleIntro] = useState<string>("");
@@ -29,6 +26,8 @@ export default function ModuleCollapse({
   const [isLoadingLinks, setIsLoadingLinks] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+
 
   const handleEditClick = (
     moduleId: number,
@@ -40,25 +39,28 @@ export default function ModuleCollapse({
     setUpdatedModuleIntro(currentIntro || "");
   };
 
-  const handleSaveClick = async (moduleId: number) => {
-    setIsLoadingLinks(true);
-    setError(null);
-    setSuccess(null);
+const handleSaveClick = async (moduleId: number) => {
+  setIsLoadingLinks(true);
+  setError(null);
+  setSuccess(null);
 
-    try {
-      await updateModuleDetailsAndRevalidate(
-        moduleId,
-        updatedModuleTitle,
-        updatedModuleIntro
-      );
-      setSuccess("Module updated successfully!");
-      setEditingModuleId(null);
-    } catch {
-      setError("Failed to update module. Please try again.");
-    } finally {
-      setIsLoadingLinks(false);
-    }
-  };
+  try {
+    await updateModuleDetailsAndRevalidate(moduleId, updatedModuleTitle, updatedModuleIntro);
+    setSuccess("Module updated successfully!");
+
+    // Update the specific module in the modules array
+    setModules((prevModules) =>
+      prevModules.map((module) =>
+        module.id === moduleId ? { ...module, title: updatedModuleTitle, intro: updatedModuleIntro } : module
+      )
+    );
+    setEditingModuleId(null);
+  } catch {
+    setError("Failed to update module. Please try again.");
+  } finally {
+    setIsLoadingLinks(false);
+  }
+};
 
   const handleCancelClick = () => {
     setEditingModuleId(null);
@@ -66,20 +68,23 @@ export default function ModuleCollapse({
     setUpdatedModuleIntro("");
   };
 
-  const handleDeleteClick = async (moduleId: number) => {
-    setIsLoadingLinks(true);
-    setError(null);
-    setSuccess(null);
+const handleDeleteClick = async (moduleId: number) => {
+  setIsLoadingLinks(true);
+  setError(null);
+  setSuccess(null);
 
-    try {
-      await deleteModuleAndRevalidate(moduleId);
-      setSuccess("Module deleted successfully!");
-    } catch {
-      setError("Failed to delete module. Please try again.");
-    } finally {
-      setIsLoadingLinks(false);
-    }
-  };
+  try {
+    await deleteModuleAndRevalidate(moduleId);
+    setSuccess("Module deleted successfully!");
+
+    // Remove the deleted module from the modules array
+    setModules((prevModules) => prevModules.filter((module) => module.id !== moduleId));
+  } catch {
+    setError("Failed to delete module. Please try again.");
+  } finally {
+    setIsLoadingLinks(false);
+  }
+};
 
   const toggleCollapse = async (moduleId: number) => {
     if (openModuleId === moduleId) {
@@ -96,9 +101,15 @@ export default function ModuleCollapse({
     }
   };
 
+  const addNewModule = (newModule: SelectModule) => {
+    setModules((prevModules) => [...prevModules, newModule]);
+  };
+
   return (
+    <>
+    <ModuleModal currClass={currClass} addNewModule={addNewModule}/>
     <div className="collapse-content">
-      {allModules.map((module) => (
+      {modules.map((module) => (
         <div key={"module" + module.id} className="collapse bg-base-200 my-1">
           <input
             type="checkbox"
@@ -171,15 +182,11 @@ export default function ModuleCollapse({
             ) : (
               <div className="flex justify-between items-center w-full">
                 <span>{module.title}</span>
-            {openModuleId === module.id && (
-              <div className="flex space-x-2 relative z-10">
+                {openModuleId === module.id && (
+                  <div className="flex space-x-2 relative z-10">
                     <button
                       onClick={() =>
-                        handleEditClick(
-                          module.id,
-                          module.title,
-                          module.intro
-                        )
+                        handleEditClick(module.id, module.title, module.intro)
                       }
                       className="btn btn-warning"
                     >
@@ -241,6 +248,6 @@ export default function ModuleCollapse({
         </div>
       ))}
     </div>
+    </>
   );
-
 }

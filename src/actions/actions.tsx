@@ -13,6 +13,7 @@ import {
   insertCourseModule,
   insertLink,
   insertUtlink,
+  SelectModule,
   SelectStudent,
   SelectUser,
   updateCourseModule,
@@ -20,6 +21,7 @@ import {
   updateUTLinkDetails,
 } from "@/db/query";
 import { fetchMetadata } from "@/utils/metadata";
+import { SelectMode } from "drizzle-orm/query-builders/select.types";
 import { link } from "fs";
 import { revalidatePath } from "next/cache";
 
@@ -28,10 +30,30 @@ export async function postModule(title: string, intro: string, classId:number) {
   return postedModule;
 }
 
-export async function postModuleAndRevalidate(title: string, intro: string, classId:number) {
+export async function postModuleAndRevalidate(title: string,
+  intro: string,
+  classId: number
+): Promise<SelectModule> {
+  // Insert the course module and get the posted module
   const postedModule = await insertCourseModule(title, intro, classId);
-  await revalidatePath("/admin/module")
-  return postedModule;
+
+  // Ensure all properties required by SelectModule are present
+  if (!postedModule.id) {
+    throw new Error("Module ID is undefined. This should not happen.");
+  }
+
+  const moduleToReturn: SelectModule = {
+    id: postedModule.id,
+    classId: postedModule.classId,
+    title: postedModule.title,
+    intro: postedModule.intro ?? null, // Default to null if intro is undefined
+    createdAt: postedModule.createdAt ?? new Date(), // Default to current date if createdAt is undefined
+    updatedAt: postedModule.updatedAt ?? null, // Default to null if updatedAt is undefined
+  };
+
+  await revalidatePath("/admin/module");
+
+  return moduleToReturn;
 }
 
 export async function postUtlink(
