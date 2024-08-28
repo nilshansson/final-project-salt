@@ -107,7 +107,7 @@ export default function ModuleCollapse({
           />
           <div className="collapse-title text-xl font-semibold flex justify-between items-center">
             {editingModuleId === module.id ? (
-              <div className="flex flex-col space-y-2 w-full">
+              <div className="flex flex-col space-y-2 w-full relative z-10">
                 <input
                   type="text"
                   value={updatedModuleTitle}
@@ -172,7 +172,7 @@ export default function ModuleCollapse({
               <div className="flex justify-between items-center w-full">
                 <span>{module.title}</span>
             {openModuleId === module.id && (
-              <div className="flex space-x-2 z-10">
+              <div className="flex space-x-2 relative z-10">
                     <button
                       onClick={() =>
                         handleEditClick(
