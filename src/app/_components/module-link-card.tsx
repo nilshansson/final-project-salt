@@ -17,7 +17,9 @@ interface ModuleLinkCardProps {
 
 export default function ModuleLinkCard({ currClass }: ModuleLinkCardProps) {
   const [modules, setModules] = useState<SelectModule[]>([]);
-  const [loadedModules, setLoadedModules] = useState<Record<number, SelectModule>>({});
+  const [loadedModules, setLoadedModules] = useState<
+    Record<number, SelectModule>
+  >({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -48,13 +50,16 @@ export default function ModuleLinkCard({ currClass }: ModuleLinkCardProps) {
   }, [currClass.id]);
 
   if (isLoading) {
-    return <div>Loading modules...</div>;
+    return <div className="pt-14">Loading modules...</div>;
   }
 
   return (
     <>
       {modules.map((module) => (
-        <details key={module.id} className="collapse bg-saltDarkBlue my-2 w-full">
+        <details
+          key={module.id}
+          className="collapse bg-saltDarkBlue my-2 w-full"
+        >
           <summary className="collapse-title text-xl font-bold text-white">
             {module.title}
           </summary>

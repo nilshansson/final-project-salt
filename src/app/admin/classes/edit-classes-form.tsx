@@ -57,7 +57,7 @@ export default function EditClassesForm({
   };
 
   return (
-    <form className="flex items-center justify-center h-screen mt-36 w-full ">
+    <form className="flex items-center justify-center h-screen mt-20 w-full ">
       <div className="flex flex-col lg:flex-row gap-8 w-full px-8">
         <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-xl">
           <div className="card-body flex flex-col items-start justify-start text-center">
