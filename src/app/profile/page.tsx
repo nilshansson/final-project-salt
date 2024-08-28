@@ -3,9 +3,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { handleCreateUserIfNotExist } from "@/actions/actions";
 import { getCourseDatesByClassId } from "@/db/query";
-import ContributionGraph from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
 import CommitTracker from "../_components/commit-tracker";
+import ClassMaterial from "./class-material";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
@@ -50,24 +50,30 @@ export default async function ProfilePage() {
   }
 
   return (
-    <>
-      <div className="card w-96 shadow-xl bg-saltDarkBlue mt-4">
-        <div className="card-body flex flex-col items-center justify-center text-center">
-          <h1 className="text-lg font-bold mb-4 text-white">
-            Welcome, {user.first_name} {user.last_name}!
-          </h1>
-          {user.image_url && (
-            <img
-              src={user.image_url}
-              alt="User Profile Picture"
-              width={150}
-              height={150}
-              className="rounded-full mb-4"
-            />
-          )}
-          {content}
+    <main className=" min-h-screen p-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="card col-span-1 shadow-xl bg-saltDarkBlue mt-4 h-160">
+          <div className="card-body flex flex-col items-center justify-center text-center ">
+            <h1 className="text-lg font-bold mb-4 text-white">
+              Welcome, {user.first_name} {user.last_name}!
+            </h1>
+            {user.image_url && (
+              <img
+                src={user.image_url}
+                alt="User Profile Picture"
+                width={150}
+                height={150}
+                className="rounded-full mb-4"
+              />
+            )}
+            {content}
+          </div>
+        </div>
+
+        <div className="col-span-2">
+          <ClassMaterial />
         </div>
       </div>
-    </>
+    </main>
   );
 }

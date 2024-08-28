@@ -24,6 +24,9 @@ export default withUt({
         saltGreenPastell: "#E1FFED",
         saltBluePastell: "#ECF7FA",
       },
+      height: {
+        "160": "40rem",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
