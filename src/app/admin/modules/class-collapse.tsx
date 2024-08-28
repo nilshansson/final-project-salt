@@ -32,7 +32,8 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
   const [updatedClassName, setUpdatedClassName] = useState<string>("");
   const [updatedStartDate, setUpdatedStartDate] = useState<string>("");
   const [updatedGradDate, setUpdatedGradDate] = useState<string>("");
-  const [updatedPrecourseStartDate, setUpdatedPrecourseStartDate] = useState<string>("");
+  const [updatedPrecourseStartDate, setUpdatedPrecourseStartDate] =
+    useState<string>("");
   const [openClassId, setOpenClassId] = useState<number | null>(null);
   const [modules, setModules] = useState<SelectModule[]>([]);
   const [isLoadingModules, setIsLoadingModules] = useState<boolean>(false);
@@ -48,7 +49,9 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
     setUpdatedClassName(currentName);
     setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
     setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
-    setUpdatedPrecourseStartDate(precourseStartDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+    setUpdatedPrecourseStartDate(
+      precourseStartDate.toISOString().split("T")[0]
+    ); // Convert to YYYY-MM-DD
   };
 
   const handleSaveClick = async (classId: number) => {
@@ -84,7 +87,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
 
       // Fetch modules and links for the selected class
       const newModules = await selectAllCourseModulesByClassId(classId);
-      setModules(newModules)
+      setModules(newModules);
       setIsLoadingModules(false);
     }
   };
@@ -94,7 +97,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
       {allClasses.map((currClass) => (
         <div
           key={"classCollapse" + currClass.id}
-          className="collapse bg-base-100 prose lg:prose-lg"
+          className="collapse bg-saltDarkBlue  text-white prose lg:prose-lg"
         >
           <input
             type="checkbox"
@@ -237,9 +240,18 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
           {openClassId === currClass.id && (
             <div className="collapse-content p-0">
               <div className="p-4">
-                <p><strong>Precourse Start Date:</strong> {new Date(currClass.precourseStartDate).toDateString()}</p>
-                <p><strong>Start Date:</strong> {new Date(currClass.startDate).toDateString()}</p>
-                <p><strong>Graduation Date:</strong> {new Date(currClass.gradDate).toDateString()}</p>
+                <p>
+                  <strong className="text-white ">Precourse Start Date:</strong>{" "}
+                  {new Date(currClass.precourseStartDate).toDateString()}
+                </p>
+                <p>
+                  <strong className="text-white ">Start Date:</strong>{" "}
+                  {new Date(currClass.startDate).toDateString()}
+                </p>
+                <p>
+                  <strong className="text-white ">Graduation Date:</strong>{" "}
+                  {new Date(currClass.gradDate).toDateString()}
+                </p>
               </div>
               {isLoadingModules ? (
                 <div>Loading modules...</div>

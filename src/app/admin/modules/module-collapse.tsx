@@ -8,15 +8,21 @@ import {
 } from "@/actions/actions";
 import { Loading, ModuleModal } from "@/app/_components";
 import { SelectModule } from "@/db/queries/module-queries";
-import { combinedLink, selectAllLinksByModule } from "@/db/queries/link-queries";
+import {
+  combinedLink,
+  selectAllLinksByModule,
+} from "@/db/queries/link-queries";
 import { SelectClasses } from "@/db/query";
 
 interface ModuleCollapseProps {
   allModules: SelectModule[];
-  currClass: SelectClasses; // Assuming you have classId to fetch modules
+  currClass: SelectClasses;
 }
 
-export default function ModuleCollapse({ allModules, currClass }: ModuleCollapseProps) {
+export default function ModuleCollapse({
+  allModules,
+  currClass,
+}: ModuleCollapseProps) {
   const [modules, setModules] = useState<SelectModule[]>(allModules);
   const [editingModuleId, setEditingModuleId] = useState<number | null>(null);
   const [updatedModuleTitle, setUpdatedModuleTitle] = useState<string>("");
@@ -26,8 +32,6 @@ export default function ModuleCollapse({ allModules, currClass }: ModuleCollapse
   const [isLoadingLinks, setIsLoadingLinks] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-
 
   const handleEditClick = (
     moduleId: number,
@@ -39,28 +43,37 @@ export default function ModuleCollapse({ allModules, currClass }: ModuleCollapse
     setUpdatedModuleIntro(currentIntro || "");
   };
 
-const handleSaveClick = async (moduleId: number) => {
-  setIsLoadingLinks(true);
-  setError(null);
-  setSuccess(null);
+  const handleSaveClick = async (moduleId: number) => {
+    setIsLoadingLinks(true);
+    setError(null);
+    setSuccess(null);
 
-  try {
-    await updateModuleDetailsAndRevalidate(moduleId, updatedModuleTitle, updatedModuleIntro);
-    setSuccess("Module updated successfully!");
+    try {
+      await updateModuleDetailsAndRevalidate(
+        moduleId,
+        updatedModuleTitle,
+        updatedModuleIntro
+      );
+      setSuccess("Module updated successfully!");
 
-    // Update the specific module in the modules array
-    setModules((prevModules) =>
-      prevModules.map((module) =>
-        module.id === moduleId ? { ...module, title: updatedModuleTitle, intro: updatedModuleIntro } : module
-      )
-    );
-    setEditingModuleId(null);
-  } catch {
-    setError("Failed to update module. Please try again.");
-  } finally {
-    setIsLoadingLinks(false);
-  }
-};
+      setModules((prevModules) =>
+        prevModules.map((module) =>
+          module.id === moduleId
+            ? {
+                ...module,
+                title: updatedModuleTitle,
+                intro: updatedModuleIntro,
+              }
+            : module
+        )
+      );
+      setEditingModuleId(null);
+    } catch {
+      setError("Failed to update module. Please try again.");
+    } finally {
+      setIsLoadingLinks(false);
+    }
+  };
 
   const handleCancelClick = () => {
     setEditingModuleId(null);
@@ -68,23 +81,24 @@ const handleSaveClick = async (moduleId: number) => {
     setUpdatedModuleIntro("");
   };
 
-const handleDeleteClick = async (moduleId: number) => {
-  setIsLoadingLinks(true);
-  setError(null);
-  setSuccess(null);
+  const handleDeleteClick = async (moduleId: number) => {
+    setIsLoadingLinks(true);
+    setError(null);
+    setSuccess(null);
 
-  try {
-    await deleteModuleAndRevalidate(moduleId);
-    setSuccess("Module deleted successfully!");
+    try {
+      await deleteModuleAndRevalidate(moduleId);
+      setSuccess("Module deleted successfully!");
 
-    // Remove the deleted module from the modules array
-    setModules((prevModules) => prevModules.filter((module) => module.id !== moduleId));
-  } catch {
-    setError("Failed to delete module. Please try again.");
-  } finally {
-    setIsLoadingLinks(false);
-  }
-};
+      setModules((prevModules) =>
+        prevModules.filter((module) => module.id !== moduleId)
+      );
+    } catch {
+      setError("Failed to delete module. Please try again.");
+    } finally {
+      setIsLoadingLinks(false);
+    }
+  };
 
   const toggleCollapse = async (moduleId: number) => {
     if (openModuleId === moduleId) {
@@ -94,7 +108,6 @@ const handleDeleteClick = async (moduleId: number) => {
       setOpenModuleId(moduleId);
       setIsLoadingLinks(true);
 
-      // Fetch links for the selected module
       const fetchedLinks = await selectAllLinksByModule(moduleId);
       setLinks(fetchedLinks);
       setIsLoadingLinks(false);
@@ -107,147 +120,150 @@ const handleDeleteClick = async (moduleId: number) => {
 
   return (
     <>
-    <ModuleModal currClass={currClass} addNewModule={addNewModule}/>
-    <div className="collapse-content">
-      {modules.map((module) => (
-        <div key={"module" + module.id} className="collapse bg-base-200 my-1">
-          <input
-            type="checkbox"
-            checked={openModuleId === module.id}
-            onChange={() => toggleCollapse(module.id)}
-          />
-          <div className="collapse-title text-xl font-semibold flex justify-between items-center">
-            {editingModuleId === module.id ? (
-              <div className="flex flex-col space-y-2 w-full relative z-10">
-                <input
-                  type="text"
-                  value={updatedModuleTitle}
-                  onChange={(e) => setUpdatedModuleTitle(e.target.value)}
-                  className="input input-bordered input-lg"
-                />
-                <textarea
-                  value={updatedModuleIntro}
-                  onChange={(e) => setUpdatedModuleIntro(e.target.value)}
-                  className="textarea textarea-bordered"
-                  rows={3}
-                />
-                <div className="flex space-x-2 z-10">
-                  <button
-                    onClick={() => handleSaveClick(module.id)}
-                    className="btn text-white btn-success"
-                    disabled={isLoadingLinks}
-                  >
-                    {isLoadingLinks ? (
-                      <Loading />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                  {error && <p>{error}</p>}
-
-                  <button
-                    onClick={handleCancelClick}
-                    className="btn text-white btn-error"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-between items-center w-full">
-                <span>{module.title}</span>
-                {openModuleId === module.id && (
-                  <div className="flex space-x-2 relative z-10">
+      <ModuleModal currClass={currClass} addNewModule={addNewModule} />
+      <div className="collapse-content">
+        {modules.map((module) => (
+          <div
+            key={"module" + module.id}
+            className="collapse bg-gray-100 text-saltDarkBlue my-1"
+          >
+            <input
+              type="checkbox"
+              checked={openModuleId === module.id}
+              onChange={() => toggleCollapse(module.id)}
+            />
+            <div className="collapse-title text-xl font-semibold flex justify-between items-center">
+              {editingModuleId === module.id ? (
+                <div className="flex flex-col space-y-2 w-full relative z-10">
+                  <input
+                    type="text"
+                    value={updatedModuleTitle}
+                    onChange={(e) => setUpdatedModuleTitle(e.target.value)}
+                    className="input input-bordered input-lg"
+                  />
+                  <textarea
+                    value={updatedModuleIntro}
+                    onChange={(e) => setUpdatedModuleIntro(e.target.value)}
+                    className="textarea textarea-bordered"
+                    rows={3}
+                  />
+                  <div className="flex space-x-2 z-10">
                     <button
-                      onClick={() =>
-                        handleEditClick(module.id, module.title, module.intro)
-                      }
-                      className="btn btn-warning"
+                      onClick={() => handleSaveClick(module.id)}
+                      className="btn text-white btn-success"
+                      disabled={isLoadingLinks}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-4.036a2.5 2.5 0 113.536 3.536l-12 12a2 2 0 01-.878.487l-4 1a1 1 0 01-1.213-1.213l1-4a2 2 0 01.487-.878l12-12z"
-                        />
-                      </svg>
-                    </button>
-                    {isLoadingLinks ? (
-                      <Loading />
-                    ) : (
-                      <button
-                        onClick={() => handleDeleteClick(module.id)}
-                        className="btn btn-error"
-                      >
+                      {isLoadingLinks ? (
+                        <Loading />
+                      ) : (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
+                          className="w-6 h-6"
                         >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                    {error && <p>{error}</p>}
+
+                    <button
+                      onClick={handleCancelClick}
+                      className="btn text-white btn-error"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center w-full">
+                  <span>{module.title}</span>
+                  {openModuleId === module.id && (
+                    <div className="flex space-x-2 relative z-10">
+                      <button
+                        onClick={() =>
+                          handleEditClick(module.id, module.title, module.intro)
+                        }
+                        className="btn btn-warning"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-4.036a2.5 2.5 0 113.536 3.536l-12 12a2 2 0 01-.878.487l-4 1a1 1 0 01-1.213-1.213l1-4a2 2 0 01.487-.878l12-12z"
                           />
                         </svg>
                       </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+                      {isLoadingLinks ? (
+                        <Loading />
+                      ) : (
+                        <button
+                          onClick={() => handleDeleteClick(module.id)}
+                          className="btn btn-error"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 "
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="collapse-content">
+              {editingModuleId !== module.id && (
+                <>
+                  <p>{module.intro}</p>
+                  {isLoadingLinks ? (
+                    <div>Loading links...</div>
+                  ) : (
+                    <LinkBoxes moduleId={module.id} links={links} />
+                  )}
+                </>
+              )}
+            </div>
           </div>
-          <div className="collapse-content">
-            {editingModuleId !== module.id && (
-              <>
-                <p>{module.intro}</p>
-                {isLoadingLinks ? (
-                  <div>Loading links...</div>
-                ) : (
-                  <LinkBoxes moduleId={module.id} links={links} />
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
     </>
   );
 }
