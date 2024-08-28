@@ -24,7 +24,6 @@ export default function EditClassesForm({
       }
     });
   };
-  const orange = "#FF7961";
 
   const handleClassSubmit = async (event: React.FormEvent, classId: number) => {
     event.preventDefault();
@@ -58,9 +57,9 @@ export default function EditClassesForm({
   };
 
   return (
-    <form className="flex items-center justify-center h-screen mt-4">
+    <form className="flex items-center justify-center h-screen mt-16 w-full ">
       <div className="flex flex-col lg:flex-row gap-8 w-full px-8">
-        <div className="card bg-saltGreenPastell w-full lg:w-1/2 shadow-xl">
+        <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-xl">
           <div className="card-body flex flex-col items-start justify-start text-center">
             <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
               Students
@@ -90,7 +89,7 @@ export default function EditClassesForm({
                 ))}
               {allStudents.filter((student) => student.classId === null)
                 .length === 0 && (
-                <p>All students have been assigned to a class.</p>
+                <p>All students have been assigned to a class 🥳</p>
               )}
             </div>
 
@@ -128,7 +127,7 @@ export default function EditClassesForm({
           </div>
         </div>
 
-        <div className="card bg-saltBluePastell w-full lg:w-1/2 shadow-xl">
+        <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-sm">
           <div className="card-body flex flex-col items-start justify-start text-center">
             <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
               Classes Overview
@@ -141,16 +140,16 @@ export default function EditClassesForm({
               return (
                 <div
                   key={classItem.id}
-                  className="mb-4 flex flex-row items-center w-full bg-saltLightPink p-3 rounded-xl"
+                  className="mb-4 flex flex-row items-center w-full bg-saltDarkBlue p-3 rounded-xl"
                 >
-                  <h1 className="text-saltDarkBlue text-3xl text-center">
+                  <h1 className="text-saltLightGrey text-3xl text-center">
                     {classItem.name}
                   </h1>
 
                   <div className="ml-auto">
                     <button
                       type="button"
-                      className="btn btn-outline"
+                      className="text-white py-2 px-4 bg-saltOrange rounded-lg hover:bg-saltDarkPink"
                       onClick={(event) =>
                         handleClassSubmit(event, classItem.id)
                       }
