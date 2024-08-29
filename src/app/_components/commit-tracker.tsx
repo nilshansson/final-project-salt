@@ -12,12 +12,14 @@ interface GHCommitProps {
   };
   precourseStart: Date | null;
   bootcampStart: Date | null;
+  GITHUB_ACCESS_TOKEN: string | undefined
 }
 
 export default function CommitTracker({
   student,
   precourseStart,
   bootcampStart,
+  GITHUB_ACCESS_TOKEN,
 }: GHCommitProps) {
   const [contributionCalendar, setContributionCalendar] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +34,6 @@ export default function CommitTracker({
         }
 
         const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
-        const GITHUB_ACCESS_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
         const query = `
           query ($username: String!, $fromDate: DateTime!, $toDate: DateTime!) {

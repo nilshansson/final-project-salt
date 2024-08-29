@@ -29,6 +29,8 @@ export default async function ProfilePage() {
 
   let content;
 
+  const GITHUB_ACCESS_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+
   if (student.classId) {
     const { precourseStart, bootcampStart } = await getCourseDatesByClassId(
       student.classId
@@ -41,6 +43,7 @@ export default async function ProfilePage() {
           student={student}
           precourseStart={precourseStart}
           bootcampStart={bootcampStart}
+          GITHUB_ACCESS_TOKEN={GITHUB_ACCESS_TOKEN}
         />
       </>
     ) : (
