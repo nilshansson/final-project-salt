@@ -330,7 +330,8 @@ export async function selectClassByName(
 }
 export async function createClass(newClass: InsertClasses) {
   try {
-    await db.insert(classes).values(newClass);
+    const [createdClass] = await db.insert(classes).values(newClass).returning();
+    return createdClass
   } catch (error) {
     console.error(error);
     throw new Error("could not create class");

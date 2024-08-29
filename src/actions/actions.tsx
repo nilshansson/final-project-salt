@@ -10,6 +10,7 @@ import {
   deleteUTLink,
   editClass,
   getAllStudentInfo,
+  InsertClasses,
   insertCourseModule,
   insertLink,
   insertUtlink,
@@ -137,17 +138,11 @@ export async function deleteUTLinkRevalidate(linkId: number) {
   await revalidatePath("admin/module")
 }
 
-export async function postClassAndRevalidate(name: string, startDate: Date, gradDate: Date) {
+export async function postClassAndRevalidate(newClass:InsertClasses) {
   try {
-    const newClass = {
-      name,
-      startDate,
-      gradDate,
-    };
-
-    await createClass(newClass);
-    await revalidatePath("admin/module")
-    return true;
+    const createdClass = await createClass(newClass);
+    revalidatePath("/admin/module")
+    return createdClass;
   } catch (error) {
     console.error(error);
     return false;

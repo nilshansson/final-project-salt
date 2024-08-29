@@ -35,10 +35,6 @@ export function ModuleModal({ currClass, addNewModule }: ModalProps) {
     modal?.showModal();
   };
 
-  const handleModuleCreated = (newModule: SelectModule) => {
-    addNewModule(newModule);
-  };
-
   return (
     <>
       <button
@@ -51,7 +47,7 @@ export function ModuleModal({ currClass, addNewModule }: ModalProps) {
         <div className="modal-box">
           <ModuleForm
             currClass={currClass}
-            onModuleCreated={handleModuleCreated}
+            onModuleCreated={addNewModule}
           />
         </div>
       </dialog>

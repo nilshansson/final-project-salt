@@ -3,6 +3,7 @@
 import { postModule } from "@/actions/actions";
 import { ClassForm } from "@/app/_components";
 import { SelectClasses } from "@/db/query";
+import { revalidatePath } from "next/cache";
 import { useState, useEffect } from "react";
 
 export function ClassModal() {

@@ -1,6 +1,6 @@
 "use server";
 
-import { selectAllClasses } from "@/db/query";
+import { selectAllClasses, SelectClasses } from "@/db/query";
 import ClassCollapse from "./class-collapse";
 import { ClassModal, Main } from "@/app/_components";
 
