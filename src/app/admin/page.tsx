@@ -9,9 +9,7 @@ export default async function AdminPage() {
 
   return (
     <>
-      <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 underline">
-        Admin Dashboard
-      </h1>
+
 
       {allClasses.map((classItem) => (
         <div key={classItem.id} className="w-full p-4 pb-10">
@@ -35,3 +33,8 @@ export default async function AdminPage() {
     </>
   );
 }
+
+
+      // <h1 className="text-center text-5xl font-extrabold text-saltDarkBlue py-10 underline">
+      //   Admin Dashboard
+      // </h1>
