@@ -1,7 +1,7 @@
 "use server";
 
 import { selectAllClasses, getAllStudentInfo, SelectStudent } from "@/db/query";
-import { StudentCard } from "../_components";
+import { Main, StudentCard } from "../_components";
 
 export default async function AdminPage() {
   const allStudentInfo: SelectStudent[] = await getAllStudentInfo();
@@ -9,7 +9,7 @@ export default async function AdminPage() {
 
   return (
     <>
-
+<Main title="Admin Dashboard">
 
       {allClasses.map((classItem) => (
         <div key={classItem.id} className="w-full p-4 pb-10">
@@ -30,6 +30,7 @@ export default async function AdminPage() {
           </div>
         </div>
       ))}
+      </Main>
     </>
   );
 }
