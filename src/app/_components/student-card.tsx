@@ -43,7 +43,7 @@ export async function StudentCard({ student }: StudentCardProps) {
               student={student}
               precourseStart={precourseStart}
               bootcampStart={bootcampStart}
-              GITHUB_ACCESS_TOKEN="GITHUB_ACCESS_TOKEN"
+              GITHUB_ACCESS_TOKEN={GITHUB_ACCESS_TOKEN}
             />
           </div>
         ) : (
