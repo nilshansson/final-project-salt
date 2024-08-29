@@ -38,7 +38,7 @@ export default async function ProfileCard({userId}:ProfileProps){
           student={student}
           precourseStart={precourseStart}
           bootcampStart={bootcampStart}
-          GITHUB_ACCESS_TOKEN="GITHUB_ACCESS_TOKEN"
+          GITHUB_ACCESS_TOKEN={GITHUB_ACCESS_TOKEN}
         />
       </>
     ) : (
