@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="h-full">
         <head>
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <link
@@ -34,9 +34,9 @@ export default function RootLayout({
             type="image/png"
           />
         </head>
-        <body className={`${manrope.className} bg-saltLightGrey`}>
+        <body className={`${manrope.className} bg-saltLightGrey h-full flex flex-col`}>
           <Navbar />
-          {children}
+          <div className="flex-grow">{children}</div>
           <Footer />
         </body>
       </html>
