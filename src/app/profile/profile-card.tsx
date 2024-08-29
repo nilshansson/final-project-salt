@@ -23,6 +23,7 @@ export default async function ProfileCard({userId}:ProfileProps){
 
   let content;
 
+  const GITHUB_ACCESS_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
   if (student.classId) {
     const { precourseStart, bootcampStart } = await getCourseDatesByClassId(
       student.classId
@@ -35,6 +36,7 @@ export default async function ProfileCard({userId}:ProfileProps){
           student={student}
           precourseStart={precourseStart}
           bootcampStart={bootcampStart}
+          GITHUB_ACCESS_TOKEN="GITHUB_ACCESS_TOKEN"
         />
       </>
     ) : (

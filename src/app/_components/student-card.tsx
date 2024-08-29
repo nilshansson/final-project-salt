@@ -18,7 +18,7 @@ export async function StudentCard({ student }: StudentCardProps) {
   const { precourseStart, bootcampStart } = await getCourseDatesByClassId(
     student.classId
   );
-
+  const GITHUB_ACCESS_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
   return (
     <div className="card bg-saltLightGrey min-w-60 max-w-72 shadow-xl">
       <div className="card-body flex flex-col items-center justify-center text-center">
@@ -43,6 +43,7 @@ export async function StudentCard({ student }: StudentCardProps) {
               student={student}
               precourseStart={precourseStart}
               bootcampStart={bootcampStart}
+              GITHUB_ACCESS_TOKEN="GITHUB_ACCESS_TOKEN"
             />
           </div>
         ) : (
