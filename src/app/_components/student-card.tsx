@@ -46,7 +46,7 @@ export async function StudentCard({ student }: StudentCardProps) {
             />
           </div>
         ) : (
-          <p className="text-red-600">This student hasn't added their GitHub</p>
+          <p className="text-red-600">This student hasn&apos;t added their GitHub</p>
         )}
       </div>
     </div>

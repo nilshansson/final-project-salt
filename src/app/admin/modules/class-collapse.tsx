@@ -39,21 +39,21 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
   const [modules, setModules] = useState<SelectModule[]>([]);
   const [isLoadingModules, setIsLoadingModules] = useState<boolean>(false);
 
-  const handleEditClick = (
-    classId: number,
-    currentName: string,
-    startDate: Date,
-    gradDate: Date,
-    precourseStartDate: Date
-  ) => {
-    setEditingClassId(classId);
-    setUpdatedClassName(currentName);
-    setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
-    setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
-    setUpdatedPrecourseStartDate(
-      precourseStartDate.toISOString().split("T")[0]
-    ); // Convert to YYYY-MM-DD
-  };
+const handleEditClick = (
+  classId: number,
+  currentName: string,
+  startDate: Date,
+  gradDate: Date,
+  precourseStartDate: Date
+) => {
+  setEditingClassId(classId);
+  setUpdatedClassName(currentName);
+  setUpdatedStartDate(startDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+  setUpdatedGradDate(gradDate.toISOString().split("T")[0]); // Convert to YYYY-MM-DD
+  setUpdatedPrecourseStartDate(
+    precourseStartDate.toISOString().split("T")[0]
+  ); // Convert to YYYY-MM-DD
+};
 
   const handleSaveClick = async (classId: number) => {
     await updateClassAndRevalidate(
@@ -187,19 +187,19 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                 <span>{currClass.name}</span>
                 {openClassId === currClass.id && (
                   <div className="flex space-x-2 relative z-10">
-                    <button
-                      onClick={() =>
-                        handleEditClick(
-                          currClass.id,
-                          currClass.name,
-                          currClass.startDate,
-                          currClass.gradDate,
-                          currClass.precourseStartDate
-                        )
-                      }
-                      className="btn text-3xl btn-warning relative z-10"
-                      style={{ pointerEvents: "auto" }}
-                    >
+<button
+  onClick={() =>
+    handleEditClick(
+      currClass.id,
+      currClass.name,
+      currClass.startDate || new Date(), // Use current date if null
+      currClass.gradDate || new Date(), // Use current date if null
+      currClass.precourseStartDate || new Date() // Use current date if null
+    )
+  }
+  className="btn text-3xl btn-warning relative z-10"
+  style={{ pointerEvents: "auto" }}
+>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -245,15 +245,15 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
               <div className="p-4">
                 <p className="my-1">
                   <strong className="text-white ">Precourse Start Date:</strong>{" "}
-                  {new Date(currClass.precourseStartDate).toDateString()}
+                  {new Date(currClass.precourseStartDate!).toDateString()}
                 </p>
                 <p className="my-1">
                   <strong className="text-white ">Start Date:</strong>{" "}
-                  {new Date(currClass.startDate).toDateString()}
+                  {new Date(currClass.startDate!).toDateString()}
                 </p>
                 <p className="my-1">
                   <strong className="text-white ">Graduation Date:</strong>{" "}
-                  {new Date(currClass.gradDate).toDateString()}
+                  {new Date(currClass.gradDate!).toDateString()}
                 </p>
               </div>
               {isLoadingModules ? (
