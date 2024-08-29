@@ -68,6 +68,9 @@ export function Footer() {
           <p>
             Copyright © SALT {new Date().getFullYear()} - All rights reserved
           </p>
+          <p>
+            Salt-Modules Release 2.0.3. from Ohayoo Reloaded
+          </p>
         </aside>
       </div>
     </footer>
