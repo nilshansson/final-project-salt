@@ -17,7 +17,7 @@ export function PreloggedInHero() {
             Welcome to the SALT precourse!
           </h1>
           <p className="mb-5">
-            We're excited for you to start the bootcamp soon. Before diving in,
+            We&apos;re excited for you to start the bootcamp soon. Before diving in,
             please complete this pre-course to set yourself up for success.
           </p>
           <SignedOut>

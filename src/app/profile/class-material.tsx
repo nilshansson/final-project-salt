@@ -98,7 +98,6 @@ export default async function ClassMaterial() {
 
                   <div className="w-full md:w-4/12">
                     <LinksCard
-                      links={moduleWLink.links}
                       moduleId={moduleWLink.module.id}
                     />
                   </div>
