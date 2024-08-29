@@ -23,6 +23,9 @@ export default withUt({
         saltLightGrey: "#EBEBEB",
         saltGreenPastell: "#E1FFED",
         saltBluePastell: "#ECF7FA",
+        lightGrey: "#F3F0F0",
+        mediumGrey: "#E6E3E3",
+        darkGrey: "#D8D8D8",
       },
       height: {
         "160": "40rem",
