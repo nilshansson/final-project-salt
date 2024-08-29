@@ -254,7 +254,9 @@ export default function ModuleCollapse({
                 <>
                   <p>{module.intro}</p>
                   {isLoadingLinks ? (
-                    <div>Loading links...</div>
+                    <div>
+                      Loading links... <Loading />
+                    </div>
                   ) : (
                     <LinkBoxes moduleId={module.id} links={links} />
                   )}

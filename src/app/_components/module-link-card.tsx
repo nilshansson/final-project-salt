@@ -10,6 +10,7 @@ import { IntroCard } from "../module/[id]/intro-card";
 import { LinksCard } from "../module/[id]/links-card";
 import { useEffect, useState } from "react";
 import { selectAllLinksByModule } from "@/db/queries/link-queries";
+import { Loading } from "./loading";
 
 interface ModuleLinkCardProps {
   currClass: SelectClasses;
@@ -72,7 +73,10 @@ export default function ModuleLinkCard({ currClass }: ModuleLinkCardProps) {
                 {loadedModules[module.id] ? (
                   <LinksCard moduleId={module.id} />
                 ) : (
-                  <div>Loading links...</div>
+                  <>
+                    <div>Loading links...</div>
+                    <Loading />
+                  </>
                 )}
               </div>
             </div>

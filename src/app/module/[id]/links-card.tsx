@@ -1,11 +1,15 @@
 "use client";
 
 import { postUtlink, revalidatePathCreateModule } from "@/actions/actions";
-import { combinedLink, selectAllLinksByModule } from "@/db/queries/link-queries";
+import {
+  combinedLink,
+  selectAllLinksByModule,
+} from "@/db/queries/link-queries";
 import { UploadButton } from "@/utils/uploadthing";
 import Link from "next/link";
 import LinkPoster from "./link-poster";
 import { useState, useEffect } from "react";
+import { Loading } from "@/app/_components";
 
 export interface LinksProps {
   moduleId: number;
@@ -56,10 +60,13 @@ export function LinksCard({ moduleId }: LinksProps) {
   };
 
   if (isLoading) {
-    return <div>Loading links...</div>;
+    return (
+      <div>
+        Loading links...
+        <Loading />
+      </div>
+    );
   }
-
-
 
   return (
     <>

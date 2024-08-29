@@ -45,8 +45,10 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
       <div className="flex flex-col space-y-2">
-        <h3>Create module for {currClass.name}</h3>
-        <label className="font-semibold">Title:</label>
+        <h3 className="text-saltDarkBlue font-extrabold">
+          Create module for {currClass.name}
+        </h3>
+        <label className="font-semibold text-saltDarkBlue">Title:</label>
         <input
           type="text"
           value={title}
@@ -56,7 +58,7 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
         />
       </div>
       <div className="flex flex-col space-y-2">
-        <label className="font-semibold">Intro:</label>
+        <label className="font-semibold text-saltDarkBlue">Intro:</label>
         <textarea
           value={intro}
           onChange={(e) => setIntro(e.target.value)}
@@ -70,7 +72,7 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
 
       <button
         type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
+        className="bg-saltOrange text-white py-2 px-4 rounded mt-4 font-bold"
         disabled={loading}
       >
         {loading ? <Loading /> : "Create Module"}
