@@ -1,13 +1,17 @@
 "use client"
 
+import Image from "next/image";
+
 export function Footer() {
   return (
     <footer className="footer bg-saltDarkBlue rounded p-10 text-white mt-auto">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Column 1: Logo */}
         <div className="flex flex-col items-center md:items-start space-y-4">
-          <img
+          <Image
             src="//salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-light.svg"
+            width={200}
+            height={100}
             alt="SALT Logo"
             className="w-32"
           />

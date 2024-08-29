@@ -6,6 +6,7 @@ import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import { GithubForm } from "./github-form";
 import CommitTracker from "../_components/commit-tracker";
 import ClassMaterial from "./class-material";
+import Image from "next/image";
 
 export default async function ProfilePage() {
   const clerkAuth = await auth();
@@ -63,7 +64,7 @@ export default async function ProfilePage() {
                 Welcome, {user.first_name} {user.last_name}!
               </h1>
               {user.image_url && (
-                <img
+                <Image
                   src={user.image_url}
                   alt="User Profile Picture"
                   width={250}

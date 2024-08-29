@@ -2,6 +2,7 @@ import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import CommitTracker from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
 import { handleCreateUserIfNotExist } from "@/actions/actions";
+import Image from "next/image";
 
 interface ProfileProps{
   userId:string
@@ -50,7 +51,7 @@ export default async function ProfileCard({userId}:ProfileProps){
               Welcome, {user.first_name} {user.last_name}!
             </h1>
             {user.image_url && (
-              <img
+              <Image
                 src={user.image_url}
                 alt="User Profile Picture"
                 width={150}

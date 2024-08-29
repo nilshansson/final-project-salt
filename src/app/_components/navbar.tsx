@@ -54,14 +54,16 @@ export async function Navbar() {
       </div>
 
       <div className="navbar-center"></div>
-      <Link href="/profile">
-        <Image
-          src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-dark.svg"
-          width={80}
-          height={80}
-          alt="</salt>"
-        />
-      </Link>
+
+<Link href="/profile">
+  <Image
+    src="https://salt.dev/new-site/wp-content/uploads/2024/02/salt-logo-dark.svg"
+    alt="</salt>"
+    width={80}
+    height={80}
+  />
+</Link>
+
 
       <div className="navbar-end">
         <SignedIn>
