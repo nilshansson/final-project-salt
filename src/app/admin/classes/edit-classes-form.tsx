@@ -72,7 +72,14 @@ export default function EditClassesForm({
               {allStudents
                 .filter((student) => student.classId === null)
                 .map((student) => (
-                  <div className="form-control justify-end" key={student.id}>
+                  <div
+                    className={`form-control justify-end rounded-md ${
+                      selectedStudentsId.includes(student.id)
+                        ? "bg-saltOrange text-white"
+                        : "hover:bg-slate-300 "
+                    }`}
+                    key={student.id}
+                  >
                     <label className="label cursor-pointer">
                       <span className="label-text mr-3">{student.name}</span>
                       <input
@@ -104,7 +111,14 @@ export default function EditClassesForm({
                 {allStudents
                   .filter((student) => student.classId === classItem.id)
                   .map((student) => (
-                    <div className="form-control justify-end " key={student.id}>
+                    <div
+                      className={`form-control justify-end rounded-md ${
+                        selectedStudentsId.includes(student.id)
+                          ? "bg-saltOrange"
+                          : "hover:bg-slate-300"
+                      }`}
+                      key={student.id}
+                    >
                       <label className="label cursor-pointer">
                         <span className="label-text mr-3">{student.name}</span>
                         <input
