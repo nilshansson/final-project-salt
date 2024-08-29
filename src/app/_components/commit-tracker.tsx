@@ -128,60 +128,74 @@ export default function CommitTracker({
     );
   }
 
-return (
-  <div className="flex flex-col bg-saltLightGrey w-full rounded p-3 justify-center items-center">
-    {/* Header Row for Days of the Week */}
-    <div className="grid grid-cols-7 w-full">
-      {[ 'S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-        <div key={index} className="text-xs text-black text-center mb-2">
-          {day}
-        </div>
-      ))}
-    </div>
-
-    {/* Calendar Weeks */}
-    {contributionCalendar.map((week: any, i: number) => {
-      const weekTotalContributions = week.contributionDays.reduce(
-        (sum: number, day: any) => sum + day.contributionCount,
-        0
-      );
-
-      // Calculate the number of empty days before the start of the first week's contributions
-      const firstDayOfWeek = new Date(week.contributionDays[0].date).getDay(); // Get the day index (0 for Sunday, 1 for Monday, etc.)
-      const paddingDays = firstDayOfWeek === 0 ? 6 : firstDayOfWeek; // Adjust so 0 (Sunday) -> 6, 1 (Monday) -> 0, etc.
-
-      return (
-        <div key={i} className="grid grid-cols-7 w-full">
-          {/* Week Label with Tooltip */}
-          <div className="tooltip col-span-7" data-tip={`Total ${weekTotalContributions} contributions on week ${i + 1}`}>
-            <h3 className="text-xs text-black">
-              Week {i + 1}:
-            </h3>
+  return (
+    <div className="flex flex-col bg-saltDarkBlue w-full rounded p-3 justify-center items-center">
+      {/* Header Row for Days of the Week */}
+      <div className="grid grid-cols-7 w-full">
+        {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+          <div key={index} className="text-xs text-white text-center mb-2">
+            {day}
           </div>
+        ))}
+      </div>
 
-          {/* Empty padding at the start of the first week */}
-          {i === 0 && Array.from({ length: paddingDays }).map((_, index) => (
-            <div key={`empty-${index}`} className="w-4 h-4 m-[0.5px]"></div>
-          ))}
+      {/* Calendar Weeks */}
+      <div className=" bg-white w-full rounded-sm">
+        {contributionCalendar.map((week: any, i: number) => {
+          const weekTotalContributions = week.contributionDays.reduce(
+            (sum: number, day: any) => sum + day.contributionCount,
+            0
+          );
 
-          {/* Contribution Days */}
-          {week.contributionDays.map((day: any, j: number) => (
-            <div key={j}>
-            <div className="tooltip" data-tip={`${day.contributionCount} contributions on ${day.date}`}>
+          // Calculate the number of empty days before the start of the first week's contributions
+          const firstDayOfWeek = new Date(
+            week.contributionDays[0].date
+          ).getDay(); // Get the day index (0 for Sunday, 1 for Monday, etc.)
+          const paddingDays = firstDayOfWeek === 0 ? 6 : firstDayOfWeek; // Adjust so 0 (Sunday) -> 6, 1 (Monday) -> 0, etc.
+
+          return (
+            <div key={i} className="grid grid-cols-7 w-full">
+              {/* Week Label with Tooltip */}
               <div
-                title={`${day.contributionCount} contributions on ${day.date}`}
-                className="w-4 h-4 m-[0.5px] rounded"
-                style={{
-                  backgroundColor: getColor(day.contributionCount),
-border: "1px solid #bcbcbc",
-                }}
-              ></div>
+                className="tooltip col-span-7"
+                data-tip={`Total ${weekTotalContributions} contributions on week ${
+                  i + 1
+                }`}
+              >
+                <h3 className="text-xs text-black">Week {i + 1}:</h3>
+              </div>
+
+              {/* Empty padding at the start of the first week */}
+              {i === 0 &&
+                Array.from({ length: paddingDays }).map((_, index) => (
+                  <div
+                    key={`empty-${index}`}
+                    className="w-4 h-4 m-[0.5px]"
+                  ></div>
+                ))}
+
+              {/* Contribution Days */}
+              {week.contributionDays.map((day: any, j: number) => (
+                <div key={j}>
+                  <div
+                    className="tooltip"
+                    data-tip={`${day.contributionCount} contributions on ${day.date}`}
+                  >
+                    <div
+                      title={`${day.contributionCount} contributions on ${day.date}`}
+                      className="w-4 h-4 m-[0.5px] rounded"
+                      style={{
+                        backgroundColor: getColor(day.contributionCount),
+                        border: "1px solid #bcbcbc",
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
             </div>
-            </div>
-          ))}
-        </div>
-      );
-    })}
-  </div>
-);
+          );
+        })}
+      </div>
+    </div>
+  );
 }

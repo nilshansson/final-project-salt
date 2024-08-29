@@ -69,7 +69,7 @@ export default async function ClassMaterial() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center ">
+    <main className="flex h-auto flex-col items-center ">
       {filteredClassMaterials.map((classWModules) => (
         <>
           <h1 className="text-5xl font-extrabold mb-8 text-saltDarkBlue bg-saltOrange w-full py-4 text-center rounded-2xl">
