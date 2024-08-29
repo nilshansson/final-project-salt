@@ -20,7 +20,7 @@ export async function StudentCard({ student }: StudentCardProps) {
   );
 
   return (
-    <div className="card bg-saltLightPink min-w-60 max-w-72 shadow-xl">
+    <div className="card bg-white min-w-60 max-w-72 shadow-xl">
       <div className="card-body flex flex-col items-center justify-center text-center">
         <h1 className="text-2xl font-bold mb-4 text-saltDarkBlue">
           {student.name}
