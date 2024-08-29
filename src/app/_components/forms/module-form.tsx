@@ -54,7 +54,7 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="border border-gray-300 rounded p-2"
+          className="border border-gray-300 rounded p-2 text-saltDarkBlue"
         />
       </div>
       <div className="flex flex-col space-y-2">
@@ -62,7 +62,7 @@ export function ModuleForm({ currClass, onModuleCreated }: ModuleProps) {
         <textarea
           value={intro}
           onChange={(e) => setIntro(e.target.value)}
-          className="border border-gray-300 rounded p-2"
+          className="border border-gray-300 rounded p-2 text-saltDarkBlue"
         />
       </div>
 
