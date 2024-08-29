@@ -1,3 +1,5 @@
+"use server"
+
 import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import CommitTracker from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
