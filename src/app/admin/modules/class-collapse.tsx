@@ -112,7 +112,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                   type="text"
                   value={updatedClassName}
                   onChange={(e) => setUpdatedClassName(e.target.value)}
-                  className="input input-bordered input-lg flex-grow"
+                  className="input input-bordered input-lg flex-grow text-saltDarkBlue"
                   style={{ pointerEvents: "auto" }}
                 />
                 <label className="font-semibold">Start Date:</label>
@@ -120,7 +120,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                   type="date"
                   value={updatedStartDate}
                   onChange={(e) => setUpdatedStartDate(e.target.value)}
-                  className="input input-bordered input-sm"
+                  className="input input-bordered input-sm text-saltDarkBlue"
                   style={{ pointerEvents: "auto" }}
                 />
                 <label className="font-semibold">Graduation Date:</label>
@@ -128,7 +128,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                   type="date"
                   value={updatedGradDate}
                   onChange={(e) => setUpdatedGradDate(e.target.value)}
-                  className="input input-bordered input-sm"
+                  className="input input-bordered input-sm text-saltDarkBlue"
                   style={{ pointerEvents: "auto" }}
                 />
                 <label className="font-semibold py-1">
@@ -138,7 +138,7 @@ export default function ClassCollapse({ allClasses }: ClassCollapseProps) {
                   type="date"
                   value={updatedPrecourseStartDate}
                   onChange={(e) => setUpdatedPrecourseStartDate(e.target.value)}
-                  className="input input-bordered input-sm"
+                  className="input input-bordered input-sm text-saltDarkBlue"
                   style={{ pointerEvents: "auto" }}
                 />
                 <div className="flex space-x-2 z-10">
