@@ -57,11 +57,11 @@ export default function EditClassesForm({
   };
 
   return (
-    <form className="flex items-center justify-center h-screen mt-20 w-full ">
-      <div className="flex flex-col lg:flex-row gap-8 w-full px-8">
-        <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-xl">
-          <div className="card-body flex flex-col items-start justify-start text-center">
-            <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
+<form className="flex items-center justify-center w-full h-full">
+  <div className="flex flex-col lg:flex-row gap-8 w-full h-full px-8">
+    <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-xl flex-grow">
+      <div className="card-body flex flex-col items-start justify-start text-center h-full">
+        <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
               Students
             </h1>
             <div className="bg-darkGrey w-full p-6 rounded-lg">
@@ -73,10 +73,10 @@ export default function EditClassesForm({
                   .filter((student) => student.classId === null)
                   .map((student) => (
                     <div
-                      className={`form-control justify-end rounded-md ${
+                      className={`form-control justify-end rounded-md transition duration-200 ${
                         selectedStudentsId.includes(student.id)
                           ? "bg-saltOrange text-white"
-                          : "hover:bg-slate-300 "
+                          : "hover:bg-slate-300"
                       }`}
                       key={student.id}
                     >
@@ -112,7 +112,7 @@ export default function EditClassesForm({
                     .filter((student) => student.classId === classItem.id)
                     .map((student) => (
                       <div
-                        className={`form-control justify-end rounded-md ${
+                        className={`form-control justify-end rounded-md transition duration-200 ${
                           selectedStudentsId.includes(student.id)
                             ? "bg-saltOrange"
                             : "hover:bg-slate-300"
@@ -141,12 +141,11 @@ export default function EditClassesForm({
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-sm">
-          <div className="card-body flex flex-col items-start justify-start text-center">
-            <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
+      </div>
+    </div>
+    <div className="card bg-saltLightPink w-full lg:w-1/2 shadow-sm flex-grow">
+      <div className="card-body flex flex-col items-start justify-start text-center h-full">
+        <h1 className="text-4xl font-bold mb-4 pb-11 text-saltOrange">
               Classes Overview
             </h1>
 
@@ -167,7 +166,7 @@ export default function EditClassesForm({
                     <div className="ml-auto">
                       <button
                         type="button"
-                        className="text-white py-2 px-4 bg-saltOrange rounded-lg hover:bg-saltDarkPink"
+                        className="text-white py-2 px-4 bg-saltOrange rounded-lg hover:bg-saltDarkPink transition duration-200"
                         onClick={(event) =>
                           handleClassSubmit(event, classItem.id)
                         }
