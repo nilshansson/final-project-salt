@@ -23,7 +23,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export default async function ClassMaterial() {
   const clerkAuth = await auth();
-  const userId = clerkAuth.userId;
+  const saltieId = clerkAuth.saltieId;
 
   interface moduleWithLinks {
     module: SelectModule;
@@ -35,12 +35,12 @@ export default async function ClassMaterial() {
     moduleWLink: moduleWithLinks[];
   }
 
-  const userinfo = await getStudentInfo(userId!);
+  const saltieinfo = await getStudentInfo(saltieId!);
 
   const classMaterials: (classesWithModulesWithLinks | null)[] =
     await Promise.all(
-      userinfo.map(async (userClassInfo) => {
-        const { classId } = userClassInfo;
+      saltieinfo.map(async (saltieClassInfo) => {
+        const { classId } = saltieClassInfo;
 
         if (classId !== null) {
           const selectedClass = await selectClass(classId);

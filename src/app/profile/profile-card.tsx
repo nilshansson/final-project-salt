@@ -3,24 +3,24 @@
 import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import CommitTracker from "../_components/commit-tracker";
 import { GithubForm } from "./github-form";
-import { handleCreateUserIfNotExist } from "@/actions/actions";
+import { handleCreateSaltieIfNotExist } from "@/actions/actions";
 import Image from "next/image";
 
 interface ProfileProps{
-  userId:string
+  saltieId:string
 }
 
-export default async function ProfileCard({userId}:ProfileProps){
-  const user = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
+export default async function ProfileCard({saltieId}:ProfileProps){
+  const saltie = await fetch(`https://api.clerk.dev/v1/salties/${saltieId}`, {
     headers: {
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
   }).then((res) => res.json());
 
-  const name = `${user.first_name} ${user.last_name}`;
-  const { student } = await handleCreateUserIfNotExist(userId!, name);
+  const name = `${saltie.first_name} ${saltie.last_name}`;
+  const { student } = await handleCreateSaltieIfNotExist(saltieId!, name);
   if (!student) {
-    throw new Error("Could not load or create user");
+    throw new Error("Could not load or create saltie");
   }
 
   let content;
@@ -52,12 +52,12 @@ export default async function ProfileCard({userId}:ProfileProps){
         <div className="card col-span-1 shadow-xl bg-saltDarkBlue h-160">
           <div className="card-body flex flex-col items-center justify-center text-center ">
             <h1 className="text-lg font-bold mb-4 text-white">
-              Welcome, {user.first_name} {user.last_name}!
+              Welcome, {saltie.first_name} {saltie.last_name}!
             </h1>
-            {user.image_url && (
+            {saltie.image_url && (
               <Image
-                src={user.image_url}
-                alt="User Profile Picture"
+                src={saltie.image_url}
+                alt="Saltie Profile Picture"
                 width={150}
                 height={150}
                 className="rounded-full mb-4"

@@ -8,7 +8,7 @@ type StudentCardProps = {
   student: {
     id: number;
     name: string;
-    userId: string | null;
+    saltieId: string | null;
     classId: number | null;
     github: string | null;
   };

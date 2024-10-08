@@ -8,16 +8,16 @@ export default clerkMiddleware(async (auth, request) => {
   const baseUrl = nextUrl.origin;
 
   if (isAdminRoute(request)) {
-    const { userId, sessionClaims } = await auth();
+    const { saltieId, sessionClaims } = await auth();
 
-    if (!userId) {
+    if (!saltieId) {
       return NextResponse.redirect(new URL("/", baseUrl));
     }
 
     // Assert the expected structure of sessionClaims
-    const userRole = (sessionClaims as { role?: { role: string } })?.role?.role;
+    const saltieRole = (sessionClaims as { role?: { role: string } })?.role?.role;
 
-    if (userRole !== "admin") {
+    if (saltieRole !== "admin") {
       return new NextResponse(
         JSON.stringify({
           error: "Unauthorized: You do not have access to this page.",

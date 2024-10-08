@@ -3,7 +3,7 @@ import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const students = pgTable("students", {
   id: serial("id").primaryKey(),
-  userId: text("user_id").references(() => users.id),
+  saltieId: text("saltie_id").references(() => salties.id),
   classId: integer("class_id").references(() => classes.id, {
     onDelete: "set null",
   }),
@@ -11,7 +11,7 @@ export const students = pgTable("students", {
   github: text("github"),
 });
 
-export const users = pgTable("users", {
+export const salties = pgTable("salties", {
   id: text("id").notNull().unique(),
   role: text("role"),
 });
@@ -97,14 +97,14 @@ export const utlinksRelations = relations(utlinks, ({ one }) => ({
   }),
 }));
 
-export const usersRelations = relations(users, ({ one }) => ({
+export const saltiesRelations = relations(salties, ({ one }) => ({
   student: one(students),
 }));
 
 export const studentsRelations = relations(students, ({ one }) => ({
-  user: one(users, {
-    fields: [students.userId],
-    references: [users.id],
+  saltie: one(salties, {
+    fields: [students.saltieId],
+    references: [salties.id],
   }),
   class: one(classes, {
     fields: [students.classId],

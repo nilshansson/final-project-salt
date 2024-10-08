@@ -7,7 +7,7 @@ import {
   links,
   students,
   utlinks,
-  users,
+  salties,
   classes,
 } from "./schema";
 import { eq, inArray } from "drizzle-orm";
@@ -203,36 +203,36 @@ export async function selectAllLinksByModule(
   return combinedLinks;
 }
 
-export type SelectUser = typeof users.$inferSelect;
-export type InsertUser = typeof users.$inferInsert;
+export type SelectSaltie = typeof salties.$inferSelect;
+export type InsertSaltie = typeof salties.$inferInsert;
 
 export type SelectStudent = typeof students.$inferSelect;
 export type InsertStudent = typeof students.$inferInsert;
 
-export async function createStudentAndUserIfNotExists(
-  userId: string,
+export async function createStudentAndSaltieIfNotExists(
+  saltieId: string,
   name: string
-): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
+): Promise<{ saltie: SelectSaltie | null; student: SelectStudent | null }> {
   const existingStudent = await db
     .select()
     .from(students)
-    .where(eq(students.userId, userId))
+    .where(eq(students.saltieId, saltieId))
     .then((result) => result[0] || null);
 
-  const existingUser = await db
+  const existingSaltie = await db
     .select()
-    .from(users)
-    .where(eq(users.id, userId))
+    .from(salties)
+    .where(eq(salties.id, saltieId))
     .then((result) => result[0] || null);
 
-  let newUser = existingUser;
+  let newSaltie = existingSaltie;
   let newStudent = existingStudent;
 
-  if (!existingUser) {
-    [newUser] = await db
-      .insert(users)
+  if (!existingSaltie) {
+    [newSaltie] = await db
+      .insert(salties)
       .values({
-        id: userId,
+        id: saltieId,
         role: "student",
       })
       .returning();
@@ -242,41 +242,41 @@ export async function createStudentAndUserIfNotExists(
     [newStudent] = await db
       .insert(students)
       .values({
-        userId: userId,
+        saltieId: saltieId,
         name: name,
       })
       .returning();
   }
 
-  if (newUser !== existingUser || newStudent !== existingStudent) {
+  if (newSaltie !== existingSaltie || newStudent !== existingStudent) {
     console.log("CREATED NEW OBJECTS\n\n\n");
-    console.log(newUser);
+    console.log(newSaltie);
     console.log(newStudent);
   } else {
     console.log("RETRIEVED EXISTING OBJECTS\n\n\n");
-    console.log(newUser);
+    console.log(newSaltie);
     console.log(newStudent);
   }
 
-  return { user: newUser, student: newStudent };
+  return { saltie: newSaltie, student: newStudent };
 }
 
-export async function addGitHubUsername(
-  userId: string,
-  githubUsername: string
+export async function addGitHubSaltiename(
+  saltieId: string,
+  githubSaltiename: string
 ) {
   await db
     .update(students)
-    .set({ github: githubUsername })
-    .where(eq(students.userId, userId));
+    .set({ github: githubSaltiename })
+    .where(eq(students.saltieId, saltieId));
 }
 
-export async function getStudentInfo(userId: string) {
-  const Userinfo = await db
+export async function getStudentInfo(saltieId: string) {
+  const Saltieinfo = await db
     .select()
     .from(students)
-    .where(eq(students.userId, userId));
-  return Userinfo;
+    .where(eq(students.saltieId, saltieId));
+  return Saltieinfo;
 }
 
 export async function getAllStudentInfo() {

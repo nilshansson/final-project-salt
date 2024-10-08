@@ -9,11 +9,11 @@ interface GHFormProps {
 }
 
 export function GithubForm({ student }: GHFormProps) {
-  const [githubUsername, setGithubUsername] = useState("");
+  const [githubSaltiename, setGithubSaltiename] = useState("");
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (githubUsername && student.userId) {
-      handleAddGithubToDB(student.userId, githubUsername);
+    if (githubSaltiename && student.saltieId) {
+      handleAddGithubToDB(student.saltieId, githubSaltiename);
     }
   };
 
@@ -21,9 +21,9 @@ export function GithubForm({ student }: GHFormProps) {
     <form onSubmit={handleSubmit} className="join">
       <input
         className="input input-bordered join-item"
-        placeholder="GitHub Username"
-        value={githubUsername}
-        onChange={(e) => setGithubUsername(e.target.value)}
+        placeholder="GitHub Saltiename"
+        value={githubSaltiename}
+        onChange={(e) => setGithubSaltiename(e.target.value)}
       />
       <button type="submit" className="btn join-item rounded-r-full">
         Add

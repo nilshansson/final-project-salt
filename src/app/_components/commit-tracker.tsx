@@ -6,7 +6,7 @@ interface GHCommitProps {
   student: {
     id: number;
     name: string;
-    userId: string | null;
+    saltieId: string | null;
     classId: number | null;
     github: string | null;
   };
@@ -30,14 +30,14 @@ export default function CommitTracker({
     async function fetchContributions() {
       try {
         if (!studentGithub || !precourseStart || !bootcampStart) {
-          throw new Error("Missing necessary data (GitHub username or dates)");
+          throw new Error("Missing necessary data (GitHub saltiename or dates)");
         }
 
         const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 
         const query = `
-          query ($username: String!, $fromDate: DateTime!, $toDate: DateTime!) {
-            user(login: $username) {
+          query ($saltiename: String!, $fromDate: DateTime!, $toDate: DateTime!) {
+            saltie(login: $saltiename) {
               contributionsCollection(from: $fromDate, to: $toDate) {
                 contributionCalendar {
                   totalContributions
@@ -68,7 +68,7 @@ export default function CommitTracker({
           },
           body: JSON.stringify({
             query,
-            variables: { username: studentGithub, fromDate, toDate },
+            variables: { saltiename: studentGithub, fromDate, toDate },
           }),
         });
 
@@ -78,7 +78,7 @@ export default function CommitTracker({
 
         const data = await response.json();
         setContributionCalendar(
-          data.data.user.contributionsCollection.contributionCalendar.weeks
+          data.data.saltie.contributionsCollection.contributionCalendar.weeks
         );
       } catch (error: any) {
         setError(error.message);

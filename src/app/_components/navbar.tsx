@@ -22,8 +22,8 @@ export async function Navbar() {
   const allClasses = await selectAllClasses();
   const { sessionClaims } = auth();
 
-  const userRole = getRoleFromSessionClaims(sessionClaims);
-  const isAdmin = userRole === "admin";
+  const saltieRole = getRoleFromSessionClaims(sessionClaims);
+  const isAdmin = saltieRole === "admin";
 
   const allClassesWithModules: ClassWithModules[] = await Promise.all(
     allClasses.map(async (currClass) => {

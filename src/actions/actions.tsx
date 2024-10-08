@@ -1,9 +1,9 @@
 "use server";
 
 import {
-  addGitHubUsername,
+  addGitHubSaltiename,
   createClass,
-  createStudentAndUserIfNotExists,
+  createStudentAndSaltieIfNotExists,
   deleteClass,
   deleteCourseModule,
   deleteLink,
@@ -16,7 +16,7 @@ import {
   insertUtlink,
   SelectModule,
   SelectStudent,
-  SelectUser,
+  SelectSaltie,
   updateCourseModule,
   updateLinkDetails,
   updateUTLinkDetails,
@@ -101,18 +101,18 @@ export async function revalidatePathCreateModule() {
   await revalidatePath("/admin/create-module/");
 }
 export async function handleAddGithubToDB(
-  userId: string,
-  githubUsername: string
+  saltieId: string,
+  githubSaltiename: string
 ) {
-  await addGitHubUsername(userId, githubUsername);
+  await addGitHubSaltiename(saltieId, githubSaltiename);
   await revalidatePath("/profile")
 }
-export async function handleCreateUserIfNotExist(
-  userId: string,
+export async function handleCreateSaltieIfNotExist(
+  saltieId: string,
   name: string
-): Promise<{ user: SelectUser | null; student: SelectStudent | null }> {
-  const { user, student } = await createStudentAndUserIfNotExists(userId, name);
-  return { user, student };
+): Promise<{ saltie: SelectSaltie | null; student: SelectStudent | null }> {
+  const { saltie, student } = await createStudentAndSaltieIfNotExists(saltieId, name);
+  return { saltie, student };
 }
 
 export async function updateLinkDetailsRevalidate(linkId: number, title: string, url: string) {

@@ -1,10 +1,10 @@
--- Mock data for 'users' table
-INSERT INTO users (id, role) VALUES
-('user1', 'admin'),
-('user2', 'student'),
-('user3', 'teacher'),
-('user4', 'student'),
-('user5', 'student');
+-- Mock data for 'salties' table
+INSERT INTO salties (id, role) VALUES
+('saltie1', 'admin'),
+('saltie2', 'student'),
+('saltie3', 'teacher'),
+('saltie4', 'student'),
+('saltie5', 'student');
 
 
 -- Mock data for 'classes' table
@@ -13,10 +13,10 @@ INSERT INTO classes (id, name) VALUES
 (2, 'Science 101'),
 (3, 'History 101');
 -- Mock data for 'students' table
-INSERT INTO students (id, user_id, class_id, name, github) VALUES
-(1, 'user2', '1', 'John Doe', 'https://github.com/johndoe'),
-(2, 'user4', '1', 'Jane Smith', 'https://github.com/janesmith'),
-(3, 'user5', '2', 'Jim Beam', 'https://github.com/jimbeam');
+INSERT INTO students (id, saltie_id, class_id, name, github) VALUES
+(1, 'saltie2', '1', 'John Doe', 'https://github.com/johndoe'),
+(2, 'saltie4', '1', 'Jane Smith', 'https://github.com/janesmith'),
+(3, 'saltie5', '2', 'Jim Beam', 'https://github.com/jimbeam');
 
 -- Mock data for 'course_modules' table
 INSERT INTO course_modules (id, class_id, title, intro) VALUES

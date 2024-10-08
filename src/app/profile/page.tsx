@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import { handleCreateUserIfNotExist } from "@/actions/actions";
+import { handleCreateSaltieIfNotExist } from "@/actions/actions";
 import { getCourseDatesByClassId } from "@/db/queries/class-queries";
 import { GithubForm } from "./github-form";
 import CommitTracker from "../_components/commit-tracker";
@@ -13,18 +13,18 @@ export default async function ProfilePage() {
   if (!clerkAuth) {
     return <div>Please sign in to view your profile.</div>;
   }
-  const userId = clerkAuth.userId;
+  const saltieId = clerkAuth.userId;
 
-  const user = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
+  const saltie = await fetch(`https://api.clerk.dev/v1/users/${saltieId}`, {
     headers: {
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
     },
   }).then((res) => res.json());
 
-  const name = `${user.first_name} ${user.last_name}`;
-  const { student } = await handleCreateUserIfNotExist(userId!, name);
+  const name = `${saltie.first_name} ${saltie.last_name}`;
+  const { student } = await handleCreateSaltieIfNotExist(saltieId!, name);
   if (!student) {
-    throw new Error("Could not load or create user");
+    throw new Error("Could not load or create saltie");
   }
 
   let content;
@@ -38,15 +38,10 @@ export default async function ProfilePage() {
 
     content = student.github ? (
       <>
-        <h1 className="text-saltDarkPink">Commits since precourse start:</h1>
-        <CommitTracker
-          student={student}
-          precourseStart={precourseStart}
-          bootcampStart={bootcampStart}
-          GITHUB_ACCESS_TOKEN={GITHUB_ACCESS_TOKEN}
-        />
+      <h1 className="text-saltDarkPink">Commits since precourse start:</h1>
+      <CommitTracker student={student} precourseStart={precourseStart} bootcampStart={bootcampStart} GITHUB_ACCESS_TOKEN={GITHUB_ACCESS_TOKEN}/>
       </>
-    ) : (
+      ) : (
       <GithubForm student={student} />
     );
   } else {
@@ -64,12 +59,12 @@ export default async function ProfilePage() {
               </h1>
 
               <h1 className="text-lg font-extrabold mb-4 text-white text-center">
-                Welcome, {user.first_name} {user.last_name}!
+                Welcome, {saltie.first_name} {saltie.last_name}!
               </h1>
-              {user.image_url && (
+              {saltie.image_url && (
                 <Image
-                  src={user.image_url}
-                  alt="User Profile Picture"
+                  src={saltie.image_url}
+                  alt="Saltie Profile Picture"
                   width={250}
                   height={250}
                   className="rounded-full mb-4"

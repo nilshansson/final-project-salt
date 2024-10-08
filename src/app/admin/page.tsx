@@ -21,7 +21,7 @@ export default async function AdminPage() {
             {allStudentInfo
               .filter((student) => student.classId === classItem.id)
               .map((student) => (
-                <StudentCard key={student.userId} student={student} />
+                <StudentCard key={student.saltieId} student={student} />
               ))}
 
             {allStudentInfo.filter(
