@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="h-full">
+      <html lang="en" data-theme="light" className="h-full">
         <head>
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <link
